@@ -8,6 +8,8 @@
   "license": "MIT",
   "type": "module",
   "scripts": {
+    "format:check": "prettier --check .",
+    "format:write": "prettier --write .",
     "test": "jest"
   },
   "devDependencies": {
@@ -24,5 +26,9 @@
         "testEnvironment": "node"
       }
     }
+  },
+  "prettier": {
+    "semi": false,
+    "singleQuote": true
   }
 }
