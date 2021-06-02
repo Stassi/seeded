@@ -1,11 +1,10 @@
 import hexTestCases from './hexTextCases'
 import toHexCharCode from './toHexCharCode'
 
+const { cases, name } = hexTestCases()
+
 describe('toHexCharCode', () => {
-  test.each(hexTestCases())(
-    '"%s" should be character code "%s" in hexadecimal',
-    (plaintextLetter, hexCode) => {
-      expect(toHexCharCode(plaintextLetter)).toBe(hexCode)
-    }
-  )
+  test.each(cases)(name, (plaintextLetter, hexCode) => {
+    expect(toHexCharCode(plaintextLetter)).toBe(hexCode)
+  })
 })

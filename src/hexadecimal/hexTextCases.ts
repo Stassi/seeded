@@ -1,7 +1,13 @@
 type PlaintextAndHexPairs = [string?, string?][]
 
-export default function hexTestCases(): PlaintextAndHexPairs {
-  const plaintext: string[] = 'HELLOWORLD'.split(''),
+interface HexTestCases {
+  cases: PlaintextAndHexPairs
+  name: string
+}
+
+export default function hexTestCases(): HexTestCases {
+  const cases: PlaintextAndHexPairs = [],
+    plaintext: string[] = 'HELLOWORLD'.split(''),
     hexEncoded: string[] = [
       '48',
       '45',
@@ -15,10 +21,9 @@ export default function hexTestCases(): PlaintextAndHexPairs {
       '44',
     ]
 
-  let cases: PlaintextAndHexPairs = []
   for (let i = 0; i < plaintext.length; i++) {
     cases[i] = [plaintext[i], hexEncoded[i]]
   }
 
-  return cases
+  return { cases, name: '"%s" should be character code "%s" in hexadecimal' }
 }
