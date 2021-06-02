@@ -20,12 +20,8 @@
     "typescript": "^4.3.2"
   },
   "jest": {
-    "globals": {
-      "ts-jest": {
-        "preset": "ts-jest/presets/default-esm",
-        "testEnvironment": "node"
-      }
-    }
+    "preset": "ts-jest",
+    "testEnvironment": "node"
   },
   "prettier": {
     "semi": false,
