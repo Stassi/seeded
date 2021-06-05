@@ -1,8 +1,9 @@
-import { remainder256 } from '../utilities/remainder'
+import remainder from '../utilities/remainder'
 import sum from '../utilities/sum'
 
 interface SwapPointerInput {
-  state: number
+  state?: number
+  width: number
 }
 
 export interface SwapPointer extends SwapPointerInput {
@@ -10,16 +11,19 @@ export interface SwapPointer extends SwapPointerInput {
   create: (n: number) => SwapPointer
 }
 
-export default function swapPointer(
-  { state }: SwapPointerInput = { state: 0 }
-): SwapPointer {
+export default function swapPointer({
+  width,
+  state = 0,
+}: SwapPointerInput): SwapPointer {
+  const remainderStateWidth = remainder(width)
+
   function addTo(...summands: number[]): number {
-    return remainder256(sum(state, ...summands))
+    return remainderStateWidth(sum(state, ...summands))
   }
 
   function create(n: number): SwapPointer {
-    return swapPointer({ state: n })
+    return swapPointer({ width, state: n })
   }
 
-  return { addTo, create, state }
+  return { addTo, create, state, width }
 }

@@ -1,9 +1,10 @@
 import keyScheduler from './keyScheduler/keyScheduler'
+import { KeyStream } from './utilities/identityPermutation'
 
 export default function arcSeed(): any {
-  const keyScheduled: number[] = keyScheduler({
+  const keyScheduled: KeyStream = keyScheduler({
     key: [1, 2, 3, 4, 5, 6, 7, 8],
-    stateWidth: 256,
+    keyStreamWidth: 256,
   })
 
   console.log({ keyScheduled })

@@ -1,30 +1,34 @@
-import identityPermutation from '../utilities/identityPermutation'
 import atIndex from '../utilities/atIndex'
+import identityPermutation, {
+  KeyStream,
+} from '../utilities/identityPermutation'
 import length from '../utilities/length'
 import remainder from '../utilities/remainder'
 import swapPointer, { SwapPointer } from './swapPointer'
 
 interface KeySchedulerInput {
   key: number[]
-  stateWidth: number
+  keyStreamWidth: number
 }
 
 export default function keyScheduler({
   key,
-  stateWidth,
-}: KeySchedulerInput): number[] {
+  keyStreamWidth,
+}: KeySchedulerInput): KeyStream {
   let i: number = 0
-  let j: SwapPointer = swapPointer()
-  let state: number[] = identityPermutation(stateWidth)
+  let j: SwapPointer = swapPointer({ width: keyStreamWidth })
+  let keyStream: KeyStream = identityPermutation(keyStreamWidth)
   const remainderKeyLength = remainder(length(key))
   const atKeyIndex = atIndex(key)
-  const atStateIndex = atIndex(state)
+  const atKeyStreamIndex = atIndex(keyStream)
 
-  for (; i < stateWidth; i++) {
-    j = j.create(j.addTo(atKeyIndex(remainderKeyLength(i)), atStateIndex(i)))
-    state[j.state] = i
-    state[i] = j.state
+  for (; i < keyStreamWidth; i++) {
+    j = j.create(
+      j.addTo(atKeyIndex(remainderKeyLength(i)), atKeyStreamIndex(i))
+    )
+    keyStream[j.state] = i
+    keyStream[i] = j.state
   }
 
-  return state
+  return keyStream
 }
