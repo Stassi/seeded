@@ -4,9 +4,15 @@ import length from '../utilities/length'
 import remainder from '../utilities/remainder'
 import swapPointer, { SwapPointer } from './swapPointer'
 
-const stateWidth = 256
+interface KeySchedulerInput {
+  key: number[]
+  stateWidth: number
+}
 
-export default function keyScheduler(key: number[]): number[] {
+export default function keyScheduler({
+  key,
+  stateWidth,
+}: KeySchedulerInput): number[] {
   let i: number = 0
   let j: SwapPointer = swapPointer()
   let state: number[] = identityPermutation(stateWidth)
