@@ -1,6 +1,6 @@
-export type KeyStream = number[]
+export type Pool = number[]
 
-export default function identityPermutation(width: number): KeyStream {
+export default function identityPermutation(width: number): Pool {
   // @ts-ignore
   return [...Array(width).keys()]
 }
