@@ -21,7 +21,7 @@ export default function keyScheduler({
 
   s.forEach((i: number): void => {
     j = j.create(j.addTo(atKeyIndex(remainderKeyLength(i)), s.atIndex(i)))
-    s = s.swapIndices(i, j.state)
+    s = s.create(s.swapIndices(i, j.state))
   })
 
   return s.state

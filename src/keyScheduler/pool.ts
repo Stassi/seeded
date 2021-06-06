@@ -10,8 +10,9 @@ type ForEachCallback = (value: number, index: number, array: number[]) => void
 
 export interface Pool extends PoolInput {
   atIndex: (n: number) => any
+  create: (s: number[]) => Pool
   forEach: (fn: ForEachCallback) => void
-  swapIndices: (i: number, j: number) => Pool
+  swapIndices: (i: number, j: number) => number[]
 }
 
 export default function pool({
@@ -22,17 +23,21 @@ export default function pool({
     return atIndexUtil(state)(n)
   }
 
+  function create(s: number[]): Pool {
+    return pool({ poolWidth, state: s })
+  }
+
   function forEach(fn: ForEachCallback): void {
     return state.forEach(fn)
   }
 
-  function swapIndices(i: number, j: number): Pool {
+  function swapIndices(i: number, j: number): number[] {
     const newState: number[] = [...state],
       prevI: number = atIndex(i)
     newState[i] = atIndex(j)
     newState[j] = prevI
-    return pool({ poolWidth, state: newState })
+    return newState
   }
 
-  return { atIndex, forEach, poolWidth, state, swapIndices }
+  return { atIndex, create, forEach, poolWidth, state, swapIndices }
 }
