@@ -9,7 +9,7 @@ interface PoolInput {
 type ForEachCallback = (value: number, index: number, array: number[]) => void
 
 export interface Pool extends PoolInput {
-  atIndex: (n: number) => any
+  atIndex: (n: number) => number
   create: (s: number[]) => Pool
   forEach: (fn: ForEachCallback) => void
   swapIndices: (i: number, j: number) => number[]
