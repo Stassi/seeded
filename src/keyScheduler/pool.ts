@@ -2,8 +2,8 @@ import atIndexUtil from '../utilities/atIndex'
 import identityPermutation from '../utilities/identityPermutation'
 
 interface PoolInput {
-  poolWidth: number
   state?: number[]
+  width: number
 }
 
 type ForEachCallback = (value: number, index: number, array: number[]) => void
@@ -16,15 +16,15 @@ export interface Pool extends PoolInput {
 }
 
 export default function pool({
-  poolWidth,
-  state = identityPermutation(poolWidth),
+  width,
+  state = identityPermutation(width),
 }: PoolInput): Pool {
   function atIndex(n: number): any {
     return atIndexUtil(state)(n)
   }
 
   function create(s: number[]): Pool {
-    return pool({ poolWidth, state: s })
+    return pool({ width, state: s })
   }
 
   function forEach(fn: ForEachCallback): void {
@@ -39,5 +39,5 @@ export default function pool({
     return newState
   }
 
-  return { atIndex, create, forEach, poolWidth, state, swapIndices }
+  return { atIndex, create, forEach, state, swapIndices, width }
 }

@@ -6,15 +6,15 @@ import swapPointer, { SwapPointer } from './swapPointer'
 
 interface KeySchedulerInput {
   key: number[]
-  poolWidth: number
+  width: number
 }
 
 export default function keyScheduler({
   key,
-  poolWidth,
+  width,
 }: KeySchedulerInput): number[] {
-  let j: SwapPointer = swapPointer({ width: poolWidth })
-  let s: Pool = pool({ poolWidth })
+  let j: SwapPointer = swapPointer({ width })
+  let s: Pool = pool({ width })
 
   const remainderKeyLength = remainder(length(key))
   const atKeyIndex = atIndex(key)
