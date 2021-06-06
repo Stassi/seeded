@@ -19,9 +19,9 @@ export default function pool({
   width,
   state = identityPermutation(width),
 }: PoolInput): Pool {
-  const atIndex: (i: number) => number = atIndexUtil(state)
+  const atIndex: Pool['atIndex'] = atIndexUtil(state)
 
-  function create(s: number[]): Pool {
+  function create(s: PoolInput['state']): Pool {
     return pool({ width, state: s })
   }
 

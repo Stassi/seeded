@@ -21,7 +21,7 @@ export default function swapPointer({
     return remainderWidth(sum(state, ...summands))
   }
 
-  function create(n: number): SwapPointer {
+  function create(n: SwapPointerInput['state']): SwapPointer {
     return swapPointer({ width, state: n })
   }
 
