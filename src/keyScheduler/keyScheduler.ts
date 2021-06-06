@@ -19,10 +19,9 @@ export default function keyScheduler({
   const remainderKeyLength = remainder(length(key))
   const atKeyIndex = atIndex(key)
 
-  s.clone().forEach((i: number): void => {
+  s.forEach((i: number): void => {
     j = j.create(j.addTo(atKeyIndex(remainderKeyLength(i)), s.atIndex(i)))
-    s.state[j.state] = i
-    s.state[i] = j.state
+    s = s.swapIndices(i, j.state)
   })
 
   return s.state
