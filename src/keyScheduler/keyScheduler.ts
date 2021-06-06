@@ -1,6 +1,6 @@
 import atIndex from '../utilities/atIndex'
-import identityPermutation, { Pool } from '../utilities/identityPermutation'
 import length from '../utilities/length'
+import pool, { Pool } from './pool'
 import remainder from '../utilities/remainder'
 import swapPointer, { SwapPointer } from './swapPointer'
 
@@ -12,19 +12,18 @@ interface KeySchedulerInput {
 export default function keyScheduler({
   key,
   poolWidth,
-}: KeySchedulerInput): Pool {
+}: KeySchedulerInput): number[] {
   let j: SwapPointer = swapPointer({ width: poolWidth })
-  let pool: Pool = identityPermutation(poolWidth)
-  const poolOriginal: Pool = [...pool]
+  let s: Pool = pool({ poolWidth })
+
   const remainderKeyLength = remainder(length(key))
   const atKeyIndex = atIndex(key)
-  const atPoolIndex = atIndex(pool)
 
-  poolOriginal.forEach((i: number): void => {
-    j = j.create(j.addTo(atKeyIndex(remainderKeyLength(i)), atPoolIndex(i)))
-    pool[j.state] = i
-    pool[i] = j.state
+  s.clone().forEach((i: number): void => {
+    j = j.create(j.addTo(atKeyIndex(remainderKeyLength(i)), s.atIndex(i)))
+    s.state[j.state] = i
+    s.state[i] = j.state
   })
 
-  return pool
+  return s.state
 }
