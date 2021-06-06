@@ -30,11 +30,11 @@ export default function pool({
   }
 
   function swapIndices(i: number, j: number): number[] {
-    const newState: number[] = [...state],
+    const s: number[] = [...state],
       prevI: number = atIndex(i)
-    newState[i] = atIndex(j)
-    newState[j] = prevI
-    return newState
+    s[i] = atIndex(j)
+    s[j] = prevI
+    return s
   }
 
   return { atIndex, create, forEach, state, swapIndices, width }

@@ -15,10 +15,10 @@ export default function swapPointer({
   width,
   state = 0,
 }: SwapPointerInput): SwapPointer {
-  const remainderStateWidth = remainder(width)
+  const remainderWidth = remainder(width)
 
   function addTo(...summands: number[]): number {
-    return remainderStateWidth(sum(state, ...summands))
+    return remainderWidth(sum(state, ...summands))
   }
 
   function create(n: number): SwapPointer {
