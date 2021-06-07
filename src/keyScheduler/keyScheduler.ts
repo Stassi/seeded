@@ -1,11 +1,11 @@
 import { Key } from './key'
 import { Pool } from './pool'
-import { SwapPointer } from './swapPointer'
+import { RoundKey } from './roundKey'
 
 interface KeySchedulerInput {
   key: Key
   pool: Pool
-  roundKey: SwapPointer
+  roundKey: RoundKey
 }
 
 export default function keyScheduler({

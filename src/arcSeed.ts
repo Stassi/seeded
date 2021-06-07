@@ -1,7 +1,7 @@
 import key from './keyScheduler/key'
 import keyScheduler from './keyScheduler/keyScheduler'
 import pool from './keyScheduler/pool'
-import swapPointer from './keyScheduler/swapPointer'
+import roundKey from './keyScheduler/roundKey'
 
 const defaultWidth = 256
 
@@ -15,7 +15,7 @@ export default function arcSeed(
   const keyScheduled = keyScheduler({
     key: key([1, 2, 3, 4, 5, 6, 7, 8]),
     pool: pool({ width }),
-    roundKey: swapPointer({ width }),
+    roundKey: roundKey({ width }),
   })
 
   console.log(keyScheduled.state)

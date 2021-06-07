@@ -1,28 +1,28 @@
 import remainder from '../utilities/remainder'
 import sum from '../utilities/sum'
 
-interface SwapPointerInput {
+interface RoundKeyInput {
   state?: number
   width: number
 }
 
-export interface SwapPointer extends SwapPointerInput {
+export interface RoundKey extends RoundKeyInput {
   addTo: (...summands: number[]) => number
-  create: (n: number) => SwapPointer
+  create: (n: number) => RoundKey
 }
 
-export default function swapPointer({
+export default function roundKey({
   width,
   state = 0,
-}: SwapPointerInput): SwapPointer {
+}: RoundKeyInput): RoundKey {
   const remainderWidth = remainder(width)
 
   function addTo(...summands: number[]): number {
     return remainderWidth(sum(state, ...summands))
   }
 
-  function create(n: SwapPointerInput['state']): SwapPointer {
-    return swapPointer({ width, state: n })
+  function create(n: RoundKeyInput['state']): RoundKey {
+    return roundKey({ width, state: n })
   }
 
   return { addTo, create, state, width }
