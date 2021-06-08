@@ -1,12 +1,11 @@
 import atIndexUtil from '../utilities/atIndex'
 import identityPermutation from '../utilities/identityPermutation'
+import forEachUtil, { ForEachCallback } from '../utilities/forEach'
 
 interface PoolInput {
   state?: number[]
   width: number
 }
-
-type ForEachCallback = (value: number, index: number, array: number[]) => void
 
 export interface Pool extends PoolInput {
   atIndex: (n: number) => number
@@ -19,14 +18,11 @@ export default function pool({
   width,
   state = identityPermutation(width),
 }: PoolInput): Pool {
-  const atIndex: Pool['atIndex'] = atIndexUtil(state)
+  const atIndex: Pool['atIndex'] = atIndexUtil(state),
+    forEach: Pool['forEach'] = forEachUtil(state)
 
   function create(s: PoolInput['state']): Pool {
     return pool({ width, state: s })
-  }
-
-  function forEach(fn: ForEachCallback): void {
-    return state.forEach(fn)
   }
 
   function swapIndices(i: number, j: number): number[] {
