@@ -1,6 +1,6 @@
 import atIndexUtil from '../utilities/atIndex'
-import identityPermutation from '../utilities/identityPermutation'
 import forEachUtil, { ForEachCallback } from '../utilities/forEach'
+import identityPermutation from '../utilities/identityPermutation'
 
 interface PoolInput {
   state?: number[]
