@@ -18,11 +18,11 @@ export default function roundKey({
   const remainderWidth = remainder(width)
 
   function addTo(...summands: number[]): number {
-    return remainderWidth(sum(state, ...summands))
+    return sum(state, ...summands)
   }
 
   function create(n: RoundKeyInput['state']): RoundKey {
-    return roundKey({ width, state: n })
+    return roundKey({ width, state: remainderWidth(n) })
   }
 
   return { addTo, create, state, width }
