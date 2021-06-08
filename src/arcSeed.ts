@@ -3,17 +3,14 @@ import keyScheduler from './keyScheduler/keyScheduler'
 import pool from './keyScheduler/pool'
 import roundKey from './keyScheduler/roundKey'
 
-const defaultWidth = 256
-
 interface ArcSeedInput {
+  seed: string
   width?: number
 }
 
-export default function arcSeed(
-  { width = defaultWidth }: ArcSeedInput = { width: defaultWidth }
-) {
+export default function arcSeed({ seed, width = 256 }: ArcSeedInput) {
   const keyScheduled = keyScheduler({
-    key: key([1, 2, 3, 4, 5, 6, 7, 8]),
+    key: key(seed),
     pool: pool({ width }),
     roundKey: roundKey({ width }),
   })
