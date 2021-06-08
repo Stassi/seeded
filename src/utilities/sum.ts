@@ -1,5 +1,3 @@
 export default function sum(...n: number[]): number {
-  return n.reduce((prev, current) => {
-    return prev + current
-  }, 0)
+  return n.reduce((prev, current) => prev + current, 0)
 }
