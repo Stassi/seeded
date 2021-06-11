@@ -16,9 +16,11 @@ export interface Pool
   create: (state: number[]) => Pool
 }
 
-export default function pool({ width, state: stateArg }: PoolInput): Pool {
-  const state: PoolInput['state'] = stateArg || identityPermutation(width),
-    atIndex: Pool['atIndex'] = atIndexUtil(state),
+export default function pool({
+  width,
+  state = identityPermutation(width),
+}: PoolInput): Pool {
+  const atIndex: Pool['atIndex'] = atIndexUtil(state),
     forEach: Pool['forEach'] = forEachUtil(state),
     swapIndices: Pool['swapIndices'] = swapIndicesUtil(state)
 
