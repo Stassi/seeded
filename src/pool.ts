@@ -13,7 +13,7 @@ export interface Pool
     ForEachProperty,
     PoolInput,
     SwapIndicesProperty {
-  create: (s: number[]) => Pool
+  create: (state: number[]) => Pool
 }
 
 export default function pool({ width, state: stateArg }: PoolInput): Pool {
