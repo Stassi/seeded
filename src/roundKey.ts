@@ -1,4 +1,4 @@
-import remainder from './utilities/remainder'
+import remainder, { RemainderCallback } from './utilities/remainder'
 import sum from './utilities/sum'
 
 interface RoundKeyInput {
@@ -15,7 +15,7 @@ export default function roundKey({
   width,
   state = 0,
 }: RoundKeyInput): RoundKey {
-  const remainderWidth = remainder(width)
+  const remainderWidth: RemainderCallback = remainder(width)
 
   function addTo(...summands: number[]): number {
     return sum(state, ...summands)
