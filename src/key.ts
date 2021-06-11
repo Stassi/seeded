@@ -1,7 +1,7 @@
-import atIndexUtil from '../utilities/atIndex'
-import length from '../utilities/length'
-import remainder, { RemainderCallback } from '../utilities/remainder'
-import toCharCodes from '../utilities/toCharCodes'
+import atIndexUtil from './utilities/atIndex'
+import length from './utilities/length'
+import remainder, { RemainderCallback } from './utilities/remainder'
+import toCharCodes from './utilities/toCharCodes'
 
 export interface Key {
   atIndex: (n: number) => number

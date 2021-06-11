@@ -1,4 +1,4 @@
-import keyScheduler from './keyScheduler/keyScheduler'
+import keyScheduler from './keyScheduler'
 
 interface ArcSeedInput {
   seed: string

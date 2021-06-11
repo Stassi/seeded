@@ -1,5 +1,5 @@
-import remainder from '../utilities/remainder'
-import sum from '../utilities/sum'
+import remainder from './utilities/remainder'
+import sum from './utilities/sum'
 
 interface RoundKeyInput {
   state?: number

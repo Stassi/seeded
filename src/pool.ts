@@ -1,7 +1,7 @@
-import atIndexUtil from '../utilities/atIndex'
-import forEachUtil, { ForEachCallback } from '../utilities/forEach'
-import identityPermutation from '../utilities/identityPermutation'
-import swapIndicesUtil, { SwapIndicesCallback } from '../utilities/swapIndices'
+import atIndexUtil from './utilities/atIndex'
+import forEachUtil, { ForEachCallback } from './utilities/forEach'
+import identityPermutation from './utilities/identityPermutation'
+import swapIndicesUtil, { SwapIndicesCallback } from './utilities/swapIndices'
 
 interface PoolInput {
   state?: number[]
