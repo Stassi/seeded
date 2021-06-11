@@ -1,4 +1,4 @@
-import atIndexUtil from './utilities/atIndex'
+import atIndexUtil, { AtIndexCallback } from './utilities/atIndex'
 import forEachUtil, { ForEachCallback } from './utilities/forEach'
 import identityPermutation from './utilities/identityPermutation'
 import swapIndicesUtil, { SwapIndicesCallback } from './utilities/swapIndices'
@@ -9,7 +9,7 @@ interface PoolInput {
 }
 
 export interface Pool extends PoolInput {
-  atIndex: (n: number) => number
+  atIndex: AtIndexCallback
   create: (s: number[]) => Pool
   forEach: (fn: ForEachCallback) => void
   swapIndices: SwapIndicesCallback

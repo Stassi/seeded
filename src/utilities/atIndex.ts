@@ -1,3 +1,5 @@
-export default function atIndex(a: any[]): (i: number) => any {
+export type AtIndexCallback = (i: number) => any
+
+export default function atIndex(a: any[]): AtIndexCallback {
   return (i: number): any => a[i]
 }
