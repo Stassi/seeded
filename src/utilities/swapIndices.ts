@@ -1,5 +1,9 @@
 import atIndexUtil, { AtIndexCallback } from './atIndex'
 
+export interface SwapIndicesProperty {
+  swapIndices: SwapIndicesCallback
+}
+
 export type SwapIndicesCallback = (x: number, y: number) => any[]
 
 export default function swapIndices(a: any[]): SwapIndicesCallback {
