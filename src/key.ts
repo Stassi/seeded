@@ -1,11 +1,9 @@
-import atIndexUtil, { AtIndexCallback } from './utilities/atIndex'
+import atIndexUtil, { AtIndexProperty } from './utilities/atIndex'
 import length from './utilities/length'
 import remainder, { RemainderCallback } from './utilities/remainder'
 import toCharCodes from './utilities/toCharCodes'
 
-export interface Key {
-  atIndex: AtIndexCallback
-}
+export interface Key extends AtIndexProperty {}
 
 type KeyInput = number[] | string
 
