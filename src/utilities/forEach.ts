@@ -1,3 +1,7 @@
+export interface ForEachProperty {
+  forEach: (fn: ForEachCallback) => void
+}
+
 export type ForEachCallback = (
   value: number,
   index: number,

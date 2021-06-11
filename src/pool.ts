@@ -1,5 +1,5 @@
 import atIndexUtil, { AtIndexProperty } from './utilities/atIndex'
-import forEachUtil, { ForEachCallback } from './utilities/forEach'
+import forEachUtil, { ForEachProperty } from './utilities/forEach'
 import identityPermutation from './utilities/identityPermutation'
 import swapIndicesUtil, { SwapIndicesCallback } from './utilities/swapIndices'
 
@@ -8,9 +8,8 @@ interface PoolInput {
   width: number
 }
 
-export interface Pool extends AtIndexProperty, PoolInput {
+export interface Pool extends AtIndexProperty, ForEachProperty, PoolInput {
   create: (s: number[]) => Pool
-  forEach: (fn: ForEachCallback) => void
   swapIndices: SwapIndicesCallback
 }
 
