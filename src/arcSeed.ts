@@ -10,15 +10,15 @@ interface ArcSeedState {
   roundKey: RoundKeyInput['state']
 }
 
-interface KeyStream {
-  key: number[]
-  state: ArcSeedState
-}
-
 interface ArcSeedInput {
   seed: string
   state?: ArcSeedState
   width?: number
+}
+
+interface KeyStream {
+  key: number[]
+  state: ArcSeedState
 }
 
 export interface ArcSeed extends ArcSeedInput {
