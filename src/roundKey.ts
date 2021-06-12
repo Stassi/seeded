@@ -1,7 +1,7 @@
 import remainder, { RemainderCallback } from './utilities/remainder'
 import sum from './utilities/sum'
 
-interface RoundKeyInput {
+export interface RoundKeyInput {
   state?: number
   width: number
 }

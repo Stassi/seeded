@@ -3,7 +3,7 @@ import forEachUtil, { ForEachProperty } from './utilities/forEach'
 import identityPermutation from './utilities/identityPermutation'
 import swapIndicesUtil, { SwapIndicesProperty } from './utilities/swapIndices'
 
-interface PoolInput {
+export interface PoolInput {
   state?: number[]
   width: number
 }
