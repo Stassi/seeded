@@ -1,13 +1,17 @@
 {
   "name": "arcseed",
   "private": true,
+  "sideEffects": false,
   "version": "0.0.1",
   "description": "",
   "repository": "github:Stassi/arcseed",
   "author": "Andreas Stassivik <andreas@stassi.net> (https://github.com/Stassi)",
   "license": "MIT",
   "type": "module",
+  "types": "./lib/arcSeed.d.ts",
+  "exports": "./lib/arcSeed.mjs",
   "scripts": {
+    "build": "rollup -c",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "test": "jest"
@@ -16,8 +20,14 @@
     "@types/jest": "^26.0.23",
     "jest": "^27.0.3",
     "prettier": "2.3.0",
+    "rollup": "^2.51.2",
+    "rollup-plugin-ts": "^1.4.0",
     "ts-jest": "^27.0.2",
     "typescript": "^4.3.2"
+  },
+  "engines": {
+    "node": "^12.22.1 || ^14.17.0 || >=16.0.0",
+    "npm": "^7.17.0"
   },
   "jest": {
     "preset": "ts-jest",
