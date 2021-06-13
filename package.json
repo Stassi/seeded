@@ -34,6 +34,9 @@
     "linux",
     "win32"
   ],
+  "cpu": [
+    "arm"
+  ],
   "jest": {
     "preset": "ts-jest",
     "testEnvironment": "node"
