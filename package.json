@@ -32,7 +32,7 @@
   "os": [
     "linux",
     "macos",
-    "win64"
+    "win32"
   ],
   "jest": {
     "preset": "ts-jest",
