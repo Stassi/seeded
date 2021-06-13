@@ -35,7 +35,7 @@
     "win32"
   ],
   "cpu": [
-    "arm"
+    "x64"
   ],
   "jest": {
     "preset": "ts-jest",
