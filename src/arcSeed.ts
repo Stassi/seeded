@@ -16,7 +16,7 @@ interface ArcSeedInput {
   width?: number
 }
 
-interface KeyStream {
+export interface KeyStream {
   key: number[]
   state: ArcSeedState
 }
