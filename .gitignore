@@ -67,6 +67,7 @@ ehthumbs_vista.db
 fabric.properties
 jspm_packages/
 lerna-debug.log*
+lib
 lib-cov
 logs
 node_modules/
