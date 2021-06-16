@@ -23,6 +23,7 @@ export interface KeyStream {
 
 export interface ArcSeed extends ArcSeedInput {
   keyStream: (keyWidth: number) => KeyStream
+  state: ArcSeedState
 }
 
 export default function arcSeed({
