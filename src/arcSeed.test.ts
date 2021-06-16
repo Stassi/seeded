@@ -1,4 +1,4 @@
-import arcSeed, { ArcSeed, KeyStream } from './arcSeed'
+import arcSeed, { ArcSeed } from './arcSeed'
 
 describe('arcSeed', () => {
   const seed: string = 'hello.',
@@ -7,12 +7,19 @@ describe('arcSeed', () => {
   describe(`seed (deterministic): "${seed}"`, () => {
     describe('#keyStream', () => {
       const keyWidth: number = 5,
-        { keyStream }: ArcSeed = arcSeed({ seed }),
-        { key }: KeyStream = keyStream(keyWidth)
+        { keyStream }: ArcSeed = arcSeed({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
-        test(`it should return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-          expect(key).toEqual(knownKey)
+        describe('Call 1/2', () => {
+          test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
+            expect(keyStream(keyWidth).key).toEqual(knownKey)
+          })
+        })
+
+        describe('Call 2/2', () => {
+          test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
+            expect(keyStream(keyWidth).key).toEqual(knownKey)
+          })
         })
       })
     })
