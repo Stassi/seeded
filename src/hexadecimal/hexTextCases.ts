@@ -1,4 +1,4 @@
-type PlaintextAndHexPairs = [string?, string?][]
+type PlaintextAndHexPairs = [string, string][]
 
 interface HexTestCases {
   cases: PlaintextAndHexPairs
