@@ -5,6 +5,6 @@ const { cases, name } = hexTestCases()
 
 describe('toHexCharCode', () => {
   test.each(cases)(name, (plaintextLetter, hexCode) => {
-    expect(toHexCharCode(plaintextLetter)).toBe(hexCode)
+    expect(toHexCharCode(<string>plaintextLetter)).toBe(hexCode)
   })
 })
