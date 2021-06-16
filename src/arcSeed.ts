@@ -29,7 +29,7 @@ export default function arcSeed({
   seed,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
-    pool: null,
+    pool: undefined,
     roundKey: 0,
   },
   width = 256,
