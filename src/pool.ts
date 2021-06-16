@@ -14,6 +14,7 @@ export interface Pool
     PoolInput,
     SwapIndicesProperty {
   create: (state: number[]) => Pool
+  state: number[]
 }
 
 export default function pool({
@@ -24,7 +25,7 @@ export default function pool({
     forEach: Pool['forEach'] = forEachUtil(state),
     swapIndices: Pool['swapIndices'] = swapIndicesUtil(state)
 
-  function create(state: PoolInput['state']): Pool {
+  function create(state: Pool['state']): Pool {
     return pool({ state, width })
   }
 
