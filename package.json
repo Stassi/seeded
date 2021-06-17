@@ -1,7 +1,7 @@
 {
   "name": "arcseed",
   "sideEffects": false,
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "repository": "github:Stassi/arcseed",
   "author": "Andreas Stassivik <andreas@stassi.net> (https://github.com/Stassi)",
