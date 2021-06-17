@@ -6,7 +6,7 @@
   "license": "MIT",
   "author": "Andreas Stassivik <andreas@stassi.net> (https://github.com/Stassi)",
   "files": [
-    "./lib"
+    "lib/**/*"
   ],
   "type": "module",
   "types": "./lib/arcSeed.d.ts",
