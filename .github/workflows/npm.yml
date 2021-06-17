@@ -1,4 +1,4 @@
-name: Node.js Package
+name: npm
 
 on:
   pull_request:
@@ -6,6 +6,7 @@ on:
 
 jobs:
   build:
+    name: Publish
     if: github.event.pull_request.merged
     runs-on: ubuntu-latest
     steps:
