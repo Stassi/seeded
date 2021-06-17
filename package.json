@@ -1,6 +1,5 @@
 {
   "name": "arcseed",
-  "private": true,
   "sideEffects": false,
   "version": "0.0.1",
   "description": "Seedable pseudorandom number generator (PRNG).",
