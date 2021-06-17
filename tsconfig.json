@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "esModuleInterop": true,
+    "module": "ES2015",
+    "outDir": "lib",
+    "strict": true,
+    "target": "ES2015"
+  },
+  "include": ["src/**/*"]
+}
