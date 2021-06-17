@@ -14,6 +14,7 @@
     "build": "rollup -c",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
+    "prepublishOnly": "npm run build",
     "test": "jest"
   },
   "devDependencies": {
