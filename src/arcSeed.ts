@@ -11,6 +11,7 @@ interface ArcSeedState {
 }
 
 interface ArcSeedInput {
+  drop?: number
   seed: string
   state?: ArcSeedState
   width?: number
@@ -29,6 +30,7 @@ export interface ArcSeed extends ArcSeedInput {
 
 export default function arcSeed({
   seed,
+  drop = 3072,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
     pool: undefined,
@@ -42,7 +44,7 @@ export default function arcSeed({
       : keySchedule({ seed, width })
 
   function create(state: ArcSeedState): ArcSeed {
-    return arcSeed({ seed, state, width })
+    return arcSeed({ drop, seed, state, width })
   }
 
   function keyStream(keyWidth: number): KeyStream {
@@ -75,6 +77,7 @@ export default function arcSeed({
 
   return {
     create,
+    drop,
     keyStream,
     seed,
     state: {
