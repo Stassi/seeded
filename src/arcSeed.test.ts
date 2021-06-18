@@ -10,7 +10,7 @@ describe('arcSeed', () => {
     describe('#keyStream', () => {
       const keyWidth: number = 5,
         doubleKeyWidth = keyWidth * 2,
-        { keyStream, create: createArcSeed }: ArcSeed = arcSeed({ seed })
+        { keyStream }: ArcSeed = arcSeed({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
         describe('Generic call', () => {
@@ -20,16 +20,16 @@ describe('arcSeed', () => {
         })
 
         describe('Repeat of generic call and next call', () => {
-          const { key, state: nextState } = keyStream(keyWidth)
+          const {
+            key,
+            next: { keyStream: nextKeyStream },
+          } = keyStream(keyWidth)
 
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
             expect(key).toEqual(knownKey)
           })
 
           describe('Next call', () => {
-            const { keyStream: nextKeyStream }: ArcSeed =
-              createArcSeed(nextState)
-
             test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
               expect(nextKeyStream(keyWidth).key).toEqual(nextKnownKey)
             })

@@ -18,7 +18,7 @@ interface ArcSeedInput {
 
 export interface KeyStream {
   key: number[]
-  state: ArcSeedState
+  next: ArcSeed
 }
 
 export interface ArcSeed extends ArcSeedInput {
@@ -65,11 +65,11 @@ export default function arcSeed({
 
     return {
       key,
-      state: {
+      next: create({
         i,
         pool: pool.state,
         roundKey: roundKey.state,
-      },
+      }),
     }
   }
 
