@@ -2,23 +2,43 @@ import arcSeed, { ArcSeed } from './arcSeed'
 
 describe('arcSeed', () => {
   const seed: string = 'hello.',
-    knownKey: number[] = [84, 98, 80, 93, 113]
+    knownKey: number[] = [84, 98, 80, 93, 113],
+    nextKnownKey: number[] = [153, 235, 47, 95, 31],
+    compositeKey: number[] = [...knownKey, ...nextKnownKey]
 
   describe(`seed (deterministic): "${seed}"`, () => {
     describe('#keyStream', () => {
       const keyWidth: number = 5,
-        { keyStream }: ArcSeed = arcSeed({ seed })
+        doubleKeyWidth = keyWidth * 2,
+        { keyStream, create: createArcSeed }: ArcSeed = arcSeed({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
-        describe('Call 1/2', () => {
+        describe('Basic call', () => {
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
             expect(keyStream(keyWidth).key).toEqual(knownKey)
           })
         })
 
-        describe('Call 2/2', () => {
+        describe('Repeat of basic call and next call', () => {
+          const { key, state: nextState } = keyStream(keyWidth)
+
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-            expect(keyStream(keyWidth).key).toEqual(knownKey)
+            expect(key).toEqual(knownKey)
+          })
+
+          describe('Next call', () => {
+            const { keyStream: nextKeyStream }: ArcSeed =
+              createArcSeed(nextState)
+
+            test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
+              expect(nextKeyStream(keyWidth).key).toEqual(nextKnownKey)
+            })
+          })
+        })
+
+        describe('Composite call', () => {
+          test(`it should persistently return a known, ${doubleKeyWidth}-length key: [${compositeKey}]`, () => {
+            expect(keyStream(doubleKeyWidth).key).toEqual(compositeKey)
           })
         })
       })
