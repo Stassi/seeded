@@ -2,8 +2,8 @@ import arcSeed, { ArcSeed } from './arcSeed'
 
 describe('arcSeed', () => {
   const seed: string = 'hello.',
-    knownKey: number[] = [84, 98, 80, 93, 113],
-    nextKnownKey: number[] = [153, 235, 47, 95, 31],
+    knownKey: number[] = [113, 134, 94, 12, 198],
+    nextKnownKey: number[] = [119, 249, 116, 160, 21],
     compositeKey: number[] = [...knownKey, ...nextKnownKey],
     keyWidth: number = 5,
     doubleKeyWidth: number = keyWidth * 2
@@ -52,6 +52,7 @@ describe('arcSeed', () => {
       describe('Next key loaded from saved state', () => {
         const { keyStream: nextKeyStream } = arcSeed({
           seed,
+          drop: 0,
           state: savedState,
         })
 
