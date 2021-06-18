@@ -1,6 +1,6 @@
 {
   "name": "arcseed",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "homepage": "https://github.com/Stassi/arcseed#readme",
   "license": "MIT",
