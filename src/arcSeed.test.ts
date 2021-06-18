@@ -6,7 +6,7 @@ describe('arcSeed', () => {
     nextKnownKey: number[] = [153, 235, 47, 95, 31],
     compositeKey: number[] = [...knownKey, ...nextKnownKey],
     keyWidth: number = 5,
-    doubleKeyWidth = keyWidth * 2
+    doubleKeyWidth: number = keyWidth * 2
 
   describe(`seed (deterministic): "${seed}"`, () => {
     describe('#keyStream', () => {
