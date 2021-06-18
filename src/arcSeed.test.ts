@@ -13,13 +13,13 @@ describe('arcSeed', () => {
         { keyStream, create: createArcSeed }: ArcSeed = arcSeed({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
-        describe('Basic call', () => {
+        describe('Generic call', () => {
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
             expect(keyStream(keyWidth).key).toEqual(knownKey)
           })
         })
 
-        describe('Repeat of basic call and next call', () => {
+        describe('Repeat of generic call and next call', () => {
           const { key, state: nextState } = keyStream(keyWidth)
 
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
