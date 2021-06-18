@@ -1,3 +1,4 @@
+import isStrictZero from './utilities/isStrictZero'
 import keySchedule from './keySchedule'
 import length from './utilities/length'
 import poolModule, { Pool, PoolInput } from './pool'
@@ -11,6 +12,7 @@ interface ArcSeedState {
 }
 
 interface ArcSeedInput {
+  drop?: number
   seed: string
   state?: ArcSeedState
   width?: number
@@ -29,6 +31,7 @@ export interface ArcSeed extends ArcSeedInput {
 
 export default function arcSeed({
   seed,
+  drop: prevDrop = 3072,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
     pool: undefined,
@@ -36,13 +39,15 @@ export default function arcSeed({
   },
   width = 256,
 }: ArcSeedInput): ArcSeed {
-  const remainderWidth: RemainderCallback = remainder(width),
+  const drop: number = 0,
+    isNonZeroDrop: boolean = !isStrictZero(prevDrop),
+    remainderWidth: RemainderCallback = remainder(width),
     prevPool: Pool = prevPoolState
       ? poolModule({ width, state: prevPoolState })
       : keySchedule({ seed, width })
 
   function create(state: ArcSeedState): ArcSeed {
-    return arcSeed({ seed, state, width })
+    return arcSeed({ drop, seed, state, width })
   }
 
   function keyStream(keyWidth: number): KeyStream {
@@ -73,14 +78,17 @@ export default function arcSeed({
     }
   }
 
-  return {
-    create,
-    keyStream,
-    seed,
-    state: {
-      i: prevI,
-      pool: prevPool.state,
-      roundKey: prevRoundKeyState,
-    },
-  }
+  return isNonZeroDrop
+    ? keyStream(prevDrop).next
+    : {
+        create,
+        drop,
+        keyStream,
+        seed,
+        state: {
+          i: prevI,
+          pool: prevPool.state,
+          roundKey: prevRoundKeyState,
+        },
+      }
 }
