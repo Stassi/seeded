@@ -15,15 +15,12 @@ describe('arcSeed', () => {
       describe(`keyWidth: ${keyWidth}`, () => {
         describe('Generic call', () => {
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-            expect(keyStream(keyWidth).key).toEqual(knownKey)
+            expect(keyStream(keyWidth)[0]).toEqual(knownKey)
           })
         })
 
         describe('Repeat of generic call and next call', () => {
-          const {
-            key,
-            next: { keyStream: nextKeyStream },
-          } = keyStream(keyWidth)
+          const [key, { keyStream: nextKeyStream }] = keyStream(keyWidth)
 
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
             expect(key).toEqual(knownKey)
@@ -31,23 +28,21 @@ describe('arcSeed', () => {
 
           describe('Next call', () => {
             test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
-              expect(nextKeyStream(keyWidth).key).toEqual(nextKnownKey)
+              expect(nextKeyStream(keyWidth)[0]).toEqual(nextKnownKey)
             })
           })
         })
 
         describe('Composite call', () => {
           test(`it should persistently return a known, ${doubleKeyWidth}-length key: [${compositeKey}]`, () => {
-            expect(keyStream(doubleKeyWidth).key).toEqual(compositeKey)
+            expect(keyStream(doubleKeyWidth)[0]).toEqual(compositeKey)
           })
         })
       })
     })
 
     describe('state', () => {
-      const {
-        next: { state: savedState },
-      } = arcSeed({ seed }).keyStream(keyWidth)
+      const [, { state: savedState }] = arcSeed({ seed }).keyStream(keyWidth)
 
       describe('Next key loaded from saved state', () => {
         const { keyStream: nextKeyStream } = arcSeed({
@@ -57,7 +52,7 @@ describe('arcSeed', () => {
         })
 
         test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
-          expect(nextKeyStream(keyWidth).key).toEqual(nextKnownKey)
+          expect(nextKeyStream(keyWidth)[0]).toEqual(nextKnownKey)
         })
       })
     })

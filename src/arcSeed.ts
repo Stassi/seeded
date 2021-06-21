@@ -18,14 +18,11 @@ interface ArcSeedInput {
   width?: number
 }
 
-export interface KeyStream {
-  key: number[]
-  next: ArcSeed
-}
+type KeyStream = [number[], ArcSeed]
 
 export interface ArcSeed extends ArcSeedInput {
   create: (state: ArcSeedState) => ArcSeed
-  keyStream: (keyWidth: number) => KeyStream
+  keyStream: (count: number) => KeyStream
   state: ArcSeedState
 }
 
@@ -50,13 +47,16 @@ export default function arcSeed({
     return arcSeed({ drop, seed, state, width })
   }
 
-  function keyStream(keyWidth: number): KeyStream {
+  function keyStream(count: number): KeyStream {
     let i: number = prevI,
-      roundKey: RoundKey = roundKeyModule({ width, state: prevRoundKeyState }),
+      roundKey: RoundKey = roundKeyModule({
+        width,
+        state: prevRoundKeyState,
+      }),
       pool: Pool = prevPool.create(prevPool.state),
       key: number[] = []
 
-    while (length(key) < keyWidth) {
+    while (length(key) < count) {
       i = remainderWidth(i + 1)
       roundKey = roundKey.create(roundKey.addTo(pool.atIndex(i)))
       pool = pool.create(pool.swapIndices(i, roundKey.state))
@@ -68,18 +68,18 @@ export default function arcSeed({
       ]
     }
 
-    return {
+    return [
       key,
-      next: create({
+      create({
         i,
         pool: pool.state,
         roundKey: roundKey.state,
       }),
-    }
+    ]
   }
 
   return isNonZeroDrop
-    ? keyStream(prevDrop).next
+    ? keyStream(prevDrop)[1]
     : {
         create,
         drop,
