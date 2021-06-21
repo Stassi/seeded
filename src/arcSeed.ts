@@ -44,7 +44,12 @@ export default function arcSeed({
       : keySchedule({ seed, width })
 
   function create(state: ArcSeedState): ArcSeed {
-    return arcSeed({ drop, seed, state, width })
+    return arcSeed({
+      drop,
+      seed,
+      state,
+      width,
+    })
   }
 
   function keyStream(count: number): KeyStream {
