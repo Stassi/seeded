@@ -5,7 +5,8 @@ import poolModule, { Pool, PoolInput } from './pool'
 import remainder, { RemainderCallback } from './utilities/remainder'
 import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 
-const poolWidth = 256
+const defaultDrop = 3072,
+  poolWidth = 256
 
 interface ArcSeedState {
   i: number
@@ -29,7 +30,7 @@ export interface ArcSeed extends ArcSeedInput {
 
 export default function arcSeed({
   seed,
-  drop: prevDrop = 3072,
+  drop: prevDrop = defaultDrop,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
     pool: undefined,
