@@ -20,7 +20,7 @@ interface ArcSeedInput {
   state?: ArcSeedState
 }
 
-type NumbersArcSeedTuple = [number[], ArcSeed]
+export type NumbersArcSeedTuple = [number[], ArcSeed]
 
 export interface ArcSeed extends ArcSeedInput {
   create: (state: ArcSeedState) => ArcSeed
