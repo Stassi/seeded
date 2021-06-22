@@ -5,6 +5,8 @@ import poolModule, { Pool, PoolInput } from './pool'
 import remainder, { RemainderCallback } from './utilities/remainder'
 import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 
+const poolWidth = 256
+
 interface ArcSeedState {
   i: number
   pool: PoolInput['state']
@@ -15,7 +17,6 @@ interface ArcSeedInput {
   drop?: number
   seed: string
   state?: ArcSeedState
-  width?: number
 }
 
 type KeyStream = [number[], ArcSeed]
@@ -34,29 +35,27 @@ export default function arcSeed({
     pool: undefined,
     roundKey: 0,
   },
-  width = 256,
 }: ArcSeedInput): ArcSeed {
   const drop: number = 0,
     isNonZeroDrop: boolean = !isStrictZero(prevDrop),
-    remainderWidth: RemainderCallback = remainder(width),
+    remainderWidth: RemainderCallback = remainder(poolWidth),
     prevPool: Pool = prevPoolState
-      ? poolModule({ width, state: prevPoolState })
-      : keySchedule({ seed, width })
+      ? poolModule({ state: prevPoolState, width: poolWidth })
+      : keySchedule({ seed, width: poolWidth })
 
   function create(state: ArcSeedState): ArcSeed {
     return arcSeed({
       drop,
       seed,
       state,
-      width,
     })
   }
 
   function keyStream(count: number): KeyStream {
     let i: number = prevI,
       roundKey: RoundKey = roundKeyModule({
-        width,
         state: prevRoundKeyState,
+        width: poolWidth,
       }),
       pool: Pool = prevPool.create(prevPool.state),
       key: number[] = []
