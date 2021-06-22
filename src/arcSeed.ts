@@ -55,7 +55,11 @@ export default function arcSeed({
 
   function interval(count: number): NumbersArcSeedTuple {
     let result: NumbersArcSeedTuple[0] = [],
-      next: NumbersArcSeedTuple[1] | undefined,
+      next: NumbersArcSeedTuple[1] = create({
+        i: prevI,
+        pool: prevPool.state,
+        roundKey: prevRoundKeyState,
+      }),
       keyStreamLocal = keyStream
 
     while (length(result) < count) {
@@ -74,10 +78,7 @@ export default function arcSeed({
       keyStreamLocal = nextArcSeed.keyStream
     }
 
-    return [
-      result,
-      next ? next : create({ i: 0, pool: undefined, roundKey: undefined }),
-    ]
+    return [result, next]
   }
 
   function keyStream(count: number): NumbersArcSeedTuple {
