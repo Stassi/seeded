@@ -20,11 +20,12 @@ interface ArcSeedInput {
   state?: ArcSeedState
 }
 
-type KeyStream = [number[], ArcSeed]
+type NumbersArcSeedTuple = [number[], ArcSeed]
 
 export interface ArcSeed extends ArcSeedInput {
   create: (state: ArcSeedState) => ArcSeed
-  keyStream: (count: number) => KeyStream
+  interval: (count: number) => NumbersArcSeedTuple
+  keyStream: (count: number) => NumbersArcSeedTuple
   state: ArcSeedState
 }
 
@@ -52,7 +53,34 @@ export default function arcSeed({
     })
   }
 
-  function keyStream(count: number): KeyStream {
+  function interval(count: number): NumbersArcSeedTuple {
+    let result: NumbersArcSeedTuple[0] = [],
+      next: NumbersArcSeedTuple[1] | undefined,
+      keyStreamLocal = keyStream
+
+    while (length(result) < count) {
+      const [key, nextArcSeed]: NumbersArcSeedTuple = keyStreamLocal(7),
+        fiftyTwoBitBinary: string = key
+          .map((k: number) => k.toString(2).padStart(8, '0'))
+          .join('')
+          .slice(4),
+        fiftyTwoBitBinaryLength: number = length(fiftyTwoBitBinary),
+        fiftyTwoBitDecimal: number = parseInt(fiftyTwoBitBinary, 2),
+        generatedInterval: number =
+          fiftyTwoBitDecimal * 2 ** -fiftyTwoBitBinaryLength
+
+      result = [...result, generatedInterval]
+      next = nextArcSeed
+      keyStreamLocal = nextArcSeed.keyStream
+    }
+
+    return [
+      result,
+      next ? next : create({ i: 0, pool: undefined, roundKey: undefined }),
+    ]
+  }
+
+  function keyStream(count: number): NumbersArcSeedTuple {
     let i: number = prevI,
       roundKey: RoundKey = roundKeyModule({
         state: prevRoundKeyState,
@@ -88,6 +116,7 @@ export default function arcSeed({
     : {
         create,
         drop,
+        interval,
         keyStream,
         seed,
         state: {

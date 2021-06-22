@@ -2,6 +2,10 @@ import arcSeed, { ArcSeed } from './arcSeed'
 
 describe('arcSeed', () => {
   const seed: string = 'hello.',
+    knownIntervals: number[] = [
+      0.09530453672732464, 0.289083174852129, 0.6187731397359575,
+      0.21672739780799022, 0.3513632540465652,
+    ],
     knownKey: number[] = [113, 134, 94, 12, 198],
     nextKnownKey: number[] = [119, 249, 116, 160, 21],
     compositeKey: number[] = [...knownKey, ...nextKnownKey],
@@ -9,6 +13,16 @@ describe('arcSeed', () => {
     doubleKeyWidth: number = keyWidth * 2
 
   describe(`seed (deterministic): "${seed}"`, () => {
+    describe('#interval', () => {
+      const { interval }: ArcSeed = arcSeed({ seed })
+
+      describe('Generic call', () => {
+        test('it should persistently return known intervals', () => {
+          expect(interval(keyWidth)[0]).toEqual(knownIntervals)
+        })
+      })
+    })
+
     describe('#keyStream', () => {
       const { keyStream }: ArcSeed = arcSeed({ seed })
 
