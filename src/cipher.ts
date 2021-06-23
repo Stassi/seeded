@@ -4,6 +4,7 @@ import length from './utilities/length'
 import poolModule, { Pool, PoolInput } from './pool'
 import remainder, { RemainderCallback } from './utilities/remainder'
 import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
+import toFixedBinaryOctet from './utilities/toFixedBinaryOctet'
 
 const defaultDrop = 3072,
   poolWidth = 256
@@ -66,7 +67,7 @@ export default function cipher({
     while (length(result) < count) {
       const [key, nextCipher]: NumbersCipherTuple = keyStreamLocal(7),
         fiftyTwoBitBinary: string = key
-          .map((k: number) => k.toString(2).padStart(8, '0'))
+          .map(toFixedBinaryOctet)
           .join('')
           .slice(4),
         fiftyTwoBitBinaryLength: number = length(fiftyTwoBitBinary),
