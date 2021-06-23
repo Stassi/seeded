@@ -23,7 +23,7 @@ interface ArcSeedInput {
 export type NumbersArcSeedTuple = [number[], ArcSeed]
 
 export interface ArcSeed extends ArcSeedInput {
-  create: (state: ArcSeedState) => ArcSeed
+  create: (newState: ArcSeedState) => ArcSeed
   interval: (count: number) => NumbersArcSeedTuple
   keyStream: (count: number) => NumbersArcSeedTuple
   state: ArcSeedState
@@ -43,23 +43,24 @@ export default function arcSeed({
     remainderWidth: RemainderCallback = remainder(poolWidth),
     prevPool: Pool = prevPoolState
       ? poolModule({ state: prevPoolState, width: poolWidth })
-      : keySchedule({ seed, width: poolWidth })
+      : keySchedule({ seed, width: poolWidth }),
+    state = {
+      i: prevI,
+      pool: prevPool.state,
+      roundKey: prevRoundKeyState,
+    }
 
-  function create(state: ArcSeedState): ArcSeed {
+  function create(newState: ArcSeedState): ArcSeed {
     return arcSeed({
       drop,
       seed,
-      state,
+      state: newState,
     })
   }
 
   function interval(count: number): NumbersArcSeedTuple {
     let result: NumbersArcSeedTuple[0] = [],
-      next: NumbersArcSeedTuple[1] = create({
-        i: prevI,
-        pool: prevPool.state,
-        roundKey: prevRoundKeyState,
-      }),
+      next: NumbersArcSeedTuple[1] = create(state),
       keyStreamLocal = keyStream
 
     while (length(result) < count) {
@@ -120,10 +121,6 @@ export default function arcSeed({
         interval,
         keyStream,
         seed,
-        state: {
-          i: prevI,
-          pool: prevPool.state,
-          roundKey: prevRoundKeyState,
-        },
+        state,
       }
 }
