@@ -1,4 +1,5 @@
 import binaryToNumber from './utilities/binaryToNumber'
+import concatenate from './utilities/concatenate'
 import isStrictZero from './utilities/isStrictZero'
 import keySchedule from './keySchedule'
 import length from './utilities/length'
@@ -8,6 +9,7 @@ import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 import toFixedBinaryOctets from './utilities/toFixedBinaryOctets'
 
 const defaultDrop = 3072,
+  fiftyTwo = 52,
   poolWidth = 256
 
 interface CipherState {
@@ -67,10 +69,9 @@ export default function cipher({
 
     while (length(result) < count) {
       const [key, nextCipher]: NumbersCipherTuple = keyStreamLocal(7),
-        fiftyTwoBits: string = toFixedBinaryOctets(key).join('').slice(4),
-        fiftyTwoBitsLength: number = length(fiftyTwoBits),
+        fiftyTwoBits: string = concatenate(toFixedBinaryOctets(key)).slice(4),
         generatedInterval: number =
-          binaryToNumber(fiftyTwoBits) * 2 ** -fiftyTwoBitsLength
+          binaryToNumber(fiftyTwoBits) * 2 ** -fiftyTwo
 
       result = [...result, generatedInterval]
       next = nextCipher
