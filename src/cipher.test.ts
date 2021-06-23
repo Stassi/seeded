@@ -49,18 +49,18 @@ describe('cipher', () => {
       })
     })
 
-    describe('#keyStream', () => {
-      const { keyStream }: Cipher = cipher({ seed })
+    describe('#octet', () => {
+      const { octet }: Cipher = cipher({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
         describe('Generic call', () => {
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-            expect(keyStream(keyWidth)[0]).toEqual(knownKey)
+            expect(octet(keyWidth)[0]).toEqual(knownKey)
           })
         })
 
         describe('Repeat of generic call and next call', () => {
-          const [key, { keyStream: nextKeyStream }] = keyStream(keyWidth)
+          const [key, { octet: nextOctet }] = octet(keyWidth)
 
           test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
             expect(key).toEqual(knownKey)
@@ -68,31 +68,31 @@ describe('cipher', () => {
 
           describe('Next call', () => {
             test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
-              expect(nextKeyStream(keyWidth)[0]).toEqual(nextKnownKey)
+              expect(nextOctet(keyWidth)[0]).toEqual(nextKnownKey)
             })
           })
         })
 
         describe('Composite call', () => {
           test(`it should persistently return a known, ${doubleKeyWidth}-length key: [${compositeKey}]`, () => {
-            expect(keyStream(doubleKeyWidth)[0]).toEqual(compositeKey)
+            expect(octet(doubleKeyWidth)[0]).toEqual(compositeKey)
           })
         })
       })
     })
 
     describe('state', () => {
-      const [, { state: savedState }] = cipher({ seed }).keyStream(keyWidth)
+      const [, { state: savedState }] = cipher({ seed }).octet(keyWidth)
 
       describe('Next key loaded from saved state', () => {
-        const { keyStream: nextKeyStream } = cipher({
+        const { octet: nextOctet } = cipher({
           seed,
           drop: 0,
           state: savedState,
         })
 
         test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
-          expect(nextKeyStream(keyWidth)[0]).toEqual(nextKnownKey)
+          expect(nextOctet(keyWidth)[0]).toEqual(nextKnownKey)
         })
       })
     })

@@ -29,7 +29,7 @@ export type NumbersCipherTuple = [number[], Cipher]
 export interface Cipher extends CipherInput {
   create: (newState: CipherState) => Cipher
   interval: (count: number) => NumbersCipherTuple
-  keyStream: (count: number) => NumbersCipherTuple
+  octet: (count: number) => NumbersCipherTuple
   state: CipherState
 }
 
@@ -65,23 +65,23 @@ export default function cipher({
   function interval(count: number): NumbersCipherTuple {
     let result: NumbersCipherTuple[0] = [],
       next: NumbersCipherTuple[1] = create(state),
-      keyStreamLocal = keyStream
+      octetLocal = octet
 
     while (length(result) < count) {
-      const [key, nextCipher]: NumbersCipherTuple = keyStreamLocal(7),
+      const [key, nextCipher]: NumbersCipherTuple = octetLocal(7),
         fiftyTwoBits: string = concatenate(toFixedBinaryOctets(key)).slice(4),
         generatedInterval: number =
           binaryToNumber(fiftyTwoBits) * 2 ** -fiftyTwo
 
       result = [...result, generatedInterval]
       next = nextCipher
-      keyStreamLocal = nextCipher.keyStream
+      octetLocal = nextCipher.octet
     }
 
     return [result, next]
   }
 
-  function keyStream(count: number): NumbersCipherTuple {
+  function octet(count: number): NumbersCipherTuple {
     let i: number = prevI,
       roundKey: RoundKey = roundKeyModule({
         state: prevRoundKeyState,
@@ -113,12 +113,12 @@ export default function cipher({
   }
 
   return isNonZeroDrop
-    ? keyStream(prevDrop)[1]
+    ? octet(prevDrop)[1]
     : {
         create,
         drop,
         interval,
-        keyStream,
+        octet,
         seed,
         state,
       }
