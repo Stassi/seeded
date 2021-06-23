@@ -8,28 +8,28 @@ import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 const defaultDrop = 3072,
   poolWidth = 256
 
-interface ArcSeedState {
+interface CipherState {
   i: number
   pool: PoolInput['state']
   roundKey: RoundKeyInput['state']
 }
 
-interface ArcSeedInput {
+interface CipherInput {
   drop?: number
   seed: string
-  state?: ArcSeedState
+  state?: CipherState
 }
 
-export type NumbersArcSeedTuple = [number[], ArcSeed]
+export type NumbersCipherTuple = [number[], Cipher]
 
-export interface ArcSeed extends ArcSeedInput {
-  create: (newState: ArcSeedState) => ArcSeed
-  interval: (count: number) => NumbersArcSeedTuple
-  keyStream: (count: number) => NumbersArcSeedTuple
-  state: ArcSeedState
+export interface Cipher extends CipherInput {
+  create: (newState: CipherState) => Cipher
+  interval: (count: number) => NumbersCipherTuple
+  keyStream: (count: number) => NumbersCipherTuple
+  state: CipherState
 }
 
-export default function arcSeed({
+export default function cipher({
   seed,
   drop: prevDrop = defaultDrop,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
@@ -37,7 +37,7 @@ export default function arcSeed({
     pool: undefined,
     roundKey: 0,
   },
-}: ArcSeedInput): ArcSeed {
+}: CipherInput): Cipher {
   const drop: number = 0,
     isNonZeroDrop: boolean = !isStrictZero(prevDrop),
     remainderWidth: RemainderCallback = remainder(poolWidth),
@@ -50,21 +50,21 @@ export default function arcSeed({
       roundKey: prevRoundKeyState,
     }
 
-  function create(newState: ArcSeedState): ArcSeed {
-    return arcSeed({
+  function create(newState: CipherState): Cipher {
+    return cipher({
       drop,
       seed,
       state: newState,
     })
   }
 
-  function interval(count: number): NumbersArcSeedTuple {
-    let result: NumbersArcSeedTuple[0] = [],
-      next: NumbersArcSeedTuple[1] = create(state),
+  function interval(count: number): NumbersCipherTuple {
+    let result: NumbersCipherTuple[0] = [],
+      next: NumbersCipherTuple[1] = create(state),
       keyStreamLocal = keyStream
 
     while (length(result) < count) {
-      const [key, nextArcSeed]: NumbersArcSeedTuple = keyStreamLocal(7),
+      const [key, nextCipher]: NumbersCipherTuple = keyStreamLocal(7),
         fiftyTwoBitBinary: string = key
           .map((k: number) => k.toString(2).padStart(8, '0'))
           .join('')
@@ -75,14 +75,14 @@ export default function arcSeed({
           fiftyTwoBitDecimal * 2 ** -fiftyTwoBitBinaryLength
 
       result = [...result, generatedInterval]
-      next = nextArcSeed
-      keyStreamLocal = nextArcSeed.keyStream
+      next = nextCipher
+      keyStreamLocal = nextCipher.keyStream
     }
 
     return [result, next]
   }
 
-  function keyStream(count: number): NumbersArcSeedTuple {
+  function keyStream(count: number): NumbersCipherTuple {
     let i: number = prevI,
       roundKey: RoundKey = roundKeyModule({
         state: prevRoundKeyState,

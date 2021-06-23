@@ -1,6 +1,6 @@
-import arcSeed, { ArcSeed, NumbersArcSeedTuple } from './arcSeed'
+import cipher, { Cipher, NumbersCipherTuple } from './cipher'
 
-describe('arcSeed', () => {
+describe('cipher', () => {
   const seed: string = 'hello.',
     knownIntervals: number[] = [
       0.09530453672732464, 0.289083174852129, 0.6187731397359575,
@@ -19,7 +19,7 @@ describe('arcSeed', () => {
 
   describe(`seed (deterministic): "${seed}"`, () => {
     describe('#interval', () => {
-      const { interval }: ArcSeed = arcSeed({ seed })
+      const { interval }: Cipher = cipher({ seed })
 
       describe('Generic call', () => {
         test('it should persistently return known intervals', () => {
@@ -28,7 +28,7 @@ describe('arcSeed', () => {
       })
 
       describe('Repeat of generic call and next call', () => {
-        const [value, { interval: nextInterval }]: NumbersArcSeedTuple =
+        const [value, { interval: nextInterval }]: NumbersCipherTuple =
           interval(keyWidth)
 
         test('it should persistently return known intervals', () => {
@@ -50,7 +50,7 @@ describe('arcSeed', () => {
     })
 
     describe('#keyStream', () => {
-      const { keyStream }: ArcSeed = arcSeed({ seed })
+      const { keyStream }: Cipher = cipher({ seed })
 
       describe(`keyWidth: ${keyWidth}`, () => {
         describe('Generic call', () => {
@@ -82,10 +82,10 @@ describe('arcSeed', () => {
     })
 
     describe('state', () => {
-      const [, { state: savedState }] = arcSeed({ seed }).keyStream(keyWidth)
+      const [, { state: savedState }] = cipher({ seed }).keyStream(keyWidth)
 
       describe('Next key loaded from saved state', () => {
-        const { keyStream: nextKeyStream } = arcSeed({
+        const { keyStream: nextKeyStream } = cipher({
           seed,
           drop: 0,
           state: savedState,
