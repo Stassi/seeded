@@ -1,3 +1,4 @@
+import binaryToNumber from './utilities/binaryToNumber'
 import isStrictZero from './utilities/isStrictZero'
 import keySchedule from './keySchedule'
 import length from './utilities/length'
@@ -66,11 +67,10 @@ export default function cipher({
 
     while (length(result) < count) {
       const [key, nextCipher]: NumbersCipherTuple = keyStreamLocal(7),
-        fiftyTwoBitBinary: string = toFixedBinaryOctets(key).join('').slice(4),
-        fiftyTwoBitBinaryLength: number = length(fiftyTwoBitBinary),
-        fiftyTwoBitDecimal: number = parseInt(fiftyTwoBitBinary, 2),
+        fiftyTwoBits: string = toFixedBinaryOctets(key).join('').slice(4),
+        fiftyTwoBitsLength: number = length(fiftyTwoBits),
         generatedInterval: number =
-          fiftyTwoBitDecimal * 2 ** -fiftyTwoBitBinaryLength
+          binaryToNumber(fiftyTwoBits) * 2 ** -fiftyTwoBitsLength
 
       result = [...result, generatedInterval]
       next = nextCipher
