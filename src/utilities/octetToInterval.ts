@@ -9,8 +9,8 @@ import octetsNeededForLength from './octetsNeededForLength'
 import sliceAt, { SliceAtCallback } from './sliceAt'
 import toFixedBinaryOctets from './toFixedBinaryOctets'
 
-const bitsInOctet: number = 8,
-  maximumSafeBinaryLength: number = 52,
+export const bitsInOctet: number = 8
+const maximumSafeBinaryLength: number = 52,
   maxSafeBinaryToInterval: BinaryNumberToIntervalCallback =
     binaryNumberToInterval(maximumSafeBinaryLength)
 
