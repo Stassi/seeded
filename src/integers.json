@@ -1,0 +1,6 @@
+{
+  "bitsInOctet": 8,
+  "defaultDrop": 3072,
+  "maximumSafeBinaryLength": 52,
+  "poolWidth": 256
+}
