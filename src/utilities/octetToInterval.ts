@@ -8,11 +8,10 @@ import { NumbersCipherTuple } from '../cipher'
 import octetsNeededForLength from './octetsNeededForLength'
 import sliceAt, { SliceAtCallback } from './sliceAt'
 import toFixedBinaryOctets from './toFixedBinaryOctets'
+import { bitsInOctet, maximumSafeBinaryLength } from '../integers.json'
 
-export const bitsInOctet: number = 8
-const maximumSafeBinaryLength: number = 52,
-  maxSafeBinaryToInterval: BinaryNumberToIntervalCallback =
-    binaryNumberToInterval(maximumSafeBinaryLength)
+const maxSafeBinaryToInterval: BinaryNumberToIntervalCallback =
+  binaryNumberToInterval(maximumSafeBinaryLength)
 
 export const octetsNeededForMaxSafeBinary: number = octetsNeededForLength(
   maximumSafeBinaryLength

@@ -7,9 +7,7 @@ import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
-
-const defaultDrop = 3072,
-  poolWidth = 256
+import { defaultDrop, poolWidth } from './integers.json'
 
 interface CipherState {
   i: number

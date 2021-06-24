@@ -1,5 +1,5 @@
-import { bitsInOctet } from './octetToInterval'
 import toBinary from './toBinary'
+import { bitsInOctet } from '../integers.json'
 
 export function toFixedBinaryOctet(n: number): string {
   return toBinary(n).padStart(bitsInOctet, '0')
