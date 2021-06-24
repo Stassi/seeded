@@ -1,15 +1,14 @@
-import binaryToNumber from './utilities/binaryToNumber'
-import concatenate from './utilities/concatenate'
 import isStrictZero from './utilities/isStrictZero'
 import keySchedule from './keySchedule'
 import length from './utilities/length'
 import poolModule, { Pool, PoolInput } from './pool'
 import remainder, { RemainderCallback } from './utilities/remainder'
 import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
-import toFixedBinaryOctets from './utilities/toFixedBinaryOctets'
+import octetToInterval, {
+  octetsNeededForMaxSafeBinary,
+} from './utilities/octetToInterval'
 
 const defaultDrop = 3072,
-  fiftyTwo = 52,
   poolWidth = 256
 
 interface CipherState {
@@ -68,12 +67,11 @@ export default function cipher({
       octetLocal = octet
 
     while (length(result) < count) {
-      const [key, nextCipher]: NumbersCipherTuple = octetLocal(7),
-        fiftyTwoBits: string = concatenate(toFixedBinaryOctets(key)).slice(4),
-        generatedInterval: number =
-          binaryToNumber(fiftyTwoBits) * 2 ** -fiftyTwo
+      const [generatedOctet, nextCipher]: NumbersCipherTuple = octetLocal(
+        octetsNeededForMaxSafeBinary
+      )
 
-      result = [...result, generatedInterval]
+      result = [...result, octetToInterval(generatedOctet)]
       next = nextCipher
       octetLocal = nextCipher.octet
     }
