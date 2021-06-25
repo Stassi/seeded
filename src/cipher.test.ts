@@ -52,31 +52,29 @@ describe('cipher', () => {
     describe('#octet', () => {
       const { octet }: Cipher = cipher({ seed })
 
-      describe(`keyWidth: ${keyWidth}`, () => {
-        describe('Generic call', () => {
-          test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-            expect(octet(keyWidth)[0]).toEqual(knownKey)
-          })
+      describe('Generic call', () => {
+        test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
+          expect(octet(keyWidth)[0]).toEqual(knownKey)
+        })
+      })
+
+      describe('Repeat of generic call and next call', () => {
+        const [key, { octet: nextOctet }] = octet(keyWidth)
+
+        test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
+          expect(key).toEqual(knownKey)
         })
 
-        describe('Repeat of generic call and next call', () => {
-          const [key, { octet: nextOctet }] = octet(keyWidth)
-
-          test(`it should persistently return a known, ${keyWidth}-length key: [${knownKey}]`, () => {
-            expect(key).toEqual(knownKey)
-          })
-
-          describe('Next call', () => {
-            test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
-              expect(nextOctet(keyWidth)[0]).toEqual(nextKnownKey)
-            })
+        describe('Next call', () => {
+          test(`it should persistently return a known, ${keyWidth}-length key: [${nextKnownKey}]`, () => {
+            expect(nextOctet(keyWidth)[0]).toEqual(nextKnownKey)
           })
         })
+      })
 
-        describe('Composite call', () => {
-          test(`it should persistently return a known, ${doubleKeyWidth}-length key: [${compositeKey}]`, () => {
-            expect(octet(doubleKeyWidth)[0]).toEqual(compositeKey)
-          })
+      describe('Composite call', () => {
+        test(`it should persistently return a known, ${doubleKeyWidth}-length key: [${compositeKey}]`, () => {
+          expect(octet(doubleKeyWidth)[0]).toEqual(compositeKey)
         })
       })
     })
