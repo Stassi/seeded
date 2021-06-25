@@ -101,7 +101,7 @@ describe('cipher', () => {
 
   describe('stochastic', () => {
     describe('#interval', () => {
-      const { interval }: Cipher = cipher({ seed: 'hello.' })
+      const { interval }: Cipher = cipher()
 
       describe('Repeated calls', () => {
         const x: number = interval(1)[0][0],
