@@ -7,6 +7,7 @@ import roundKeyModule, { RoundKey, RoundKeyInput } from './roundKey'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
+import timeSinceEpoch from './utilities/timeSinceEpoch'
 import { defaultDrop, poolWidth } from './integers.json'
 
 interface CipherState {
@@ -17,7 +18,7 @@ interface CipherState {
 
 interface CipherInput {
   drop?: number
-  seed: string
+  seed?: string
   state?: CipherState
 }
 
@@ -31,14 +32,14 @@ export interface Cipher extends CipherInput {
 }
 
 export default function cipher({
-  seed,
   drop: prevDrop = defaultDrop,
+  seed = `${timeSinceEpoch()}`,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
     pool: undefined,
     roundKey: 0,
   },
-}: CipherInput): Cipher {
+}: CipherInput = {}): Cipher {
   const drop: number = 0,
     isNonZeroDrop: boolean = !isStrictZero(prevDrop),
     remainderWidth: RemainderCallback = remainder(poolWidth),

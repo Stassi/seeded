@@ -9,7 +9,7 @@ const rollupConfig = defineConfig({
     format: 'es',
     sourcemap: true,
   },
-  plugins: [json(), ts()],
+  plugins: [json({ preferConst: true }), ts()],
 })
 
 export default rollupConfig
