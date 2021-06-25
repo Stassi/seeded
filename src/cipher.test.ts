@@ -1,10 +1,9 @@
 import cipher, { Cipher, NumbersCipherTuple } from './cipher'
 
 describe('cipher', () => {
-  const seed: string = 'hello.'
-
-  describe(`seed (deterministic): "${seed}"`, () => {
-    const keyWidth: number = 5,
+  describe(`deterministic`, () => {
+    const seed: string = 'hello.',
+      keyWidth: number = 5,
       doubleKeyWidth: number = keyWidth * 2
 
     describe('#interval', () => {
