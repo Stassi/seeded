@@ -108,7 +108,7 @@ describe('cipher', () => {
           y: number = interval(1)[0][0]
 
         test('it should return distinct values', () => {
-          expect(x !== y).toBeTruthy()
+          expect(x === y).toBeFalsy()
         })
 
         test('it should return values between [0, 1)', () => {
