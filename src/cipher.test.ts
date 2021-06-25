@@ -101,11 +101,12 @@ describe('cipher', () => {
 
   describe('stochastic', () => {
     describe('#interval', () => {
-      const { interval }: Cipher = cipher()
+      const { interval: intervalX }: Cipher = cipher(),
+        { interval: intervalY }: Cipher = cipher()
 
-      describe('Repeated calls', () => {
-        const x: number = interval(1)[0][0],
-          y: number = interval(1)[0][0]
+      describe('Multiple instances', () => {
+        const [[x]]: NumbersCipherTuple = intervalX(1),
+          [[y]]: NumbersCipherTuple = intervalY(1)
 
         test('it should return distinct values', () => {
           expect(x === y).toBeFalsy()
