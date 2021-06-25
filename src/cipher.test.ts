@@ -98,4 +98,26 @@ describe('cipher', () => {
       })
     })
   })
+
+  describe('stochastic', () => {
+    describe('#interval', () => {
+      const { interval }: Cipher = cipher({ seed: 'hello.' })
+
+      describe('Repeated calls', () => {
+        const x: number = interval(1)[0][0],
+          y: number = interval(1)[0][0]
+
+        test('it should return distinct values', () => {
+          expect(x !== y).toBeTruthy()
+        })
+
+        test('it should return values between [0, 1)', () => {
+          expect(x).toBeGreaterThanOrEqual(0)
+          expect(x).toBeLessThan(1)
+          expect(y).toBeGreaterThanOrEqual(0)
+          expect(y).toBeLessThan(1)
+        })
+      })
+    })
+  })
 })
