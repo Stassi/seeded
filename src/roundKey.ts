@@ -6,7 +6,7 @@ export interface RoundKeyInput {
   width: number
 }
 
-export interface RoundKey extends RoundKeyInput {
+export interface RoundKey {
   addTo: (...summands: number[]) => number
   create: (n: number) => RoundKey
   state: number
@@ -26,5 +26,5 @@ export default function roundKey({
     return roundKey({ width, state: remainderWidth(n) })
   }
 
-  return { addTo, create, state, width }
+  return { addTo, create, state }
 }
