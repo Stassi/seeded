@@ -1,7 +1,27 @@
 {
   "name": "arcseed",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "Seedable pseudorandom number generator (PRNG).",
+  "keywords": [
+    "arc4",
+    "arcfour",
+    "continuous probability distribution",
+    "deterministic random bit generator",
+    "discrete probability distribution",
+    "drbg",
+    "interval",
+    "modern cryptography",
+    "persistent data structure",
+    "prng",
+    "pseudorandom number generator",
+    "pseudorandom number sampling",
+    "rc4",
+    "seed",
+    "seedable",
+    "stream cipher",
+    "uniform distribution",
+    "weighted distribution"
+  ],
   "homepage": "https://github.com/Stassi/arcseed#readme",
   "license": "MIT",
   "author": "Andreas Stassivik <andreas@stassi.net> (https://github.com/Stassi)",
@@ -17,10 +37,11 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "jest && package-check"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
+    "@skypack/package-check": "^0.2.2",
     "@types/jest": "^26.0.23",
     "jest": "^27.0.5",
     "prettier": "2.3.1",

@@ -3,9 +3,9 @@ export interface ForEachProperty {
 }
 
 export type ForEachCallback = (
-  value: number,
+  value: any,
   index: number,
-  array: number[]
+  array: any[]
 ) => void
 
 export default function forEach(a: any[]) {
