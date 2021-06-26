@@ -17,7 +17,7 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepublishOnly": "npm run build",
-    "test": "jest"
+    "test": "jest && package-check"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
