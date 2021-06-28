@@ -9,3 +9,4 @@
 [![Snyk package health](https://snyk.io/advisor/npm-package/arcseed/badge.svg)](https://snyk.io/advisor/npm-package/arcseed)
 [![CodeQL](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml)
 [![Continuous integration](https://github.com/Stassi/arcseed/actions/workflows/ci.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/ci.yml)
+[![Snyk analysis](https://github.com/Stassi/arcseed/actions/workflows/snyk.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/snyk.yml)
