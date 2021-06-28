@@ -24,7 +24,7 @@ interface CipherInput {
 
 export type NumbersCipherTuple = [number[], Cipher]
 
-export interface Cipher extends CipherInput {
+export interface Cipher {
   create: (newState: CipherState) => Cipher
   interval: (count: number) => NumbersCipherTuple
   octet: (count: number) => NumbersCipherTuple
@@ -113,10 +113,8 @@ export default function cipher({
     ? octet(prevDrop)[1]
     : {
         create,
-        drop,
         interval,
         octet,
-        seed,
         state,
       }
 }

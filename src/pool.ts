@@ -11,7 +11,6 @@ export interface PoolInput {
 export interface Pool
   extends AtIndexProperty,
     ForEachProperty,
-    PoolInput,
     SwapIndicesProperty {
   create: (state: number[]) => Pool
   state: number[]
@@ -29,5 +28,5 @@ export default function pool({
     return pool({ state, width })
   }
 
-  return { atIndex, create, forEach, state, swapIndices, width }
+  return { atIndex, create, forEach, state, swapIndices }
 }
