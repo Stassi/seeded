@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Vulnerability scan
-        uses: snyk/actions/node@v0
+        uses: snyk/actions/node@7fad562681122205233d1242c3bb39598c5393da
         continue-on-error: true
         env:
           SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
