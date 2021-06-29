@@ -7,8 +7,8 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    name: Build
+  test-build:
+    name: Test & Build
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -17,11 +17,27 @@ jobs:
         os: [macos-latest, ubuntu-latest, windows-latest]
 
     steps:
-      - uses: actions/checkout@v2
+      - name: Repository checkout
+        uses: actions/checkout@v2
+
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-      - run: npm ci
-      - run: npm run build --if-present
-      - run: npm test
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run test suite
+        run: npm test
+
+      - name: Build compilation
+        run: npm run build
+
+      - name: Coverage report generation
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.4.x'
+        run: npm run coverage
+
+      - name: Submit coverage report to provider
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.4.x'
+        uses: codecov/codecov-action@v1

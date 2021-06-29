@@ -1,6 +1,6 @@
 {
   "name": "arcseed",
-  "version": "0.0.10",
+  "version": "0.0.11",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",
@@ -34,6 +34,7 @@
   "repository": "github:Stassi/arcseed",
   "scripts": {
     "build": "rollup -c",
+    "coverage": "jest --coverage",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepublishOnly": "npm run build",
@@ -52,7 +53,7 @@
   },
   "engines": {
     "node": "^12.22.1 || ^14.17.1 || >=16.4.0",
-    "npm": "^6.14.13 || ^7.19.0"
+    "npm": "^6.14.13 || >=7.19.0"
   },
   "os": [
     "darwin",
