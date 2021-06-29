@@ -18,6 +18,7 @@
     "rc4",
     "seed",
     "seedable",
+    "seeded",
     "stream cipher",
     "uniform distribution",
     "weighted distribution"
