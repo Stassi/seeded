@@ -34,6 +34,7 @@
   "repository": "github:Stassi/arcseed",
   "scripts": {
     "build": "rollup -c",
+    "coverage": "jest --coverage",
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepublishOnly": "npm run build",
