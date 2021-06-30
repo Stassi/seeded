@@ -6,7 +6,7 @@ interface OctetInput extends CipherInput {
 }
 
 export interface Octet {
-  generated: number[]
+  generated: NumbersCipherTuple[0]
   next: ({ ...OctetInput }) => Octet
 }
 
