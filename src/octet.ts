@@ -14,7 +14,7 @@ export default function octet({ count = 1, ...props }: OctetInput = {}): Octet {
   const { octet: cipherOctet }: Cipher = cipher({ ...props })
   const [generated, { state }]: NumbersCipherTuple = cipherOctet(count)
 
-  function next({ count: newCount = 1 }: OctetInput): Octet {
+  function next({ count: newCount = 1 }: OctetInput = {}): Octet {
     return octet({
       state,
       count: newCount,
