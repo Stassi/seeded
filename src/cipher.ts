@@ -16,7 +16,7 @@ interface CipherState {
   roundKey: RoundKeyInput['state']
 }
 
-interface CipherInput {
+export interface CipherInput {
   drop?: number
   seed?: string
   state?: CipherState
