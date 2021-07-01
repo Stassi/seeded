@@ -10,7 +10,7 @@ describe('octet', () => {
       nextKnownKey: number[] = [119, 249, 116, 160, 21],
       compositeKey: number[] = [...knownKey, ...nextKnownKey]
 
-    describe('generic call and next call', () => {
+    describe('first chained call', () => {
       const { generated, next: nextOctet }: Octet = octet({
         seed,
         count: keyWidth,
@@ -20,7 +20,7 @@ describe('octet', () => {
         expect(generated).toEqual(knownKey)
       })
 
-      describe('next call', () => {
+      describe('second chained call', () => {
         test('it should persistently return a known key', () => {
           const { generated: generatedTwo } = nextOctet({ count: keyWidth })
           expect(generatedTwo).toEqual(nextKnownKey)
