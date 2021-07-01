@@ -40,5 +40,21 @@ describe('octet', () => {
         expect(generated).toEqual(compositeKey)
       })
     })
+
+    describe('state loading', () => {
+      const { state }: Octet = octet({
+          seed,
+          count: keyWidth,
+        }),
+        { generated }: Octet = octet({
+          state,
+          count: keyWidth,
+          drop: 0,
+        })
+
+      test('it should return a known key from a loaded state', () => {
+        expect(generated).toEqual(nextKnownKey)
+      })
+    })
   })
 })
