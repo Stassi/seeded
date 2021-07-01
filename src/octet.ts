@@ -1,4 +1,9 @@
-import type { Cipher, CipherInput, NumbersCipherTuple } from './cipher'
+import type {
+  Cipher,
+  CipherInput,
+  CipherState,
+  NumbersCipherTuple,
+} from './cipher'
 import cipher from './cipher'
 
 interface OctetInput extends CipherInput {
@@ -7,20 +12,21 @@ interface OctetInput extends CipherInput {
 
 export interface Octet {
   generated: NumbersCipherTuple[0]
-  next: ({ ...OctetInput }) => Octet
+  next: (nextCount?: number) => Octet
+  state: CipherState
 }
 
 export default function octet({ count = 1, ...props }: OctetInput = {}): Octet {
   const { octet: cipherOctet }: Cipher = cipher({ ...props })
   const [generated, { state }]: NumbersCipherTuple = cipherOctet(count)
 
-  function next({ count: newCount = 1 }: OctetInput = {}): Octet {
+  function next(nextCount = 1): Octet {
     return octet({
       state,
-      count: newCount,
+      count: nextCount,
       drop: 0,
     })
   }
 
-  return { generated, next }
+  return { generated, next, state }
 }

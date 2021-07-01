@@ -10,7 +10,7 @@ import octetToInterval, {
 import timeSinceEpoch from './utilities/timeSinceEpoch'
 import { defaultDrop, poolWidth } from './integers.json'
 
-interface CipherState {
+export interface CipherState {
   i: number
   pool: PoolInput['state']
   roundKey: RoundKeyInput['state']
