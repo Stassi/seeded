@@ -55,4 +55,26 @@ describe('octet', () => {
       })
     })
   })
+
+  describe('stochastic', () => {
+    describe('multiple instances', () => {
+      const {
+          generated: [x],
+        } = octet(),
+        {
+          generated: [y],
+        } = octet()
+
+      test('it should return distinct values', () => {
+        expect(x === y).toBeFalsy()
+      })
+
+      test('it should return discrete integers between [0, 255]', () => {
+        expect(x).toBeGreaterThanOrEqual(0)
+        expect(x).toBeLessThanOrEqual(255)
+        expect(y).toBeGreaterThanOrEqual(0)
+        expect(y).toBeLessThanOrEqual(255)
+      })
+    })
+  })
 })
