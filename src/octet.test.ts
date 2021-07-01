@@ -27,5 +27,16 @@ describe('octet', () => {
         })
       })
     })
+
+    describe('composite call', () => {
+      test('it should persistently return a known key', () => {
+        const { generated }: Octet = octet({
+          seed,
+          count: doubleKeyWidth,
+        })
+
+        expect(generated).toEqual(compositeKey)
+      })
+    })
   })
 })
