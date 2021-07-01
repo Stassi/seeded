@@ -1,6 +1,6 @@
 {
   "name": "arcseed",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",
@@ -18,6 +18,7 @@
     "rc4",
     "seed",
     "seedable",
+    "seeded",
     "stream cipher",
     "uniform distribution",
     "weighted distribution"
@@ -46,7 +47,7 @@
     "@types/jest": "^26.0.23",
     "jest": "^27.0.5",
     "prettier": "2.3.2",
-    "rollup": "^2.52.3",
+    "rollup": "^2.52.6",
     "rollup-plugin-ts": "^1.4.0",
     "ts-jest": "^27.0.3",
     "typescript": "^4.3.4"
@@ -68,6 +69,7 @@
     "testEnvironment": "node"
   },
   "prettier": {
+    "endOfLine": "auto",
     "semi": false,
     "singleQuote": true
   },

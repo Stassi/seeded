@@ -8,6 +8,6 @@
 ![node-current](https://img.shields.io/node/v/arcseed?style=plastic)
 [![codecov](https://codecov.io/gh/Stassi/arcseed/branch/main/graph/badge.svg?token=E4J0KJHHWR)](https://codecov.io/gh/Stassi/arcseed)
 [![Snyk advisor](https://snyk.io/advisor/npm-package/arcseed/badge.svg)](https://snyk.io/advisor/npm-package/arcseed)
-[![CodeQL](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml)
 [![Continuous integration](https://github.com/Stassi/arcseed/actions/workflows/ci.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/ci.yml)
+[![CodeQL](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/codeql.yml)
 [![Snyk analysis](https://github.com/Stassi/arcseed/actions/workflows/snyk.yml/badge.svg)](https://github.com/Stassi/arcseed/actions/workflows/snyk.yml)

@@ -3,7 +3,7 @@ import json from '@rollup/plugin-json'
 import ts from 'rollup-plugin-ts'
 
 const rollupConfig = defineConfig({
-  input: 'src/cipher.ts',
+  input: 'src/index.ts',
   output: {
     file: 'lib/arcSeed.mjs',
     format: 'es',
