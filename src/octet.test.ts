@@ -22,7 +22,9 @@ describe('octet', () => {
 
       describe('second chained call', () => {
         test('it should persistently return a known key', () => {
-          const { generated: generatedTwo } = nextOctet({ count: keyWidth })
+          const { generated: generatedTwo }: Octet = nextOctet({
+            count: keyWidth,
+          })
           expect(generatedTwo).toEqual(nextKnownKey)
         })
       })
