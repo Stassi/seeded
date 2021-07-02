@@ -1,6 +1,5 @@
-import binaryNumberToInterval, {
-  BinaryNumberToIntervalCallback,
-} from './binaryNumberToInterval'
+import type { BinaryNumberToIntervalCallback } from './binaryNumberToInterval'
+import binaryNumberToInterval from './binaryNumberToInterval'
 import binaryToNumber from './binaryToNumber'
 import concatenate from './concatenate'
 import negate from './negate'
