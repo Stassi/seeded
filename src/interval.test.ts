@@ -1,3 +1,6 @@
+import type { Interval } from './interval'
+import interval from './interval'
+
 describe('interval', () => {
   describe(`deterministic`, () => {
     const seed: string = 'hello.',
@@ -14,7 +17,21 @@ describe('interval', () => {
       compositeInterval: number[] = [...knownIntervals, ...nextKnownIntervals]
 
     describe('first chained call', () => {
-      describe('second chained call', () => {})
+      const { generated, next: nextInterval }: Interval = interval({
+        seed,
+        count: keyWidth,
+      })
+
+      test('it should persistently return known intervals', () => {
+        expect(generated).toEqual(knownIntervals)
+      })
+
+      describe('second chained call', () => {
+        test('it should persistently return known intervals', () => {
+          const { generated: generatedTwo }: Interval = nextInterval(keyWidth)
+          expect(generatedTwo).toEqual(nextKnownIntervals)
+        })
+      })
     })
 
     describe('composite call', () => {})
