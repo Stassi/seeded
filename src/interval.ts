@@ -1,26 +1,44 @@
-import cipher, {
-  Cipher,
-  CipherInput,
-  CipherState,
-  NumbersCipherTuple,
-} from './cipher'
+import type { Octet, OctetInput } from './octet'
+import length from './utilities/length'
+import octet from './octet'
+import octetToInterval, {
+  octetsNeededForMaxSafeBinary,
+} from './utilities/octetToInterval'
 
-interface IntervalInput extends CipherInput {
-  count?: number
-}
+interface IntervalInput extends OctetInput {}
 
-export interface Interval {
-  generated: NumbersCipherTuple[0]
+export interface Interval extends Octet {
   next: (nextCount?: number) => Interval
-  state: CipherState
 }
 
 export default function interval({
   count = 1,
   ...props
 }: IntervalInput = {}): Interval {
-  const { interval: cipherInterval }: Cipher = cipher({ ...props })
-  const [generated, { state }]: NumbersCipherTuple = cipherInterval(count)
+  let generated: Interval['generated'] = [],
+    state: Interval['state'] = {
+      i: 0,
+      pool: [],
+      roundKey: 0,
+    },
+    localNextOctet: Octet['next'] = () => octet()
+
+  while (length(generated) < count) {
+    const {
+      generated: generatedOctet,
+      next: nextOctet,
+      state: octetState,
+    }: Octet = length(generated) === 0
+      ? octet({
+          count: octetsNeededForMaxSafeBinary,
+          ...props,
+        })
+      : localNextOctet(octetsNeededForMaxSafeBinary)
+
+    generated = [...generated, octetToInterval(generatedOctet)]
+    localNextOctet = nextOctet
+    state = octetState
+  }
 
   function next(nextCount = 1): Interval {
     return interval({
