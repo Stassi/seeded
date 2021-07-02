@@ -14,7 +14,7 @@ describe('interval', () => {
         0.6881552357812133, 0.20458416697748794, 0.06062310602522847,
         0.522549827384321, 0.8543837916790913,
       ],
-      compositeInterval: number[] = [...knownIntervals, ...nextKnownIntervals]
+      compositeIntervals: number[] = [...knownIntervals, ...nextKnownIntervals]
 
     describe('first chained call', () => {
       const { generated, next: nextInterval }: Interval = interval({
@@ -41,7 +41,7 @@ describe('interval', () => {
           count: doubleKeyWidth,
         })
 
-        expect(generated).toEqual(compositeInterval)
+        expect(generated).toEqual(compositeIntervals)
       })
     })
 
