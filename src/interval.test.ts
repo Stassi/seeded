@@ -34,7 +34,16 @@ describe('interval', () => {
       })
     })
 
-    describe('composite call', () => {})
+    describe('composite call', () => {
+      test('it should persistently return known intervals', () => {
+        const { generated }: Interval = interval({
+          seed,
+          count: doubleKeyWidth,
+        })
+
+        expect(generated).toEqual(compositeInterval)
+      })
+    })
 
     describe('state loading', () => {})
   })
