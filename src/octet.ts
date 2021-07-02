@@ -6,7 +6,7 @@ import type {
 } from './cipher'
 import cipher from './cipher'
 
-interface OctetInput extends CipherInput {
+export interface OctetInput extends CipherInput {
   count?: number
 }
 
