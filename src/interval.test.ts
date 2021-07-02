@@ -62,5 +62,25 @@ describe('interval', () => {
     })
   })
 
-  describe(`stochastic`, () => {})
+  describe(`stochastic`, () => {
+    describe('multiple instances', () => {
+      const {
+          generated: [x],
+        }: Interval = interval(),
+        {
+          generated: [y],
+        }: Interval = interval()
+
+      test('it should return distinct values', () => {
+        expect(x === y).toBeFalsy()
+      })
+
+      test('it should return continuous values between [0, 1)', () => {
+        expect(x).toBeGreaterThanOrEqual(0)
+        expect(x).toBeLessThan(1)
+        expect(y).toBeGreaterThanOrEqual(0)
+        expect(y).toBeLessThan(1)
+      })
+    })
+  })
 })
