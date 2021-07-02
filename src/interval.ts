@@ -8,7 +8,7 @@ import octetToInterval, {
 interface IntervalInput extends OctetInput {}
 
 export interface Interval extends Octet {
-  next: (nextCount?: number) => Interval
+  next: (count?: number) => Interval
 }
 
 export default function interval({
