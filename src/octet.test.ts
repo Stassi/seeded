@@ -6,30 +6,30 @@ describe('octet', () => {
     const seed: string = 'hello.',
       count: number = 5,
       doubleCount: number = count * 2,
-      knownKey: number[] = [113, 134, 94, 12, 198],
-      nextKnownKey: number[] = [119, 249, 116, 160, 21],
-      compositeKey: number[] = [...knownKey, ...nextKnownKey]
+      knownOctets: number[] = [113, 134, 94, 12, 198],
+      nextKnownOctets: number[] = [119, 249, 116, 160, 21],
+      compositeOctets: number[] = [...knownOctets, ...nextKnownOctets]
 
     describe('first chained call', () => {
       const { generated, next: nextOctet }: Octet = octet({ count, seed })
 
-      test('it should persistently return a known key', () => {
-        expect(generated).toEqual(knownKey)
+      test('it should persistently return known octets', () => {
+        expect(generated).toEqual(knownOctets)
       })
 
       describe('second chained call', () => {
-        test('it should persistently return a known key', () => {
+        test('it should persistently return known octets', () => {
           const { generated: generatedTwo }: Octet = nextOctet(count)
-          expect(generatedTwo).toEqual(nextKnownKey)
+          expect(generatedTwo).toEqual(nextKnownOctets)
         })
       })
     })
 
     describe('composite call', () => {
-      test('it should persistently return a known key', () => {
+      test('it should persistently return known octets', () => {
         const { generated }: Octet = octet({ seed, count: doubleCount })
 
-        expect(generated).toEqual(compositeKey)
+        expect(generated).toEqual(compositeOctets)
       })
     })
 
@@ -37,8 +37,8 @@ describe('octet', () => {
       const { state }: Octet = octet({ count, seed }),
         { generated }: Octet = octet({ count, state, drop: 0 })
 
-      test('it should return a known key from a loaded state', () => {
-        expect(generated).toEqual(nextKnownKey)
+      test('it should return known octets from a loaded state', () => {
+        expect(generated).toEqual(nextKnownOctets)
       })
     })
   })
