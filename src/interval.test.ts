@@ -45,7 +45,21 @@ describe('interval', () => {
       })
     })
 
-    describe('state loading', () => {})
+    describe('state loading', () => {
+      const { state }: Interval = interval({
+          seed,
+          count: keyWidth,
+        }),
+        { generated }: Interval = interval({
+          state,
+          count: keyWidth,
+          drop: 0,
+        })
+
+      test('it should return known intervals from a loaded state', () => {
+        expect(generated).toEqual(nextKnownIntervals)
+      })
+    })
   })
 
   describe(`stochastic`, () => {})
