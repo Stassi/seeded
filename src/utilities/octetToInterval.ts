@@ -3,7 +3,6 @@ import binaryNumberToInterval from './binaryNumberToInterval'
 import binaryToNumber from './binaryToNumber'
 import concatenate from './concatenate'
 import negate from './negate'
-import { NumbersCipherTuple } from '../cipher'
 import octetsNeededForLength from './octetsNeededForLength'
 import sliceAt, { SliceAtCallback } from './sliceAt'
 import toFixedBinaryOctets from './toFixedBinaryOctets'
@@ -20,8 +19,10 @@ const sliceToMaxSafeBinary: SliceAtCallback = sliceAt(
   octetsNeededForMaxSafeBinary * bitsInOctet + negate(maximumSafeBinaryLength)
 )
 
-export default function octetToInterval(key: NumbersCipherTuple[0]): number {
+export default function octetToInterval(octet: number[]): number {
   return maxSafeBinaryToInterval(
-    binaryToNumber(sliceToMaxSafeBinary(concatenate(toFixedBinaryOctets(key))))
+    binaryToNumber(
+      sliceToMaxSafeBinary(concatenate(toFixedBinaryOctets(octet)))
+    )
   )
 }
