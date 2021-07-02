@@ -1,4 +1,5 @@
 import type { Octet, OctetInput } from './octet'
+import isStrictZero from './utilities/isStrictZero'
 import length from './utilities/length'
 import octet from './octet'
 import octetToInterval, {
@@ -28,7 +29,7 @@ export default function interval({
       generated: generatedOctet,
       next: nextOctet,
       state: octetState,
-    }: Octet = length(generated) === 0
+    }: Octet = isStrictZero(length(generated))
       ? octet({
           count: octetsNeededForMaxSafeBinary,
           ...props,
