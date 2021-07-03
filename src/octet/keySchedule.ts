@@ -1,6 +1,9 @@
-import keyModule, { Key } from './key'
-import poolModule, { Pool } from './pool'
-import roundKeyModule, { RoundKey } from './roundKey'
+import type { Key } from './key'
+import type { Pool } from './pool'
+import type { RoundKey } from './roundKey'
+import keyModule from './key'
+import poolModule from './pool'
+import roundKeyModule from './roundKey'
 
 interface KeyScheduleInput {
   seed: string

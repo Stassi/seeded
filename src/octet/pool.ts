@@ -1,7 +1,10 @@
-import atIndexUtil, { AtIndexProperty } from './utilities/atIndex'
-import forEachUtil, { ForEachProperty } from './utilities/forEach'
-import identityPermutation from './utilities/identityPermutation'
-import swapIndicesUtil, { SwapIndicesProperty } from './utilities/swapIndices'
+import type { AtIndexProperty } from '../utilities/atIndex'
+import type { ForEachProperty } from '../utilities/forEach'
+import type { SwapIndicesProperty } from '../utilities/swapIndices'
+import atIndexUtil from '../utilities/atIndex'
+import forEachUtil from '../utilities/forEach'
+import identityPermutation from '../utilities/identityPermutation'
+import swapIndicesUtil from '../utilities/swapIndices'
 
 export interface PoolInput {
   state?: number[]

@@ -1,14 +1,15 @@
 import type { Pool, PoolInput } from './pool'
-import type { RemainderCallback } from './utilities/remainder'
+import type { RemainderCallback } from '../utilities/remainder'
 import type { RoundKey, RoundKeyInput } from './roundKey'
+import type { SliceAtCallback } from '../utilities/sliceAt'
 import keySchedule from './keySchedule'
-import length from './utilities/length'
+import length from '../utilities/length'
 import poolModule from './pool'
-import remainder from './utilities/remainder'
+import remainder from '../utilities/remainder'
 import roundKeyModule from './roundKey'
-import sliceAt, { SliceAtCallback } from './utilities/sliceAt'
-import timeSinceEpoch from './utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from './integers.json'
+import sliceAt from '../utilities/sliceAt'
+import timeSinceEpoch from '../utilities/timeSinceEpoch'
+import { defaultDrop, poolWidth } from '../integers.json'
 
 interface OctetState {
   i: number

@@ -1,7 +1,9 @@
-import atIndexUtil, { AtIndexProperty } from './utilities/atIndex'
-import length from './utilities/length'
-import remainder, { RemainderCallback } from './utilities/remainder'
-import toCharCodes from './utilities/toCharCodes'
+import type { AtIndexProperty } from '../utilities/atIndex'
+import type { RemainderCallback } from '../utilities/remainder'
+import atIndexUtil from '../utilities/atIndex'
+import length from '../utilities/length'
+import remainder from '../utilities/remainder'
+import toCharCodes from '../utilities/toCharCodes'
 
 export interface Key extends AtIndexProperty {}
 
