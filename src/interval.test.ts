@@ -1,4 +1,5 @@
 import type { Interval } from './interval'
+import delay from './utilities/delay'
 import interval from './interval'
 
 describe('interval', () => {
@@ -64,18 +65,31 @@ describe('interval', () => {
 
   describe(`stochastic`, () => {
     describe('multiple instances', () => {
-      const {
+      test('it should return distinct values', async () => {
+        const {
           generated: [x],
-        }: Interval = interval(),
-        {
-          generated: [y],
-        }: Interval = interval()
+        } = interval()
 
-      test('it should return distinct values', () => {
+        await delay(1)
+
+        const {
+          generated: [y],
+        } = interval()
+
         expect(x === y).toBeFalsy()
       })
 
-      test('it should return continuous values between [0, 1)', () => {
+      test('it should return continuous values between [0, 1)', async () => {
+        const {
+          generated: [x],
+        } = interval()
+
+        await delay(1)
+
+        const {
+          generated: [y],
+        } = interval()
+
         expect(x).toBeGreaterThanOrEqual(0)
         expect(x).toBeLessThan(1)
         expect(y).toBeGreaterThanOrEqual(0)

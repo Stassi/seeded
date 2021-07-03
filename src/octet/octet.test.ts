@@ -1,4 +1,5 @@
 import type { Octet } from './octet'
+import delay from '../utilities/delay'
 import octet from './octet'
 
 describe('octet', () => {
@@ -45,18 +46,31 @@ describe('octet', () => {
 
   describe('stochastic', () => {
     describe('multiple instances', () => {
-      const {
+      test('it should return distinct values', async () => {
+        const {
           generated: [x],
-        } = octet(),
-        {
+        } = octet()
+
+        await delay(1)
+
+        const {
           generated: [y],
         } = octet()
 
-      test('it should return distinct values', () => {
         expect(x === y).toBeFalsy()
       })
 
-      test('it should return discrete integers between [0, 255]', () => {
+      test('it should return discrete integers between [0, 255]', async () => {
+        const {
+          generated: [x],
+        } = octet()
+
+        await delay(1)
+
+        const {
+          generated: [y],
+        } = octet()
+
         expect(x).toBeGreaterThanOrEqual(0)
         expect(x).toBeLessThanOrEqual(255)
         expect(y).toBeGreaterThanOrEqual(0)
