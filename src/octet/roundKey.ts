@@ -1,5 +1,6 @@
-import remainder, { RemainderCallback } from './utilities/remainder'
-import sum from './utilities/sum'
+import type { RemainderCallback } from '../utilities/remainder'
+import remainder from '../utilities/remainder'
+import sum from '../utilities/sum'
 
 export interface RoundKeyInput {
   state?: number
