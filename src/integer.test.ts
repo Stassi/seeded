@@ -64,7 +64,7 @@ describe('integer', () => {
           generated: [x],
         }: Integer = integer()
 
-        await delay(10)
+        await delay(100)
 
         const {
           generated: [y],
