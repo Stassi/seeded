@@ -7,8 +7,8 @@ describe('integer', () => {
     const seed: string = 'hello.',
       keyWidth: number = 5,
       doubleKeyWidth: number = keyWidth * 2,
-      knownIntegers: number[] = [0, 1, 2, 3, 4],
-      nextKnownIntegers: number[] = [5, 6, 7, 8, 9],
+      knownIntegers: number[] = [3, 4, 4, 2, 8],
+      nextKnownIntegers: number[] = [9, 9, 6, 0, 1],
       compositeIntegers: number[] = [...knownIntegers, ...nextKnownIntegers]
 
     describe('first chained call', () => {
