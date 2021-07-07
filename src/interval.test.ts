@@ -3,7 +3,7 @@ import delayTen from './utilities/delayTen'
 import interval from './interval'
 
 describe('interval', () => {
-  describe('range: [0, 1)', () => {
+  describe('range: [0, 1) (default)', () => {
     describe(`deterministic`, () => {
       const seed: string = 'hello.',
         keyWidth: number = 5,
