@@ -102,4 +102,80 @@ describe('interval', () => {
       })
     })
   })
+
+  describe('range: [0, 10)', () => {
+    const min: number = 0,
+      max: number = 10
+
+    describe(`deterministic`, () => {
+      const seed: string = 'hello.',
+        keyWidth: number = 5,
+        doubleKeyWidth: number = keyWidth * 2,
+        knownIntervals: number[] = [
+          0.9530453672732464, 2.8908317485212898, 6.187731397359575,
+          2.167273978079902, 3.513632540465652,
+        ],
+        nextKnownIntervals: number[] = [
+          6.881552357812133, 2.0458416697748794, 0.6062310602522847,
+          5.225498273843209, 8.543837916790913,
+        ],
+        compositeIntervals: number[] = [
+          ...knownIntervals,
+          ...nextKnownIntervals,
+        ]
+
+      describe('first chained call', () => {
+        const { generated, next: nextInterval }: Interval = interval({
+          max,
+          min,
+          seed,
+          count: keyWidth,
+        })
+
+        test('it should persistently return known intervals', () => {
+          expect(generated).toEqual(knownIntervals)
+        })
+
+        describe('second chained call', () => {
+          test('it should persistently return known intervals', () => {
+            const { generated: generatedTwo }: Interval = nextInterval(keyWidth)
+            expect(generatedTwo).toEqual(nextKnownIntervals)
+          })
+        })
+      })
+
+      describe('composite call', () => {
+        test('it should persistently return known intervals', () => {
+          const { generated }: Interval = interval({
+            max,
+            min,
+            seed,
+            count: doubleKeyWidth,
+          })
+
+          expect(generated).toEqual(compositeIntervals)
+        })
+      })
+
+      describe('state loading', () => {
+        const { state }: Interval = interval({
+            max,
+            min,
+            seed,
+            count: keyWidth,
+          }),
+          { generated }: Interval = interval({
+            max,
+            min,
+            state,
+            count: keyWidth,
+            drop: 0,
+          })
+
+        test('it should return known intervals from a loaded state', () => {
+          expect(generated).toEqual(nextKnownIntervals)
+        })
+      })
+    })
+  })
 })
