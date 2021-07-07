@@ -163,7 +163,7 @@ describe('interval', () => {
             expect(x === y).toBeFalsy()
           })
 
-          test('it should return continuous values within allowed range', async () => {
+          test('it should return continuous values within specified range', async () => {
             const {
               generated: [x],
             }: Interval = interval({ max, min })
