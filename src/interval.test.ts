@@ -1,5 +1,5 @@
 import type { Interval } from './interval'
-import delay from './utilities/delay'
+import delayTen from './utilities/delayTen'
 import interval from './interval'
 
 describe('interval', () => {
@@ -70,7 +70,7 @@ describe('interval', () => {
           generated: [x],
         } = interval()
 
-        await delay(1)
+        await delayTen()
 
         const {
           generated: [y],
@@ -84,7 +84,7 @@ describe('interval', () => {
           generated: [x],
         } = interval()
 
-        await delay(1)
+        await delayTen()
 
         const {
           generated: [y],
