@@ -162,22 +162,22 @@ describe('interval', () => {
       })
 
       describe(`stochastic`, () => {
-        const generate = (): number => interval({ max, min }).generated[0]
+        const stochasticPair = async (): Promise<[number, number]> => {
+          const single = (): number => interval({ max, min }).generated[0]
+          const x: number = single()
+          await delayTen()
+          const y: number = single()
+          return [x, y]
+        }
 
         describe('multiple instances', () => {
           test('it should return distinct values', async () => {
-            const x: number = generate()
-            await delayTen()
-            const y: number = generate()
-
+            const [x, y]: [number, number] = await stochasticPair()
             expect(x === y).toBeFalsy()
           })
 
           test('it should return continuous values within specified range', async () => {
-            const x: number = generate()
-            await delayTen()
-            const y: number = generate()
-
+            const [x, y]: [number, number] = await stochasticPair()
             expect(x).toBeGreaterThanOrEqual(min || 0)
             expect(x).toBeLessThan(max || 1)
             expect(y).toBeGreaterThanOrEqual(min || 0)
