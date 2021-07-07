@@ -48,11 +48,11 @@ export default function octet({
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
   let i: number = prevI,
-    pool: Pool = prevPool.create(prevPool.state),
     roundKey: RoundKey = roundKeyModule({
       state: prevRoundKeyState,
       width: poolWidth,
     }),
+    pool: Pool = prevPool.create(prevPool.state),
     generated: number[] = []
 
   while (length(generated) < toGenerate) {
