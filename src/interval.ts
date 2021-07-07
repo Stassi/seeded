@@ -17,12 +17,12 @@ export default function interval({
   ...props
 }: IntervalInput = {}): Interval {
   let generated: Interval['generated'] = [],
+    localNextOctet: Octet['next'] = () => octet(),
     state: Interval['state'] = {
       i: 0,
       pool: [],
       roundKey: 0,
-    },
-    localNextOctet: Octet['next'] = () => octet()
+    }
 
   while (length(generated) < count) {
     const {
