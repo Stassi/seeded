@@ -6,7 +6,10 @@ import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
 
-interface IntervalInput extends OctetInput {}
+interface IntervalInput extends OctetInput {
+  max?: number
+  min?: number
+}
 
 export interface Interval extends Octet {
   next: (count?: number) => Interval
@@ -14,6 +17,8 @@ export interface Interval extends Octet {
 
 export default function interval({
   count = 1,
+  max = 1,
+  min = 0,
   ...props
 }: IntervalInput = {}): Interval {
   let generated: Interval['generated'] = [],
@@ -36,13 +41,18 @@ export default function interval({
         })
       : localNextOctet(octetsNeededForMaxSafeBinary)
 
-    generated = [...generated, octetToInterval(generatedOctet)]
+    generated = [
+      ...generated,
+      octetToInterval(generatedOctet) * (max - min) + min,
+    ]
     localNextOctet = nextOctet
     state = octetState
   }
 
   function next(nextCount = 1): Interval {
     return interval({
+      max,
+      min,
       state,
       count: nextCount,
       drop: 0,
