@@ -3,7 +3,7 @@ import delayTen from '../utilities/delayTen'
 import octet from './octet'
 
 describe('octet', () => {
-  describe(`deterministic`, () => {
+  describe('deterministic', () => {
     const seed: string = 'hello.',
       count: number = 5,
       doubleCount: number = count * 2,
