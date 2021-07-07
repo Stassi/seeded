@@ -36,6 +36,20 @@ describe('interval', () => {
     {
       expected: [
         [
+          0.09530453672732464, 0.289083174852129, 0.6187731397359575,
+          0.21672739780799022, 0.3513632540465652,
+        ],
+        [
+          0.6881552357812133, 0.20458416697748794, 0.06062310602522847,
+          0.522549827384321, 0.8543837916790913,
+        ],
+      ],
+      max: undefined,
+      min: undefined,
+    },
+    {
+      expected: [
+        [
           -0.40469546327267536, -0.21091682514787102, 0.11877313973595749,
           -0.2832726021920098, -0.1486367459534348,
         ],
@@ -83,8 +97,8 @@ describe('interval', () => {
       expected: [firstExpected, secondExpected],
     }: {
       expected: number[][]
-      max: number
-      min: number
+      max?: number
+      min?: number
     }) => {
       describe(`deterministic`, () => {
         const seed: string = 'hello.',
@@ -174,10 +188,10 @@ describe('interval', () => {
               generated: [y],
             }: Interval = interval({ max, min })
 
-            expect(x).toBeGreaterThanOrEqual(min)
-            expect(x).toBeLessThan(max)
-            expect(y).toBeGreaterThanOrEqual(min)
-            expect(y).toBeLessThan(max)
+            expect(x).toBeGreaterThanOrEqual(min || 0)
+            expect(x).toBeLessThan(max || 1)
+            expect(y).toBeGreaterThanOrEqual(min || 0)
+            expect(y).toBeLessThan(max || 1)
           })
         })
       })
