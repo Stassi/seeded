@@ -1,9 +1,9 @@
 import type { Octet } from './octet'
-import delay from '../utilities/delay'
+import delayTen from '../utilities/delayTen'
 import octet from './octet'
 
 describe('octet', () => {
-  describe(`deterministic`, () => {
+  describe('deterministic', () => {
     const seed: string = 'hello.',
       count: number = 5,
       doubleCount: number = count * 2,
@@ -51,7 +51,7 @@ describe('octet', () => {
           generated: [x],
         } = octet()
 
-        await delay(1)
+        await delayTen()
 
         const {
           generated: [y],
@@ -65,7 +65,7 @@ describe('octet', () => {
           generated: [x],
         } = octet()
 
-        await delay(1)
+        await delayTen()
 
         const {
           generated: [y],
