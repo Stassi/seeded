@@ -114,12 +114,12 @@ describe('interval', () => {
             count: firstExpectedLength,
           })
 
-          test('it should persistently return known intervals', () => {
+          it('should persistently return known intervals', () => {
             expect(generated).toEqual(firstExpected)
           })
 
           describe('second chained call', () => {
-            test('it should persistently return known intervals', () => {
+            it('should persistently return known intervals', () => {
               const { generated: generatedTwo }: Interval =
                 nextInterval(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
@@ -128,7 +128,7 @@ describe('interval', () => {
         })
 
         describe('composite call', () => {
-          test('it should persistently return known intervals', () => {
+          it('should persistently return known intervals', () => {
             const { generated }: Interval = interval({
               max,
               min,
@@ -155,7 +155,7 @@ describe('interval', () => {
               drop: 0,
             })
 
-          test('it should return known intervals from a loaded state', () => {
+          it('should return known intervals from a loaded state', () => {
             expect(generated).toEqual(secondExpected)
           })
         })
@@ -171,12 +171,12 @@ describe('interval', () => {
         }
 
         describe('multiple instances', () => {
-          test('it should return distinct values', async () => {
+          it('should return distinct values', async () => {
             const [x, y]: [number, number] = await stochasticPair()
             expect(x === y).toBeFalsy()
           })
 
-          test('it should return continuous values within specified range', async () => {
+          it('should return continuous values within specified range', async () => {
             const [x, y]: [number, number] = await stochasticPair()
             expect(x).toBeGreaterThanOrEqual(min || 0)
             expect(x).toBeLessThan(max || 1)
