@@ -162,31 +162,21 @@ describe('interval', () => {
       })
 
       describe(`stochastic`, () => {
+        const generate = (): number => interval({ max, min }).generated[0]
+
         describe('multiple instances', () => {
           test('it should return distinct values', async () => {
-            const {
-              generated: [x],
-            }: Interval = interval({ max, min })
-
+            const x: number = generate()
             await delayTen()
-
-            const {
-              generated: [y],
-            }: Interval = interval({ max, min })
+            const y: number = generate()
 
             expect(x === y).toBeFalsy()
           })
 
           test('it should return continuous values within specified range', async () => {
-            const {
-              generated: [x],
-            }: Interval = interval({ max, min })
-
+            const x: number = generate()
             await delayTen()
-
-            const {
-              generated: [y],
-            }: Interval = interval({ max, min })
+            const y: number = generate()
 
             expect(x).toBeGreaterThanOrEqual(min || 0)
             expect(x).toBeLessThan(max || 1)
