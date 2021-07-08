@@ -1,58 +1,42 @@
-import type { Octet, OctetInput } from './octet'
-import type { RemainderCallback } from './utilities/remainder'
-import isStrictZero from './utilities/isStrictZero'
-import length from './utilities/length'
-import octet from './octet'
-import remainder from './utilities/remainder'
+import type { Interval, IntervalInput } from './interval'
+import ceiling from './utilities/ceiling'
+import floor from './utilities/floor'
+import interval from './interval'
+import maximumSafeBinary from './utilities/maximumSafeBinary'
 
-interface IntegerInput extends OctetInput {
-  max?: number
-  min?: number
-}
+interface IntegerInput extends IntervalInput {}
 
-export interface Integer extends Octet {
+export interface Integer extends Interval {
   next: (count?: number) => Integer
 }
 
 export default function integer({
-  count = 1,
-  max = 10,
+  max = maximumSafeBinary,
   min = 0,
+  state: prevState,
   ...props
 }: IntegerInput = {}): Integer {
-  const remainderMax: RemainderCallback = remainder(max)
+  const { generated, state }: Interval = interval({
+    ...props,
+    max,
+    min: ceiling(min),
+    state: prevState,
+  })
 
-  let generated: Integer['generated'] = [],
-    localNextOctet: Octet['next'] = () => octet(),
-    state: Integer['state'] = {
-      i: 0,
-      pool: [],
-      roundKey: 0,
-    }
-
-  while (length(generated) < count) {
-    const {
-      generated: generatedOctet,
-      next: nextOctet,
-      state: octetState,
-    }: Octet = isStrictZero(length(generated))
-      ? octet({ ...props })
-      : localNextOctet()
-
-    generated = [...generated, ...generatedOctet.map(remainderMax)]
-    localNextOctet = nextOctet
-    state = octetState
-  }
-
-  function next(nextCount = 1): Integer {
+  function next(count: number = 1): Integer {
     return integer({
+      ...props,
+      count,
       max,
       min,
       state,
-      count: nextCount,
       drop: 0,
     })
   }
 
-  return { generated, next, state }
+  return {
+    next,
+    state,
+    generated: generated.map(floor),
+  }
 }
