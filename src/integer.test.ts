@@ -128,12 +128,12 @@ describe('integer', () => {
             count: firstExpectedLength,
           })
 
-          it('should persistently return known intervals', () => {
+          it('should persistently return known integers', () => {
             expect(generated).toEqual(firstExpected)
           })
 
           describe('second chained call', () => {
-            it('should persistently return known intervals', () => {
+            it('should persistently return known integers', () => {
               const { generated: generatedTwo }: Integer =
                 nextInteger(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
@@ -142,7 +142,7 @@ describe('integer', () => {
         })
 
         describe('composite call', () => {
-          it('should persistently return known intervals', () => {
+          it('should persistently return known integers', () => {
             const { generated }: Integer = integer({
               max,
               min,
@@ -169,7 +169,7 @@ describe('integer', () => {
               drop: 0,
             })
 
-          it('should return known intervals from a loaded state', () => {
+          it('should return known integers from a loaded state', () => {
             expect(generated).toEqual(secondExpected)
           })
         })
