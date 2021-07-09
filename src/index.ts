@@ -1,9 +1,7 @@
+import type { Integer } from './integer'
 import type { Interval } from './interval'
-import type { LargeInteger } from './largeInteger'
-import type { Octet } from './octet'
+import integer from './integer'
 import interval from './interval'
-import largeInteger from './largeInteger'
-import octet from './octet'
 
-export type { Interval, LargeInteger, Octet }
-export { interval, largeInteger, octet }
+export type { Integer, Interval }
+export { integer, interval }
