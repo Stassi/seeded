@@ -142,7 +142,7 @@ describe('octetInteger', () => {
     }
   )
 
-  describe('range errors', () => {
+  describe('range overflow errors', () => {
     describe.each([
       { expected: rangeOverflowErrorMsg, max: 256, min: -1 },
       { expected: rangeOverflowErrorMsg, max: 257, min: 0 },
