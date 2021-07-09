@@ -9,6 +9,14 @@ describe('octet', () => {
   describe.each([
     {
       expected: [
+        [1, 0, 0, 0, 0],
+        [1, 1, 0, 0, 1],
+      ],
+      max: 1.9,
+      min: negate(0.9),
+    },
+    {
+      expected: [
         [113, 134, 94, 12, 198],
         [119, 249, 116, 160, 21],
       ],
