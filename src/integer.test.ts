@@ -1,9 +1,9 @@
 import type { Integer } from './integer'
 import delayTen from './utilities/delayTen'
+import integer from './integer'
 import length from './utilities/length'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
 import negate from './utilities/negate'
-import octetInteger from './integer'
 import { rangeUnderflowErrorMsg } from './octet/octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
@@ -149,7 +149,7 @@ describe('integer', () => {
           expectedLength: number = length(expected)
 
         describe('first chained call', () => {
-          const { generated, next: nextInteger }: Integer = octetInteger({
+          const { generated, next: nextInteger }: Integer = integer({
             max,
             min,
             seed,
@@ -171,7 +171,7 @@ describe('integer', () => {
 
         describe('composite call', () => {
           it('should persistently return known integers', () => {
-            const { generated }: Integer = octetInteger({
+            const { generated }: Integer = integer({
               max,
               min,
               seed,
@@ -183,13 +183,13 @@ describe('integer', () => {
         })
 
         describe('state loading', () => {
-          const { state }: Integer = octetInteger({
+          const { state }: Integer = integer({
               max,
               min,
               seed,
               count: firstExpectedLength,
             }),
-            { generated }: Integer = octetInteger({
+            { generated }: Integer = integer({
               max,
               min,
               state,
@@ -205,7 +205,7 @@ describe('integer', () => {
 
       describe(`stochastic`, () => {
         const stochasticPair = async (): Promise<[number, number]> => {
-          const single = (): number => octetInteger({ max, min }).generated[0]
+          const single = (): number => integer({ max, min }).generated[0]
           const x: number = single()
           await delayTen()
           const y: number = single()
@@ -242,7 +242,7 @@ describe('integer', () => {
         min: number
       }) => {
         it('should throw a range error', () => {
-          expect(() => octetInteger({ max, min })).toThrow(expected)
+          expect(() => integer({ max, min })).toThrow(expected)
         })
       }
     )
