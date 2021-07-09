@@ -28,6 +28,10 @@ export interface OctetInput {
   state?: OctetState
 }
 
+const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
+  rangeUnderflowErrorMsg: string = 'max ceiling must exceed min ceiling'
+export { rangeOverflowErrorMsg, rangeUnderflowErrorMsg }
+
 type NumberTransform = (n: number) => number
 
 export interface Octet {
@@ -63,9 +67,8 @@ export default function octet({
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
-  if (rangeOverflow) throw new RangeError('(max - min) must not exceed 256')
-  if (rangeUnderflow)
-    throw new RangeError('max ceiling must exceed min ceiling')
+  if (rangeOverflow) throw new RangeError(rangeOverflowErrorMsg)
+  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMsg)
 
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule({
