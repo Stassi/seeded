@@ -59,11 +59,13 @@ export default function octet({
       : keySchedule({ seed, width: poolWidth }),
     rangeDiff: number = subtractMin(max),
     rangeOverflow: boolean = rangeDiff > poolWidth,
+    rangeUnderflow: boolean = min >= max,
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
-  if (rangeOverflow)
-    throw new RangeError('(max - min) must not exceed 256')
+  if (rangeOverflow) throw new RangeError('(max - min) must not exceed 256')
+  if (rangeUnderflow)
+    throw new RangeError('max ceiling must exceed min ceiling')
 
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule({
