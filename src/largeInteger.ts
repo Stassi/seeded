@@ -5,16 +5,16 @@ import floor from './utilities/floor'
 import interval from './interval'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
 
-export interface Integer extends Interval {
-  next: (count?: number) => Integer
+export interface LargeInteger extends Interval {
+  next: (count?: number) => LargeInteger
 }
 
-export default function integer({
+export default function largeInteger({
   max = maximumSafeBinary,
   min = 0,
   state: prevState,
   ...props
-}: CipherInput = {}): Integer {
+}: CipherInput = {}): LargeInteger {
   const { generated, state }: Interval = interval({
     ...props,
     max,
@@ -22,8 +22,8 @@ export default function integer({
     state: prevState,
   })
 
-  function next(count: number = 1): Integer {
-    return integer({
+  function next(count: number = 1): LargeInteger {
+    return largeInteger({
       ...props,
       count,
       max,
