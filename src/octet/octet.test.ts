@@ -1,8 +1,9 @@
 import type { Octet } from './octet'
 import delayTen from '../utilities/delayTen'
 import length from '../utilities/length'
+import negate from '../utilities/negate'
 import octet from './octet'
-import { poolWidth } from '../integers.json'
+import { bitsInOctet, poolWidth } from '../integers.json'
 
 describe('octet', () => {
   describe.each([
@@ -19,7 +20,7 @@ describe('octet', () => {
         [113, 134, 94, 12, 198],
         [119, 249, 116, 160, 21],
       ],
-      max: 256,
+      max: poolWidth,
       min: 0,
     },
     {
@@ -27,8 +28,16 @@ describe('octet', () => {
         [1, 6, 6, 4, 6],
         [7, 1, 4, 0, 5],
       ],
-      max: 8,
+      max: bitsInOctet,
       min: 0,
+    },
+    {
+      expected: [
+        [-7, -2, -2, -4, -2],
+        [-1, -7, -4, -8, -3],
+      ],
+      max: 0,
+      min: negate(bitsInOctet),
     },
   ])(
     'range: [$min, $max)',
