@@ -3,7 +3,6 @@ import delayTen from './utilities/delayTen'
 import length from './utilities/length'
 import negate from './utilities/negate'
 import octetInteger from './octetInteger'
-import { rangeOverflowErrorMsg } from './octet/octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
 describe('octetInteger', () => {
@@ -30,6 +29,22 @@ describe('octetInteger', () => {
         [119, 249, 116, 160, 21],
       ],
       max: poolWidth,
+      min: 0,
+    },
+    {
+      expected: [
+        [23, 73, 158, 54, 89],
+        [175, 51, 14, 133, 218],
+      ],
+      max: poolWidth,
+      min: -1,
+    },
+    {
+      expected: [
+        [24, 74, 159, 55, 90],
+        [176, 52, 15, 134, 219],
+      ],
+      max: poolWidth + 1,
       min: 0,
     },
     {
@@ -141,26 +156,4 @@ describe('octetInteger', () => {
       })
     }
   )
-
-  describe('range overflow errors', () => {
-    describe.each([
-      { expected: rangeOverflowErrorMsg, max: 256, min: -1 },
-      { expected: rangeOverflowErrorMsg, max: 257, min: 0 },
-    ])(
-      'range: [$min, $max)',
-      ({
-        expected,
-        max,
-        min,
-      }: {
-        expected: string
-        max: number
-        min: number
-      }) => {
-        it('should not throw a range error', () => {
-          expect(() => octetInteger({ max, min })).not.toThrow(expected)
-        })
-      }
-    )
-  })
 })
