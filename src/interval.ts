@@ -6,10 +6,7 @@ import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
 
-export interface IntervalInput extends OctetInput {
-  max?: number
-  min?: number
-}
+export interface IntervalInput extends OctetInput {}
 
 export interface Interval extends Octet {
   next: (count?: number) => Interval
