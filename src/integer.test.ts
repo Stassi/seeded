@@ -7,7 +7,7 @@ import octetInteger from './integer'
 import { rangeUnderflowErrorMsg } from './octet/octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
-describe('octetInteger', () => {
+describe('integer', () => {
   describe.each([
     {
       expected: [
