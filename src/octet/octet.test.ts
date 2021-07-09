@@ -141,19 +141,21 @@ describe('octet', () => {
     }
   )
 
-  describe('range: [-1, 256)', () => {
-    it('should throw a range error', () => {
-      expect(() => octet({ min: -1 })).toThrow(
-        '(max - min) must not exceed 256'
-      )
+  describe('range overflow protection', () => {
+    describe('range: [-1, 256)', () => {
+      it('should throw a range error', () => {
+        expect(() => octet({ min: -1 })).toThrow(
+          '(max - min) must not exceed 256'
+        )
+      })
     })
-  })
 
-  describe('range: [0, 257)', () => {
-    it('should throw a range error', () => {
-      expect(() => octet({ max: poolWidth + 1 })).toThrow(
-        '(max - min) must not exceed 256'
-      )
+    describe('range: [0, 257)', () => {
+      it('should throw a range error', () => {
+        expect(() => octet({ max: poolWidth + 1 })).toThrow(
+          '(max - min) must not exceed 256'
+        )
+      })
     })
   })
 })
