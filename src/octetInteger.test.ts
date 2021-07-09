@@ -3,6 +3,7 @@ import delayTen from './utilities/delayTen'
 import length from './utilities/length'
 import negate from './utilities/negate'
 import octetInteger from './octetInteger'
+import { rangeUnderflowErrorMsg } from './octet/octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
 describe('octetInteger', () => {
@@ -156,4 +157,27 @@ describe('octetInteger', () => {
       })
     }
   )
+
+  describe('range underflow errors', () => {
+    describe.each([
+      { expected: rangeUnderflowErrorMsg, max: 0, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: -1, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: 1, min: 0.1 },
+    ])(
+      'range: [$min, $max)',
+      ({
+        expected,
+        max,
+        min,
+      }: {
+        expected: string
+        max: number
+        min: number
+      }) => {
+        it('should throw a range error', () => {
+          expect(() => octetInteger({ max, min })).toThrow(expected)
+        })
+      }
+    )
+  })
 })
