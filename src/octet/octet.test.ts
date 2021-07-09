@@ -141,7 +141,7 @@ describe('octet', () => {
     }
   )
 
-  describe('range overflow protection', () => {
+  describe('range overflow', () => {
     describe('range: [-1, 256)', () => {
       it('should throw a range error', () => {
         expect(() => octet({ min: -1 })).toThrow(
@@ -159,16 +159,28 @@ describe('octet', () => {
     })
   })
 
-  describe('range underflow protection', () => {
+  describe('range underflow', () => {
+    describe('range: [0, 0)', () => {
+      it('should throw a range error', () => {
+        expect(() => octet({ max: 0, min: 0 })).toThrow(
+          'max ceiling must exceed min ceiling'
+        )
+      })
+    })
+
     describe('range: [0, -1)', () => {
       it('should throw a range error', () => {
-        expect(() => octet({ max: -1 })).toThrow('')
+        expect(() => octet({ max: -1, min: 0 })).toThrow(
+          'max ceiling must exceed min ceiling'
+        )
       })
     })
 
     describe('range: [0.1, 1)', () => {
       it('should throw a range error', () => {
-        expect(() => octet({ max: 1, min: 0.1 })).toThrow('')
+        expect(() => octet({ max: 1, min: 0.1 })).toThrow(
+          'max ceiling must exceed min ceiling'
+        )
       })
     })
   })
