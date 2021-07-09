@@ -2,7 +2,7 @@ import type { Octet } from './octet'
 import delayTen from '../utilities/delayTen'
 import length from '../utilities/length'
 import negate from '../utilities/negate'
-import octet from './octet'
+import octet, { rangeOverflowErrorMsg, rangeUnderflowErrorMsg } from './octet'
 import { bitsInOctet, poolWidth } from '../integers.json'
 
 describe('octet', () => {
@@ -141,47 +141,28 @@ describe('octet', () => {
     }
   )
 
-  describe('range overflow', () => {
-    describe('range: [-1, 256)', () => {
-      it('should throw a range error', () => {
-        expect(() => octet({ min: -1 })).toThrow(
-          '(max - min) must not exceed 256'
-        )
-      })
-    })
-
-    describe('range: [0, 257)', () => {
-      it('should throw a range error', () => {
-        expect(() => octet({ max: poolWidth + 1 })).toThrow(
-          '(max - min) must not exceed 256'
-        )
-      })
-    })
-  })
-
-  describe('range underflow', () => {
-    describe('range: [0, 0)', () => {
-      it('should throw a range error', () => {
-        expect(() => octet({ max: 0, min: 0 })).toThrow(
-          'max ceiling must exceed min ceiling'
-        )
-      })
-    })
-
-    describe('range: [0, -1)', () => {
-      it('should throw a range error', () => {
-        expect(() => octet({ max: -1, min: 0 })).toThrow(
-          'max ceiling must exceed min ceiling'
-        )
-      })
-    })
-
-    describe('range: [0.1, 1)', () => {
-      it('should throw a range error', () => {
-        expect(() => octet({ max: 1, min: 0.1 })).toThrow(
-          'max ceiling must exceed min ceiling'
-        )
-      })
-    })
+  describe('range errors', () => {
+    describe.each([
+      { expected: rangeOverflowErrorMsg, max: 256, min: -1 },
+      { expected: rangeOverflowErrorMsg, max: 257, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: 0, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: -1, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: 1, min: 0.1 },
+    ])(
+      'range: [$min, $max)',
+      ({
+        expected,
+        max,
+        min,
+      }: {
+        expected: string
+        max: number
+        min: number
+      }) => {
+        it('should throw a range error', () => {
+          expect(() => octet({ max, min })).toThrow(expected)
+        })
+      }
+    )
   })
 })
