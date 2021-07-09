@@ -158,4 +158,18 @@ describe('octet', () => {
       })
     })
   })
+
+  describe('range underflow protection', () => {
+    describe('range: [0, -1)', () => {
+      it('should throw a range error', () => {
+        expect(() => octet({ max: -1 })).toThrow('')
+      })
+    })
+
+    describe('range: [0.1, 1)', () => {
+      it('should throw a range error', () => {
+        expect(() => octet({ max: 1, min: 0.1 })).toThrow('')
+      })
+    })
+  })
 })
