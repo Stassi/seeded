@@ -1,4 +1,4 @@
-import { Integer } from './integer'
+import type { Integer } from './integer'
 import delayTen from './utilities/delayTen'
 import integer from './integer'
 import length from './utilities/length'

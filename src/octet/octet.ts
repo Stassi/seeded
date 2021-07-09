@@ -2,8 +2,10 @@ import type { Pool, PoolInput } from './pool'
 import type { RemainderCallback } from '../utilities/remainder'
 import type { RoundKey, RoundKeyInput } from './roundKey'
 import type { SliceAtCallback } from '../utilities/sliceAt'
+import ceiling from '../utilities/ceiling'
 import keySchedule from './keySchedule'
 import length from '../utilities/length'
+import negate from '../utilities/negate'
 import poolModule from './pool'
 import remainder from '../utilities/remainder'
 import roundKeyModule from './roundKey'
@@ -20,9 +22,17 @@ interface OctetState {
 export interface OctetInput {
   count?: number
   drop?: number
+  max?: number
+  min?: number
   seed?: string
   state?: OctetState
 }
+
+const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
+  rangeUnderflowErrorMsg: string = 'max ceiling must exceed min ceiling'
+export { rangeOverflowErrorMsg, rangeUnderflowErrorMsg }
+
+type NumberTransform = (n: number) => number
 
 export interface Octet {
   generated: number[]
@@ -33,6 +43,8 @@ export interface Octet {
 export default function octet({
   count = 1,
   drop = defaultDrop,
+  max: prevMax = poolWidth,
+  min: prevMin = 0,
   seed = `${timeSinceEpoch()}`,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
     i: 0,
@@ -40,12 +52,23 @@ export default function octet({
     roundKey: 0,
   },
 }: OctetInput = {}): Octet {
-  const toGenerate = count + drop,
+  const max: number = ceiling(prevMax),
+    min: number = ceiling(prevMin),
+    addMin: NumberTransform = (n: number) => n + min,
+    subtractMin: NumberTransform = (n: number) => n + negate(min),
+    toGenerate: number = count + drop,
     discardNonrandom: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = prevPoolState
       ? poolModule({ state: prevPoolState, width: poolWidth })
       : keySchedule({ seed, width: poolWidth }),
+    rangeDiff: number = subtractMin(max),
+    rangeOverflow: boolean = rangeDiff > poolWidth,
+    rangeUnderflow: boolean = min >= max,
+    remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
+
+  if (rangeOverflow) throw new RangeError(rangeOverflowErrorMsg)
+  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMsg)
 
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule({
@@ -61,8 +84,12 @@ export default function octet({
     pool = pool.create(pool.swapIndices(i, roundKey.state))
     generated = [
       ...generated,
-      pool.atIndex(
-        remainderWidth(pool.atIndex(i) + pool.atIndex(roundKey.state))
+      addMin(
+        remainderRangeDiff(
+          pool.atIndex(
+            remainderWidth(pool.atIndex(i) + pool.atIndex(roundKey.state))
+          )
+        )
       ),
     ]
   }
@@ -75,6 +102,8 @@ export default function octet({
 
   function next(nextCount = 1): Octet {
     return octet({
+      max,
+      min,
       seed,
       state,
       count: nextCount,
