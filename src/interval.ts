@@ -1,12 +1,10 @@
-import type { Octet, OctetInput } from './octet'
+import type { CipherInput, Octet } from './octet'
 import isStrictZero from './utilities/isStrictZero'
 import length from './utilities/length'
 import octet from './octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
-
-export interface IntervalInput extends OctetInput {}
 
 export interface Interval extends Octet {
   next: (count?: number) => Interval
@@ -17,7 +15,7 @@ export default function interval({
   max = 1,
   min = 0,
   ...props
-}: IntervalInput = {}): Interval {
+}: CipherInput = {}): Interval {
   let generated: Interval['generated'] = [],
     localNextOctet: Octet['next'] = () => octet(),
     state: Interval['state'] = {

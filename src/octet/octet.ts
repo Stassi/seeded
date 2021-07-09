@@ -13,19 +13,19 @@ import sliceAt from '../utilities/sliceAt'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
 import { defaultDrop, poolWidth } from '../integers.json'
 
-interface OctetState {
+interface CipherState {
   i: number
   pool: PoolInput['state']
   roundKey: RoundKeyInput['state']
 }
 
-export interface OctetInput {
+export interface CipherInput {
   count?: number
   drop?: number
   max?: number
   min?: number
   seed?: string
-  state?: OctetState
+  state?: CipherState
 }
 
 const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
@@ -37,7 +37,7 @@ type NumberTransform = (n: number) => number
 export interface Octet {
   generated: number[]
   next: (count?: number) => Octet
-  state: OctetState
+  state: CipherState
 }
 
 export default function octet({
@@ -51,7 +51,7 @@ export default function octet({
     pool: undefined,
     roundKey: 0,
   },
-}: OctetInput = {}): Octet {
+}: CipherInput = {}): Octet {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
@@ -94,7 +94,7 @@ export default function octet({
     ]
   }
 
-  const state: OctetState = {
+  const state: CipherState = {
     i,
     pool: pool.state,
     roundKey: roundKey.state,

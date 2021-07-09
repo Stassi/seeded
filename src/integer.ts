@@ -1,10 +1,9 @@
-import type { Interval, IntervalInput } from './interval'
+import type { CipherInput } from './octet'
+import type { Interval } from './interval'
 import ceiling from './utilities/ceiling'
 import floor from './utilities/floor'
 import interval from './interval'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
-
-interface IntegerInput extends IntervalInput {}
 
 export interface Integer extends Interval {
   next: (count?: number) => Integer
@@ -15,7 +14,7 @@ export default function integer({
   min = 0,
   state: prevState,
   ...props
-}: IntegerInput = {}): Integer {
+}: CipherInput = {}): Integer {
   const { generated, state }: Interval = interval({
     ...props,
     max,
