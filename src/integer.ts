@@ -4,10 +4,10 @@ import largeInteger from './largeInteger'
 import octet from './octet'
 import { rangeUnderflowErrorMsg } from './octet/octet'
 
-export type OctetInteger = Octet | LargeInteger
+export type Integer = Octet | LargeInteger
 
-export default function octetInteger(props: CipherInput): OctetInteger {
-  let res: OctetInteger
+export default function octetInteger(props: CipherInput): Integer {
+  let res: Integer
 
   try {
     res = octet(props)

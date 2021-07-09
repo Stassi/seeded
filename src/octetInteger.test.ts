@@ -1,9 +1,9 @@
-import type { OctetInteger } from './octetInteger'
+import type { Integer } from './integer'
 import delayTen from './utilities/delayTen'
 import length from './utilities/length'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
 import negate from './utilities/negate'
-import octetInteger from './octetInteger'
+import octetInteger from './integer'
 import { rangeUnderflowErrorMsg } from './octet/octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
@@ -149,7 +149,7 @@ describe('octetInteger', () => {
           expectedLength: number = length(expected)
 
         describe('first chained call', () => {
-          const { generated, next: nextInteger }: OctetInteger = octetInteger({
+          const { generated, next: nextInteger }: Integer = octetInteger({
             max,
             min,
             seed,
@@ -162,7 +162,7 @@ describe('octetInteger', () => {
 
           describe('second chained call', () => {
             it('should persistently return known integers', () => {
-              const { generated: generatedTwo }: OctetInteger =
+              const { generated: generatedTwo }: Integer =
                 nextInteger(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
             })
@@ -171,7 +171,7 @@ describe('octetInteger', () => {
 
         describe('composite call', () => {
           it('should persistently return known integers', () => {
-            const { generated }: OctetInteger = octetInteger({
+            const { generated }: Integer = octetInteger({
               max,
               min,
               seed,
@@ -183,13 +183,13 @@ describe('octetInteger', () => {
         })
 
         describe('state loading', () => {
-          const { state }: OctetInteger = octetInteger({
+          const { state }: Integer = octetInteger({
               max,
               min,
               seed,
               count: firstExpectedLength,
             }),
-            { generated }: OctetInteger = octetInteger({
+            { generated }: Integer = octetInteger({
               max,
               min,
               state,
