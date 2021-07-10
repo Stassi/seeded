@@ -1,13 +1,9 @@
-import type { LargeInteger } from './largeInteger'
-import type { CipherInput, Octet } from './octet'
+import type { Cipher, CipherInput } from './cipher'
 import largeInteger from './largeInteger'
-import octet from './octet'
-import { rangeUnderflowErrorMsg } from './octet/octet'
+import octet, { rangeUnderflowErrorMsg } from './octet'
 
-export type Integer = Octet | LargeInteger
-
-export default function integer(props: CipherInput): Integer {
-  let res: Integer
+export default function integer(props: CipherInput): Cipher {
+  let res: Cipher
 
   try {
     res = octet(props)

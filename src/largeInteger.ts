@@ -1,28 +1,23 @@
-import type { CipherInput } from './octet'
-import type { Interval } from './interval'
+import type { Cipher, CipherInput } from './cipher'
 import ceiling from './utilities/ceiling'
 import floor from './utilities/floor'
 import interval from './interval'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
-
-export interface LargeInteger extends Interval {
-  next: (count?: number) => LargeInteger
-}
 
 export default function largeInteger({
   max = maximumSafeBinary,
   min = 0,
   state: prevState,
   ...props
-}: CipherInput = {}): LargeInteger {
-  const { generated, state }: Interval = interval({
+}: CipherInput = {}): Cipher {
+  const { generated, state }: Cipher = interval({
     ...props,
     max,
     min: ceiling(min),
     state: prevState,
   })
 
-  function next(count: number = 1): LargeInteger {
+  function next(count: number = 1): Cipher {
     return largeInteger({
       ...props,
       count,

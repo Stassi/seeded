@@ -1,10 +1,10 @@
-import type { Integer } from './integer'
+import type { Cipher } from './cipher'
 import delayTen from './utilities/delayTen'
 import integer from './integer'
 import length from './utilities/length'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
 import negate from './utilities/negate'
-import { rangeUnderflowErrorMsg } from './octet/octet'
+import { rangeUnderflowErrorMsg } from './octet'
 import { bitsInOctet, poolWidth } from './integers.json'
 
 describe('integer', () => {
@@ -149,7 +149,7 @@ describe('integer', () => {
           expectedLength: number = length(expected)
 
         describe('first chained call', () => {
-          const { generated, next: nextInteger }: Integer = integer({
+          const { generated, next: nextInteger }: Cipher = integer({
             max,
             min,
             seed,
@@ -162,7 +162,7 @@ describe('integer', () => {
 
           describe('second chained call', () => {
             it('should persistently return known integers', () => {
-              const { generated: generatedTwo }: Integer =
+              const { generated: generatedTwo }: Cipher =
                 nextInteger(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
             })
@@ -171,7 +171,7 @@ describe('integer', () => {
 
         describe('composite call', () => {
           it('should persistently return known integers', () => {
-            const { generated }: Integer = integer({
+            const { generated }: Cipher = integer({
               max,
               min,
               seed,
@@ -183,13 +183,13 @@ describe('integer', () => {
         })
 
         describe('state loading', () => {
-          const { state }: Integer = integer({
+          const { state }: Cipher = integer({
               max,
               min,
               seed,
               count: firstExpectedLength,
             }),
-            { generated }: Integer = integer({
+            { generated }: Cipher = integer({
               max,
               min,
               state,
