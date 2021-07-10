@@ -6,7 +6,7 @@ import { rangeUnderflowErrorMsg } from './octet/octet'
 
 export type Integer = Octet | LargeInteger
 
-export default function octetInteger(props: CipherInput): Integer {
+export default function integer(props: CipherInput): Integer {
   let res: Integer
 
   try {
