@@ -216,7 +216,7 @@ describe('number', () => {
                 drop: 0,
               })
 
-            it('should return known integers from a loaded state', () => {
+            it('should return known intervals from a loaded state', () => {
               expect(generated).toEqual(secondExpectedInterval)
             })
           })
