@@ -2,6 +2,7 @@ import type { Cipher } from './cipher'
 import delayTen from './utilities/delayTen'
 import interval from './interval'
 import length from './utilities/length'
+import { intervalRangeUnderflowErrorMessage } from './data'
 
 describe('interval', () => {
   describe.each([
@@ -187,4 +188,45 @@ describe('interval', () => {
       })
     }
   )
+
+  describe('range underflow errors', () => {
+    describe.each([
+      { expected: intervalRangeUnderflowErrorMessage, max: 0, min: 0 },
+      { expected: intervalRangeUnderflowErrorMessage, max: -1, min: 0 },
+    ])(
+      'range: [$min, $max)',
+      ({
+        expected,
+        max,
+        min,
+      }: {
+        expected: string
+        max: number
+        min: number
+      }) => {
+        it('should throw a range error', () => {
+          expect(() => interval({ max, min })).toThrow(expected)
+        })
+      }
+    )
+
+    describe.each([
+      { expected: intervalRangeUnderflowErrorMessage, max: 1, min: 0.1 },
+    ])(
+      'range: [$min, $max)',
+      ({
+        expected,
+        max,
+        min,
+      }: {
+        expected: string
+        max: number
+        min: number
+      }) => {
+        it('should NOT throw a range error', () => {
+          expect(() => interval({ max, min })).not.toThrow(expected)
+        })
+      }
+    )
+  })
 })
