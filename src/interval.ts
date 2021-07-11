@@ -5,20 +5,24 @@ import octet from './octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
+import timeSinceEpoch from './utilities/timeSinceEpoch'
+import { defaultDrop, poolWidth } from './integers.json'
 
 export default function interval({
   count = 1,
+  drop = defaultDrop,
   max = 1,
   min = 0,
-  ...props
+  seed = `${timeSinceEpoch()}`,
+  state = {
+    i: 0,
+    pool: undefined,
+    roundKey: 0,
+  },
 }: CipherInputOptional = {}): Cipher {
   let generated: Cipher['generated'] = [],
-    localNextOctet: Cipher['next'] = () => octet({ count, max, min, ...props }),
-    state: Cipher['state'] = {
-      i: 0,
-      pool: [],
-      roundKey: 0,
-    }
+    localNextOctet: Cipher['next'] = () =>
+      octet({ count, drop, max, min, seed, state })
 
   while (length(generated) < count) {
     const {
@@ -27,8 +31,12 @@ export default function interval({
       state: octetState,
     }: Cipher = isStrictZero(length(generated))
       ? octet({
+          drop,
+          seed,
+          state,
           count: octetsNeededForMaxSafeBinary,
-          ...props,
+          min: 0,
+          max: poolWidth,
         })
       : localNextOctet(octetsNeededForMaxSafeBinary)
 

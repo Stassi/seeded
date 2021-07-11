@@ -1,18 +1,17 @@
 import type { RemainderCallback } from './utilities/remainder'
 import type { SliceAtCallback } from './utilities/sliceAt'
-import type { Cipher, CipherInputOptional, Pool, RoundKey } from './cipher'
+import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
 import ceiling from './utilities/ceiling'
 import length from './utilities/length'
 import negate from './utilities/negate'
 import remainder from './utilities/remainder'
 import sliceAt from './utilities/sliceAt'
-import timeSinceEpoch from './utilities/timeSinceEpoch'
 import {
   keySchedule,
   pool as cipherPool,
   roundKey as cipherRoundKey,
 } from './cipher'
-import { defaultDrop, poolWidth } from './integers.json'
+import { poolWidth } from './integers.json'
 
 const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
   rangeUnderflowErrorMsg: string = 'max ceiling must exceed min ceiling'
@@ -21,17 +20,13 @@ export { rangeOverflowErrorMsg, rangeUnderflowErrorMsg }
 type NumberTransform = (n: number) => number
 
 export default function octet({
-  count = 1,
-  drop = defaultDrop,
-  max: prevMax = poolWidth,
-  min: prevMin = 0,
-  seed = `${timeSinceEpoch()}`,
-  state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
-    i: 0,
-    pool: undefined,
-    roundKey: 0,
-  },
-}: CipherInputOptional = {}): Cipher {
+  count,
+  drop,
+  seed,
+  max: prevMax,
+  min: prevMin,
+  state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
+}: CipherInput): Cipher {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
