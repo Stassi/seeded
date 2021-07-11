@@ -1,4 +1,4 @@
-import { Cipher } from './cipher'
+import type { Cipher } from './cipher'
 import integer from './integer'
 import interval from './interval'
 
