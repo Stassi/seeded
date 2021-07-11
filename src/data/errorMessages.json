@@ -1,4 +1,8 @@
 {
-  "integerRangeUnderflow": "max ceiling must exceed min ceiling",
-  "intervalRangeUnderflow": "max must exceed min"
+  "range": {
+    "underflow": {
+      "integer": "max ceiling must exceed min ceiling",
+      "interval": "max must exceed min"
+    }
+  }
 }
