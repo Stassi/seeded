@@ -1,11 +1,11 @@
-import type { Cipher } from './cipher'
-import delayTen from './utilities/delayTen'
-import integer from './integer'
-import length from './utilities/length'
-import maximumSafeBinary from './utilities/maximumSafeBinary'
-import negate from './utilities/negate'
-import { bitsInOctet, poolWidth } from './integers.json'
-import { range } from './errorMessages.json'
+import type { Cipher } from '../cipher'
+import delayTen from '../utilities/delayTen'
+import integer from './index'
+import length from '../utilities/length'
+import maximumSafeBinary from '../utilities/maximumSafeBinary'
+import negate from '../utilities/negate'
+import { bitsInOctet, poolWidth } from '../integers.json'
+import { range } from '../errorMessages.json'
 
 describe('integer', () => {
   describe.each([

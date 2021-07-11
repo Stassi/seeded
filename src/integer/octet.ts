@@ -1,18 +1,18 @@
-import type NumberTransform from './utilities/NumberTransform'
-import type { RemainderCallback } from './utilities/remainder'
-import type { SliceAtCallback } from './utilities/sliceAt'
-import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
-import ceiling from './utilities/ceiling'
-import length from './utilities/length'
-import negate from './utilities/negate'
-import remainder from './utilities/remainder'
-import sliceAt from './utilities/sliceAt'
+import type NumberTransform from '../utilities/NumberTransform'
+import type { RemainderCallback } from '../utilities/remainder'
+import type { SliceAtCallback } from '../utilities/sliceAt'
+import type { Cipher, CipherInput, Pool, RoundKey } from '../cipher'
+import ceiling from '../utilities/ceiling'
+import length from '../utilities/length'
+import negate from '../utilities/negate'
+import remainder from '../utilities/remainder'
+import sliceAt from '../utilities/sliceAt'
 import {
   keySchedule,
   pool as cipherPool,
   roundKey as cipherRoundKey,
-} from './cipher'
-import { poolWidth } from './integers.json'
+} from '../cipher'
+import { poolWidth } from '../integers.json'
 
 export default function octet({
   count,
