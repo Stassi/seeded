@@ -1,9 +1,8 @@
 import type { Cipher } from './cipher'
 import delayTen from './utilities/delayTen'
-import integer from './integer'
-import interval from './interval'
 import length from './utilities/length'
 import negate from './utilities/negate'
+import number from './number'
 import {
   integerRangeUnderflowErrorMessage,
   intervalRangeUnderflowErrorMessage,
@@ -100,8 +99,11 @@ describe('number', () => {
           expectedLength: number = length(expected)
 
         describe('integer', () => {
+          const discrete: boolean = true
+
           describe('first chained call', () => {
-            const { generated, next: nextInteger }: Cipher = integer({
+            const { generated, next: nextInteger }: Cipher = number({
+              discrete,
               max,
               min,
               seed,
@@ -123,7 +125,8 @@ describe('number', () => {
 
           describe('composite call', () => {
             it('should persistently return known integers', () => {
-              const { generated }: Cipher = integer({
+              const { generated }: Cipher = number({
+                discrete,
                 max,
                 min,
                 seed,
@@ -135,13 +138,15 @@ describe('number', () => {
           })
 
           describe('state loading', () => {
-            const { state }: Cipher = integer({
+            const { state }: Cipher = number({
+                discrete,
                 max,
                 min,
                 seed,
                 count: firstExpectedLength,
               }),
-              { generated }: Cipher = integer({
+              { generated }: Cipher = number({
+                discrete,
                 max,
                 min,
                 state,
@@ -156,8 +161,11 @@ describe('number', () => {
         })
 
         describe('interval', () => {
+          const discrete: boolean = false
+
           describe('first chained call', () => {
-            const { generated, next: nextInteger }: Cipher = interval({
+            const { generated, next: nextInteger }: Cipher = number({
+              discrete,
               max,
               min,
               seed,
@@ -179,7 +187,8 @@ describe('number', () => {
 
           describe('composite call', () => {
             it('should persistently return known intervals', () => {
-              const { generated }: Cipher = interval({
+              const { generated }: Cipher = number({
+                discrete,
                 max,
                 min,
                 seed,
@@ -191,13 +200,15 @@ describe('number', () => {
           })
 
           describe('state loading', () => {
-            const { state }: Cipher = interval({
+            const { state }: Cipher = number({
+                discrete,
                 max,
                 min,
                 seed,
                 count: firstExpectedLength,
               }),
-              { generated }: Cipher = interval({
+              { generated }: Cipher = number({
+                discrete,
                 max,
                 min,
                 state,
@@ -214,13 +225,15 @@ describe('number', () => {
 
       describe('stochastic', () => {
         describe('integer', () => {
-          const stochasticPair = async (): Promise<[number, number]> => {
-            const single = (): number => integer({ max, min }).generated[0]
-            const x: number = single()
-            await delayTen()
-            const y: number = single()
-            return [x, y]
-          }
+          const discrete: boolean = true,
+            stochasticPair = async (): Promise<[number, number]> => {
+              const single = (): number =>
+                number({ discrete, max, min }).generated[0]
+              const x: number = single()
+              await delayTen()
+              const y: number = single()
+              return [x, y]
+            }
 
           it('should return discrete values within specified range', async () => {
             const [x, y]: [number, number] = await stochasticPair()
@@ -232,13 +245,15 @@ describe('number', () => {
         })
 
         describe('interval', () => {
-          const stochasticPair = async (): Promise<[number, number]> => {
-            const single = (): number => interval({ max, min }).generated[0]
-            const x: number = single()
-            await delayTen()
-            const y: number = single()
-            return [x, y]
-          }
+          const discrete: boolean = false,
+            stochasticPair = async (): Promise<[number, number]> => {
+              const single = (): number =>
+                number({ discrete, max, min }).generated[0]
+              const x: number = single()
+              await delayTen()
+              const y: number = single()
+              return [x, y]
+            }
 
           it('should return discrete values within specified range', async () => {
             const [x, y]: [number, number] = await stochasticPair()
@@ -254,6 +269,8 @@ describe('number', () => {
 
   describe('range underflow errors', () => {
     describe('integer', () => {
+      const discrete: boolean = true
+
       describe.each([
         { expected: integerRangeUnderflowErrorMessage, max: 0, min: 0 },
         { expected: integerRangeUnderflowErrorMessage, max: -1, min: 0 },
@@ -270,13 +287,15 @@ describe('number', () => {
           min: number
         }) => {
           it('should throw a range error', () => {
-            expect(() => integer({ max, min })).toThrow(expected)
+            expect(() => number({ discrete, max, min })).toThrow(expected)
           })
         }
       )
     })
 
     describe('interval', () => {
+      const discrete: boolean = false
+
       describe.each([
         { expected: intervalRangeUnderflowErrorMessage, max: 0, min: 0 },
         { expected: intervalRangeUnderflowErrorMessage, max: -1, min: 0 },
@@ -292,7 +311,7 @@ describe('number', () => {
           min: number
         }) => {
           it('should throw a range error', () => {
-            expect(() => interval({ max, min })).toThrow(expected)
+            expect(() => number({ discrete, max, min })).toThrow(expected)
           })
         }
       )
@@ -311,7 +330,7 @@ describe('number', () => {
           min: number
         }) => {
           it('should NOT throw a range error', () => {
-            expect(() => interval({ max, min })).not.toThrow(expected)
+            expect(() => number({ discrete, max, min })).not.toThrow(expected)
           })
         }
       )
