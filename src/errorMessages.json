@@ -1,0 +1,5 @@
+{
+  "range": {
+    "underflow": "max ceiling must exceed min ceiling"
+  }
+}

@@ -1,3 +1,4 @@
+import type NumberTransform from './utilities/NumberTransform'
 import type { RemainderCallback } from './utilities/remainder'
 import type { SliceAtCallback } from './utilities/sliceAt'
 import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
@@ -12,12 +13,7 @@ import {
   roundKey as cipherRoundKey,
 } from './cipher'
 import { poolWidth } from './integers.json'
-
-const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
-  rangeUnderflowErrorMsg: string = 'max ceiling must exceed min ceiling'
-export { rangeOverflowErrorMsg, rangeUnderflowErrorMsg }
-
-type NumberTransform = (n: number) => number
+import { range as rangeErrorMessages } from './errorMessages.json'
 
 export default function octet({
   count,
@@ -37,13 +33,11 @@ export default function octet({
       ? cipherPool({ state: prevPoolState, width: poolWidth })
       : keySchedule({ seed, width: poolWidth }),
     rangeDiff: number = subtractMin(max),
-    rangeOverflow: boolean = rangeDiff > poolWidth,
     rangeUnderflow: boolean = min >= max,
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
-  if (rangeOverflow) throw new RangeError(rangeOverflowErrorMsg)
-  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMsg)
+  if (rangeUnderflow) throw new RangeError(rangeErrorMessages.underflow)
 
   let i: number = prevI,
     roundKey: RoundKey = cipherRoundKey({
