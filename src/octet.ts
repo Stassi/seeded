@@ -1,32 +1,17 @@
-import type { Pool, PoolInput } from './pool'
-import type { RemainderCallback } from '../utilities/remainder'
-import type { RoundKey, RoundKeyInput } from './roundKey'
-import type { SliceAtCallback } from '../utilities/sliceAt'
-import ceiling from '../utilities/ceiling'
-import keySchedule from './keySchedule'
-import length from '../utilities/length'
-import negate from '../utilities/negate'
-import poolModule from './pool'
-import remainder from '../utilities/remainder'
-import roundKeyModule from './roundKey'
-import sliceAt from '../utilities/sliceAt'
-import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from '../integers.json'
-
-interface OctetState {
-  i: number
-  pool: PoolInput['state']
-  roundKey: RoundKeyInput['state']
-}
-
-export interface OctetInput {
-  count?: number
-  drop?: number
-  max?: number
-  min?: number
-  seed?: string
-  state?: OctetState
-}
+import type { RemainderCallback } from './utilities/remainder'
+import type { SliceAtCallback } from './utilities/sliceAt'
+import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
+import ceiling from './utilities/ceiling'
+import length from './utilities/length'
+import negate from './utilities/negate'
+import remainder from './utilities/remainder'
+import sliceAt from './utilities/sliceAt'
+import {
+  keySchedule,
+  pool as cipherPool,
+  roundKey as cipherRoundKey,
+} from './cipher'
+import { poolWidth } from './integers.json'
 
 const rangeOverflowErrorMsg: string = '(max - min) must not exceed 256',
   rangeUnderflowErrorMsg: string = 'max ceiling must exceed min ceiling'
@@ -34,24 +19,14 @@ export { rangeOverflowErrorMsg, rangeUnderflowErrorMsg }
 
 type NumberTransform = (n: number) => number
 
-export interface Octet {
-  generated: number[]
-  next: (count?: number) => Octet
-  state: OctetState
-}
-
 export default function octet({
-  count = 1,
-  drop = defaultDrop,
-  max: prevMax = poolWidth,
-  min: prevMin = 0,
-  seed = `${timeSinceEpoch()}`,
-  state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState } = {
-    i: 0,
-    pool: undefined,
-    roundKey: 0,
-  },
-}: OctetInput = {}): Octet {
+  count,
+  drop,
+  seed,
+  max: prevMax,
+  min: prevMin,
+  state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
+}: CipherInput): Cipher {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
@@ -59,7 +34,7 @@ export default function octet({
     toGenerate: number = count + drop,
     discardNonrandom: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = prevPoolState
-      ? poolModule({ state: prevPoolState, width: poolWidth })
+      ? cipherPool({ state: prevPoolState, width: poolWidth })
       : keySchedule({ seed, width: poolWidth }),
     rangeDiff: number = subtractMin(max),
     rangeOverflow: boolean = rangeDiff > poolWidth,
@@ -71,7 +46,7 @@ export default function octet({
   if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMsg)
 
   let i: number = prevI,
-    roundKey: RoundKey = roundKeyModule({
+    roundKey: RoundKey = cipherRoundKey({
       state: prevRoundKeyState,
       width: poolWidth,
     }),
@@ -94,13 +69,13 @@ export default function octet({
     ]
   }
 
-  const state: OctetState = {
+  const state: Cipher['state'] = {
     i,
     pool: pool.state,
     roundKey: roundKey.state,
   }
 
-  function next(nextCount = 1): Octet {
+  function next(nextCount = 1): Cipher {
     return octet({
       max,
       min,

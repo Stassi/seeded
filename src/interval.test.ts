@@ -1,4 +1,4 @@
-import type { Interval } from './interval'
+import type { Cipher } from './cipher'
 import delayTen from './utilities/delayTen'
 import interval from './interval'
 import length from './utilities/length'
@@ -107,7 +107,7 @@ describe('interval', () => {
           expectedLength: number = length(expected)
 
         describe('first chained call', () => {
-          const { generated, next: nextInterval }: Interval = interval({
+          const { generated, next: nextInterval }: Cipher = interval({
             max,
             min,
             seed,
@@ -120,7 +120,7 @@ describe('interval', () => {
 
           describe('second chained call', () => {
             it('should persistently return known intervals', () => {
-              const { generated: generatedTwo }: Interval =
+              const { generated: generatedTwo }: Cipher =
                 nextInterval(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
             })
@@ -129,7 +129,7 @@ describe('interval', () => {
 
         describe('composite call', () => {
           it('should persistently return known intervals', () => {
-            const { generated }: Interval = interval({
+            const { generated }: Cipher = interval({
               max,
               min,
               seed,
@@ -141,13 +141,13 @@ describe('interval', () => {
         })
 
         describe('state loading', () => {
-          const { state }: Interval = interval({
+          const { state }: Cipher = interval({
               max,
               min,
               seed,
               count: firstExpectedLength,
             }),
-            { generated }: Interval = interval({
+            { generated }: Cipher = interval({
               max,
               min,
               state,

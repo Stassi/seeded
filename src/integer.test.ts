@@ -1,9 +1,11 @@
-import type { Integer } from './integer'
+import type { Cipher } from './cipher'
 import delayTen from './utilities/delayTen'
 import integer from './integer'
 import length from './utilities/length'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
 import negate from './utilities/negate'
+import { rangeUnderflowErrorMsg } from './octet'
+import { bitsInOctet, poolWidth } from './integers.json'
 
 describe('integer', () => {
   describe.each([
@@ -13,39 +15,31 @@ describe('integer', () => {
         [0, 0, 0, 0, 0],
       ],
       max: 1,
-      min: -0.9,
+      min: negate(0.9),
     },
     {
       expected: [
-        [-1, -1, 0, -1, -1],
-        [0, -1, -1, 0, 0],
+        [1, 0, 0, 0, 0],
+        [1, 1, 0, 0, 1],
       ],
-      max: 1,
-      min: -1,
+      max: 1.9,
+      min: negate(0.9),
     },
     {
       expected: [
-        [0, 0, 0, 0, 0],
-        [0, 0, 0, 0, 0],
-      ],
-      max: 1,
-      min: 0,
-    },
-    {
-      expected: [
-        [0, 0, 1, 0, 0],
-        [1, 0, 0, 1, 1],
+        [1, 0, 0, 0, 0],
+        [1, 1, 0, 0, 1],
       ],
       max: 2,
       min: 0,
     },
     {
       expected: [
-        [0, 2, 4, 1, 2],
-        [5, 1, 0, 4, 6],
+        [1, 1, 0, -1, -1],
+        [1, -1, 1, 0, -1],
       ],
-      max: 8,
-      min: 0,
+      max: 2,
+      min: negate(1),
     },
     {
       expected: [
@@ -60,6 +54,46 @@ describe('integer', () => {
       ],
       max: undefined,
       min: undefined,
+    },
+    {
+      expected: [
+        [113, 134, 94, 12, 198],
+        [119, 249, 116, 160, 21],
+      ],
+      max: poolWidth,
+      min: 0,
+    },
+    {
+      expected: [
+        [23, 73, 158, 54, 89],
+        [175, 51, 14, 133, 218],
+      ],
+      max: poolWidth,
+      min: -1,
+    },
+    {
+      expected: [
+        [24, 74, 159, 55, 90],
+        [176, 52, 15, 134, 219],
+      ],
+      max: poolWidth + 1,
+      min: 0,
+    },
+    {
+      expected: [
+        [1, 6, 6, 4, 6],
+        [7, 1, 4, 0, 5],
+      ],
+      max: bitsInOctet,
+      min: 0,
+    },
+    {
+      expected: [
+        [-7, -2, -2, -4, -2],
+        [-1, -7, -4, -8, -3],
+      ],
+      max: 0,
+      min: negate(bitsInOctet),
     },
     {
       expected: [
@@ -121,7 +155,7 @@ describe('integer', () => {
           expectedLength: number = length(expected)
 
         describe('first chained call', () => {
-          const { generated, next: nextInteger }: Integer = integer({
+          const { generated, next: nextInteger }: Cipher = integer({
             max,
             min,
             seed,
@@ -134,7 +168,7 @@ describe('integer', () => {
 
           describe('second chained call', () => {
             it('should persistently return known integers', () => {
-              const { generated: generatedTwo }: Integer =
+              const { generated: generatedTwo }: Cipher =
                 nextInteger(firstExpectedLength)
               expect(generatedTwo).toEqual(secondExpected)
             })
@@ -143,7 +177,7 @@ describe('integer', () => {
 
         describe('composite call', () => {
           it('should persistently return known integers', () => {
-            const { generated }: Integer = integer({
+            const { generated }: Cipher = integer({
               max,
               min,
               seed,
@@ -155,13 +189,13 @@ describe('integer', () => {
         })
 
         describe('state loading', () => {
-          const { state }: Integer = integer({
+          const { state }: Cipher = integer({
               max,
               min,
               seed,
               count: firstExpectedLength,
             }),
-            { generated }: Integer = integer({
+            { generated }: Cipher = integer({
               max,
               min,
               state,
@@ -188,12 +222,35 @@ describe('integer', () => {
           it('should return discrete values within specified range', async () => {
             const [x, y]: [number, number] = await stochasticPair()
             expect(x).toBeGreaterThanOrEqual(min || 0)
-            expect(x).toBeLessThan(max || maximumSafeBinary)
+            expect(x).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
             expect(y).toBeGreaterThanOrEqual(min || 0)
-            expect(y).toBeLessThan(max || maximumSafeBinary)
+            expect(y).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
           })
         })
       })
     }
   )
+
+  describe('range underflow errors', () => {
+    describe.each([
+      { expected: rangeUnderflowErrorMsg, max: 0, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: -1, min: 0 },
+      { expected: rangeUnderflowErrorMsg, max: 1, min: 0.1 },
+    ])(
+      'range: [$min, $max)',
+      ({
+        expected,
+        max,
+        min,
+      }: {
+        expected: string
+        max: number
+        min: number
+      }) => {
+        it('should throw a range error', () => {
+          expect(() => integer({ max, min })).toThrow(expected)
+        })
+      }
+    )
+  })
 })

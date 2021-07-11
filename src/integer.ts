@@ -1,42 +1,33 @@
-import type { Interval, IntervalInput } from './interval'
-import ceiling from './utilities/ceiling'
-import floor from './utilities/floor'
-import interval from './interval'
+import type { Cipher, CipherInput, CipherInputOptional } from './cipher'
+import largeInteger from './largeInteger'
 import maximumSafeBinary from './utilities/maximumSafeBinary'
-
-interface IntegerInput extends IntervalInput {}
-
-export interface Integer extends Interval {
-  next: (count?: number) => Integer
-}
+import octet, { rangeUnderflowErrorMsg } from './octet'
+import timeSinceEpoch from './utilities/timeSinceEpoch'
+import { defaultDrop } from './integers.json'
 
 export default function integer({
+  count = 1,
+  drop = defaultDrop,
   max = maximumSafeBinary,
   min = 0,
-  state: prevState,
-  ...props
-}: IntegerInput = {}): Integer {
-  const { generated, state }: Interval = interval({
-    ...props,
-    max,
-    min: ceiling(min),
-    state: prevState,
-  })
+  seed = `${timeSinceEpoch()}`,
+  state = {
+    i: 0,
+    pool: undefined,
+    roundKey: 0,
+  },
+}: CipherInputOptional = {}): Cipher {
+  const props: CipherInput = { count, drop, max, min, seed, state }
 
-  function next(count: number = 1): Integer {
-    return integer({
-      ...props,
-      count,
-      max,
-      min,
-      state,
-      drop: 0,
-    })
+  let res: Cipher
+
+  try {
+    res = octet(props)
+  } catch ({ message }) {
+    if (message === rangeUnderflowErrorMsg)
+      throw new RangeError(rangeUnderflowErrorMsg)
+    res = largeInteger(props)
   }
 
-  return {
-    next,
-    state,
-    generated: generated.map(floor),
-  }
+  return res
 }

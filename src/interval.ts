@@ -1,55 +1,46 @@
-import type { Octet, OctetInput } from './octet'
+import type { Cipher, CipherInputOptional } from './cipher'
 import isStrictZero from './utilities/isStrictZero'
 import length from './utilities/length'
 import octet from './octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
-
-export interface IntervalInput extends OctetInput {
-  max?: number
-  min?: number
-}
-
-export interface Interval extends Octet {
-  next: (count?: number) => Interval
-}
+import timeSinceEpoch from './utilities/timeSinceEpoch'
+import { defaultDrop, poolWidth } from './integers.json'
 
 export default function interval({
   count = 1,
+  drop = defaultDrop,
   max = 1,
   min = 0,
-  ...props
-}: IntervalInput = {}): Interval {
-  let generated: Interval['generated'] = [],
-    localNextOctet: Octet['next'] = () => octet(),
-    state: Interval['state'] = {
-      i: 0,
-      pool: [],
-      roundKey: 0,
-    }
+  seed = `${timeSinceEpoch()}`,
+  state: prevState = {
+    i: 0,
+    pool: undefined,
+    roundKey: 0,
+  },
+}: CipherInputOptional = {}): Cipher {
+  let generated: Cipher['generated'] = [],
+    state: Cipher['state'] = prevState
 
   while (length(generated) < count) {
-    const {
-      generated: generatedOctet,
-      next: nextOctet,
-      state: octetState,
-    }: Octet = isStrictZero(length(generated))
-      ? octet({
-          count: octetsNeededForMaxSafeBinary,
-          ...props,
-        })
-      : localNextOctet(octetsNeededForMaxSafeBinary)
+    const { generated: generatedOctet, state: octetState }: Cipher = octet({
+      seed,
+      state,
+      count: octetsNeededForMaxSafeBinary,
+      drop: isStrictZero(length(generated)) ? drop : 0,
+      min: 0,
+      max: poolWidth,
+    })
 
     generated = [
       ...generated,
       octetToInterval(generatedOctet) * (max - min) + min,
     ]
-    localNextOctet = nextOctet
     state = octetState
   }
 
-  function next(nextCount = 1): Interval {
+  function next(nextCount = 1): Cipher {
     return interval({
       max,
       min,
