@@ -5,7 +5,7 @@ import maximumSafeBinary from '../utilities/maximumSafeBinary'
 import negate from '../utilities/negate'
 import octet from './octet'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from '../integers.json'
+import { defaultDrop, poolWidth } from '../metrics.json'
 import { range as rangeErrorMessages } from '../errorMessages.json'
 
 export default function integer({

@@ -4,7 +4,7 @@ import integer from './index'
 import length from '../utilities/length'
 import maximumSafeBinary from '../utilities/maximumSafeBinary'
 import negate from '../utilities/negate'
-import { bitsInOctet, poolWidth } from '../integers.json'
+import { bitsInOctet, poolWidth } from '../metrics.json'
 import { range } from '../errorMessages.json'
 
 describe('integer', () => {

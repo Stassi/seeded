@@ -1,4 +1,4 @@
-import { maximumSafeBinaryLength } from '../integers.json'
+import { maximumSafeBinaryLength } from '../metrics.json'
 
 const maximumSafeBinary: number = 2 ** maximumSafeBinaryLength
 

@@ -6,7 +6,7 @@ import negate from './negate'
 import octetsNeededForLength from './octetsNeededForLength'
 import sliceAt, { SliceAtCallback } from './sliceAt'
 import toFixedBinaryOctets from './toFixedBinaryOctets'
-import { bitsInOctet, maximumSafeBinaryLength } from '../integers.json'
+import { bitsInOctet, maximumSafeBinaryLength } from '../metrics.json'
 
 const maxSafeBinaryToInterval: BinaryNumberToIntervalCallback =
   binaryNumberToInterval(maximumSafeBinaryLength)
