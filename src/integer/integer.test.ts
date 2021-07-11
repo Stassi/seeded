@@ -5,9 +5,9 @@ import length from '../utilities/length'
 import negate from '../utilities/negate'
 import {
   bitsInOctet,
+  integerRangeUnderflowErrorMessage,
   maximumSafeBinary,
   poolWidth,
-  rangeUnderflowErrorMessage,
 } from '../data'
 
 describe('integer', () => {
@@ -236,9 +236,9 @@ describe('integer', () => {
 
   describe('range underflow errors', () => {
     describe.each([
-      { expected: rangeUnderflowErrorMessage, max: 0, min: 0 },
-      { expected: rangeUnderflowErrorMessage, max: -1, min: 0 },
-      { expected: rangeUnderflowErrorMessage, max: 1, min: 0.1 },
+      { expected: integerRangeUnderflowErrorMessage, max: 0, min: 0 },
+      { expected: integerRangeUnderflowErrorMessage, max: -1, min: 0 },
+      { expected: integerRangeUnderflowErrorMessage, max: 1, min: 0.1 },
     ])(
       'range: [$min, $max)',
       ({

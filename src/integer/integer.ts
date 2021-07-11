@@ -6,9 +6,9 @@ import octet from './octet'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
 import {
   defaultDrop,
+  integerRangeUnderflowErrorMessage,
   maximumSafeBinary,
   poolWidth,
-  rangeUnderflowErrorMessage,
 } from '../data'
 
 export default function integer({
@@ -34,7 +34,7 @@ export default function integer({
     rangeUnderflow: boolean = ceiling(min) >= ceiling(max),
     octetRangeOverflow: boolean = max + negate(min) > poolWidth
 
-  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMessage)
+  if (rangeUnderflow) throw new RangeError(integerRangeUnderflowErrorMessage)
 
   return octetRangeOverflow ? largeInteger(props) : octet(props)
 }
