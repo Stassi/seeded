@@ -6,7 +6,11 @@ import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
 import timeSinceEpoch from './utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from './data'
+import {
+  defaultDrop,
+  intervalRangeUnderflowErrorMessage,
+  poolWidth,
+} from './data'
 
 export default function interval({
   count = 1,
@@ -20,6 +24,10 @@ export default function interval({
     roundKey: 0,
   },
 }: CipherInputOptional = {}): Cipher {
+  const rangeUnderflow: boolean = min >= max
+
+  if (rangeUnderflow) throw new RangeError(intervalRangeUnderflowErrorMessage)
+
   let generated: Cipher['generated'] = [],
     state: Cipher['state'] = prevState
 

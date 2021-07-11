@@ -1,5 +1,5 @@
 import maximumSafeBinary from './maximumSafeBinary'
-import { range } from './errorMessages.json'
+import { range as rangeErrorMessages } from './errorMessages.json'
 import {
   bitsInOctet,
   defaultDrop,
@@ -7,13 +7,19 @@ import {
   poolWidth,
 } from './metrics.json'
 
-const { underflow: rangeUnderflowErrorMessage } = range
+const {
+  underflow: {
+    integer: integerRangeUnderflowErrorMessage,
+    interval: intervalRangeUnderflowErrorMessage,
+  },
+} = rangeErrorMessages
 
 export {
   bitsInOctet,
   defaultDrop,
+  integerRangeUnderflowErrorMessage,
+  intervalRangeUnderflowErrorMessage,
   maximumSafeBinary,
   maximumSafeBinaryLength,
   poolWidth,
-  rangeUnderflowErrorMessage,
 }
