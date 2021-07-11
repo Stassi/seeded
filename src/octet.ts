@@ -1,6 +1,6 @@
 import type { RemainderCallback } from './utilities/remainder'
 import type { SliceAtCallback } from './utilities/sliceAt'
-import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
+import type { Cipher, CipherInputOptional, Pool, RoundKey } from './cipher'
 import ceiling from './utilities/ceiling'
 import length from './utilities/length'
 import negate from './utilities/negate'
@@ -31,7 +31,7 @@ export default function octet({
     pool: undefined,
     roundKey: 0,
   },
-}: CipherInput = {}): Cipher {
+}: CipherInputOptional = {}): Cipher {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,

@@ -1,4 +1,4 @@
-import type { Cipher, CipherInput } from './cipher'
+import type { Cipher, CipherInputOptional } from './cipher'
 import isStrictZero from './utilities/isStrictZero'
 import length from './utilities/length'
 import octet from './octet'
@@ -11,9 +11,9 @@ export default function interval({
   max = 1,
   min = 0,
   ...props
-}: CipherInput = {}): Cipher {
+}: CipherInputOptional = {}): Cipher {
   let generated: Cipher['generated'] = [],
-    localNextOctet: Cipher['next'] = () => octet(),
+    localNextOctet: Cipher['next'] = () => octet({ count, max, min, ...props }),
     state: Cipher['state'] = {
       i: 0,
       pool: [],
