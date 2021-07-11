@@ -337,7 +337,9 @@ describe('number', () => {
           min: number
         }) => {
           it('should throw a range error', () => {
-            expect(() => number({ discrete, max, min })).toThrow(expected)
+            expect(() =>
+              number({ max, min, ...(discrete ? discrete : {}) })
+            ).toThrow(expected)
           })
         }
       )
@@ -356,7 +358,9 @@ describe('number', () => {
           min: number
         }) => {
           it('should NOT throw a range error', () => {
-            expect(() => number({ discrete, max, min })).not.toThrow(expected)
+            expect(() =>
+              number({ max, min, ...(discrete ? discrete : {}) })
+            ).not.toThrow(expected)
           })
         }
       )
