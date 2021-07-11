@@ -1,11 +1,14 @@
-import type { Cipher } from './cipher'
-import delayTen from './utilities/delayTen'
-import integer from './integer'
-import length from './utilities/length'
-import maximumSafeBinary from './utilities/maximumSafeBinary'
-import negate from './utilities/negate'
-import { bitsInOctet, poolWidth } from './integers.json'
-import { range } from './errorMessages.json'
+import type { Cipher } from '../cipher'
+import delayTen from '../utilities/delayTen'
+import integer from './index'
+import length from '../utilities/length'
+import negate from '../utilities/negate'
+import {
+  bitsInOctet,
+  maximumSafeBinary,
+  poolWidth,
+  rangeUnderflowErrorMessage,
+} from '../data'
 
 describe('integer', () => {
   describe.each([
@@ -232,12 +235,10 @@ describe('integer', () => {
   )
 
   describe('range underflow errors', () => {
-    const { underflow: rangeUnderflowErrorMsg } = range
-
     describe.each([
-      { expected: rangeUnderflowErrorMsg, max: 0, min: 0 },
-      { expected: rangeUnderflowErrorMsg, max: -1, min: 0 },
-      { expected: rangeUnderflowErrorMsg, max: 1, min: 0.1 },
+      { expected: rangeUnderflowErrorMessage, max: 0, min: 0 },
+      { expected: rangeUnderflowErrorMessage, max: -1, min: 0 },
+      { expected: rangeUnderflowErrorMessage, max: 1, min: 0.1 },
     ])(
       'range: [$min, $max)',
       ({
