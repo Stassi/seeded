@@ -14,37 +14,29 @@ export default function interval({
   max = 1,
   min = 0,
   seed = `${timeSinceEpoch()}`,
-  state = {
+  state: prevState = {
     i: 0,
     pool: undefined,
     roundKey: 0,
   },
 }: CipherInputOptional = {}): Cipher {
   let generated: Cipher['generated'] = [],
-    localNextOctet: Cipher['next'] = () =>
-      octet({ count, drop, max, min, seed, state })
+    state: Cipher['state'] = prevState
 
   while (length(generated) < count) {
-    const {
-      generated: generatedOctet,
-      next: nextOctet,
-      state: octetState,
-    }: Cipher = isStrictZero(length(generated))
-      ? octet({
-          drop,
-          seed,
-          state,
-          count: octetsNeededForMaxSafeBinary,
-          min: 0,
-          max: poolWidth,
-        })
-      : localNextOctet(octetsNeededForMaxSafeBinary)
+    const { generated: generatedOctet, state: octetState }: Cipher = octet({
+      seed,
+      state,
+      count: octetsNeededForMaxSafeBinary,
+      drop: isStrictZero(length(generated)) ? drop : 0,
+      min: 0,
+      max: poolWidth,
+    })
 
     generated = [
       ...generated,
       octetToInterval(generatedOctet) * (max - min) + min,
     ]
-    localNextOctet = nextOctet
     state = octetState
   }
 
