@@ -1,3 +1,4 @@
+import type NumberTransform from './utilities/NumberTransform'
 import type { RemainderCallback } from './utilities/remainder'
 import type { SliceAtCallback } from './utilities/sliceAt'
 import type { Cipher, CipherInput, Pool, RoundKey } from './cipher'
@@ -13,8 +14,6 @@ import {
 } from './cipher'
 import { poolWidth } from './integers.json'
 import { range as rangeErrorMessages } from './errorMessages.json'
-
-type NumberTransform = (n: number) => number
 
 export default function octet({
   count,
