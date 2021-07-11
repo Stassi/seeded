@@ -1,12 +1,15 @@
 import type { Cipher, CipherInput, CipherInputOptional } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import largeInteger from './largeInteger'
-import maximumSafeBinary from '../utilities/maximumSafeBinary'
 import negate from '../utilities/negate'
 import octet from './octet'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from '../metrics.json'
-import { range as rangeErrorMessages } from '../errorMessages.json'
+import {
+  defaultDrop,
+  maximumSafeBinary,
+  poolWidth,
+  rangeUnderflowErrorMessage,
+} from '../data'
 
 export default function integer({
   count = 1,
@@ -31,7 +34,7 @@ export default function integer({
     octetRangeOverflow: boolean = max + negate(min) > poolWidth,
     rangeUnderflow: boolean = ceiling(min) >= ceiling(max)
 
-  if (rangeUnderflow) throw new RangeError(rangeErrorMessages.underflow)
+  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMessage)
 
   return octetRangeOverflow ? largeInteger(props) : octet(props)
 }

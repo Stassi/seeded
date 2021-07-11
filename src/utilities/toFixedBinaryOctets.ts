@@ -1,5 +1,5 @@
 import toBinary from './toBinary'
-import { bitsInOctet } from '../metrics.json'
+import { bitsInOctet } from '../data'
 
 export function toFixedBinaryOctet(n: number): string {
   return toBinary(n).padStart(bitsInOctet, '0')

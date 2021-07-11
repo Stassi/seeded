@@ -12,7 +12,7 @@ import {
   pool as cipherPool,
   roundKey as cipherRoundKey,
 } from '../cipher'
-import { poolWidth } from '../metrics.json'
+import { poolWidth } from '../data'
 
 export default function octet({
   count,

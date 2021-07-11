@@ -6,7 +6,7 @@ import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
 import timeSinceEpoch from './utilities/timeSinceEpoch'
-import { defaultDrop, poolWidth } from './metrics.json'
+import { defaultDrop, poolWidth } from './data'
 
 export default function interval({
   count = 1,
