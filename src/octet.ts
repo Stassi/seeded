@@ -13,7 +13,6 @@ import {
   roundKey as cipherRoundKey,
 } from './cipher'
 import { poolWidth } from './integers.json'
-import { range as rangeErrorMessages } from './errorMessages.json'
 
 export default function octet({
   count,
@@ -33,11 +32,8 @@ export default function octet({
       ? cipherPool({ state: prevPoolState, width: poolWidth })
       : keySchedule({ seed, width: poolWidth }),
     rangeDiff: number = subtractMin(max),
-    rangeUnderflow: boolean = min >= max,
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
-
-  if (rangeUnderflow) throw new RangeError(rangeErrorMessages.underflow)
 
   let i: number = prevI,
     roundKey: RoundKey = cipherRoundKey({
