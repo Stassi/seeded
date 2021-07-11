@@ -4,7 +4,11 @@ import integer from './integer'
 import interval from './interval'
 import length from './utilities/length'
 import negate from './utilities/negate'
-import { maximumSafeBinary, rangeUnderflowErrorMessage } from './data'
+import {
+  integerRangeUnderflowErrorMessage,
+  intervalRangeUnderflowErrorMessage,
+  maximumSafeBinary,
+} from './data'
 
 describe('number', () => {
   describe.each([
@@ -251,9 +255,9 @@ describe('number', () => {
   describe('range underflow errors', () => {
     describe('integer', () => {
       describe.each([
-        { expected: rangeUnderflowErrorMessage, max: 0, min: 0 },
-        { expected: rangeUnderflowErrorMessage, max: -1, min: 0 },
-        { expected: rangeUnderflowErrorMessage, max: 1, min: 0.1 },
+        { expected: integerRangeUnderflowErrorMessage, max: 0, min: 0 },
+        { expected: integerRangeUnderflowErrorMessage, max: -1, min: 0 },
+        { expected: integerRangeUnderflowErrorMessage, max: 1, min: 0.1 },
       ])(
         'range: [$min, $max)',
         ({
@@ -274,8 +278,8 @@ describe('number', () => {
 
     describe('interval', () => {
       describe.each([
-        { expected: rangeUnderflowErrorMessage, max: 0, min: 0 },
-        { expected: rangeUnderflowErrorMessage, max: -1, min: 0 },
+        { expected: intervalRangeUnderflowErrorMessage, max: 0, min: 0 },
+        { expected: intervalRangeUnderflowErrorMessage, max: -1, min: 0 },
       ])(
         'range: [$min, $max)',
         ({
@@ -294,7 +298,7 @@ describe('number', () => {
       )
 
       describe.each([
-        { expected: rangeUnderflowErrorMessage, max: 1, min: 0.1 },
+        { expected: intervalRangeUnderflowErrorMessage, max: 1, min: 0.1 },
       ])(
         'range: [$min, $max)',
         ({
