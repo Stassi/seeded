@@ -43,8 +43,14 @@ describe('integer', () => {
     },
     {
       expected: [
-        [113, 134, 94, 12, 198],
-        [119, 249, 116, 160, 21],
+        [
+          429213476091897, 1301914878543128, 2786706481541730, 976053428009042,
+          1582399419995796,
+        ],
+        [
+          3099175663437328, 921365178165718, 273022197705261, 2353355207890545,
+          3847802525837347,
+        ],
       ],
       max: undefined,
       min: undefined,
@@ -216,9 +222,9 @@ describe('integer', () => {
           it('should return discrete values within specified range', async () => {
             const [x, y]: [number, number] = await stochasticPair()
             expect(x).toBeGreaterThanOrEqual(min || 0)
-            expect(x).toBeLessThanOrEqual(max || poolWidth - 1)
+            expect(x).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
             expect(y).toBeGreaterThanOrEqual(min || 0)
-            expect(y).toBeLessThanOrEqual(max || poolWidth - 1)
+            expect(y).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
           })
         })
       })
