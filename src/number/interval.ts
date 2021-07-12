@@ -1,11 +1,11 @@
-import type { Cipher, CipherInput } from './cipher'
-import isStrictZero from './utilities/isStrictZero'
-import length from './utilities/length'
+import type { Cipher, CipherInput } from '../cipher'
+import isStrictZero from '../utilities/isStrictZero'
+import length from '../utilities/length'
 import { octet } from './integer'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
-} from './utilities/octetToInterval'
-import { intervalRangeUnderflowErrorMessage, poolWidth } from './data'
+} from '../utilities/octetToInterval'
+import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
 
 export default function interval({
   count,

@@ -1,13 +1,13 @@
-import type { Cipher } from './cipher'
-import delayTen from './utilities/delayTen'
-import length from './utilities/length'
-import negate from './utilities/negate'
+import type { Cipher } from '../cipher'
+import delayTen from '../utilities/delayTen'
+import length from '../utilities/length'
+import negate from '../utilities/negate'
 import number from './number'
 import {
   integerRangeUnderflowErrorMessage,
   intervalRangeUnderflowErrorMessage,
   maximumSafeBinary,
-} from './data'
+} from '../data'
 
 describe('number', () => {
   describe.each([
