@@ -1,29 +1,20 @@
-import type { Cipher, CipherInputOptional } from './cipher'
+import type { Cipher, CipherInput } from './cipher'
 import isStrictZero from './utilities/isStrictZero'
 import length from './utilities/length'
 import { octet } from './integer'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from './utilities/octetToInterval'
-import timeSinceEpoch from './utilities/timeSinceEpoch'
-import {
-  defaultDrop,
-  intervalRangeUnderflowErrorMessage,
-  poolWidth,
-} from './data'
+import { intervalRangeUnderflowErrorMessage, poolWidth } from './data'
 
 export default function interval({
-  count = 1,
-  drop = defaultDrop,
-  max = 1,
-  min = 0,
-  seed = `${timeSinceEpoch()}`,
-  state: prevState = {
-    i: 0,
-    pool: undefined,
-    roundKey: 0,
-  },
-}: CipherInputOptional = {}): Cipher {
+  count,
+  drop,
+  max,
+  min,
+  seed,
+  state: prevState,
+}: CipherInput): Cipher {
   const rangeUnderflow: boolean = min >= max
 
   if (rangeUnderflow) throw new RangeError(intervalRangeUnderflowErrorMessage)
@@ -52,6 +43,7 @@ export default function interval({
     return interval({
       max,
       min,
+      seed,
       state,
       count: nextCount,
       drop: 0,
