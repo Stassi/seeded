@@ -182,43 +182,25 @@ describe('number', () => {
       })
 
       describe('stochastic', () => {
-        describe('integer', () => {
-          const discrete: boolean = true,
-            stochasticPair = async (): Promise<[number, number]> => {
-              const single = (): number =>
-                number({ discrete, max, min }).generated[0]
-              const x: number = single()
-              await delayTen()
-              const y: number = single()
-              return [x, y]
-            }
+        describe.each([false, true])('discrete: %s', (discrete: boolean) => {
+          const stochasticPair = async (): Promise<[number, number]> => {
+            const generateOne = (): number =>
+                number({ discrete, max, min }).generated[0],
+              x: number = generateOne()
+            await delayTen()
+            const y: number = generateOne()
+            return [x, y]
+          }
 
-          it('should return discrete values within specified range', async () => {
-            const [x, y]: [number, number] = await stochasticPair()
-            expect(x).toBeGreaterThanOrEqual(min || 0)
-            expect(x).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
-            expect(y).toBeGreaterThanOrEqual(min || 0)
-            expect(y).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
-          })
-        })
+          it('should return values within specified range', async () => {
+            const [x, y]: [number, number] = await stochasticPair(),
+              minOrDefaultMin = min || 0,
+              maxOrDefaultMax = max || maximumSafeBinary - 1
 
-        describe('interval', () => {
-          const discrete: boolean = false,
-            stochasticPair = async (): Promise<[number, number]> => {
-              const single = (): number =>
-                number({ discrete, max, min }).generated[0]
-              const x: number = single()
-              await delayTen()
-              const y: number = single()
-              return [x, y]
-            }
-
-          it('should return discrete values within specified range', async () => {
-            const [x, y]: [number, number] = await stochasticPair()
-            expect(x).toBeGreaterThanOrEqual(min || 0)
-            expect(x).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
-            expect(y).toBeGreaterThanOrEqual(min || 0)
-            expect(y).toBeLessThanOrEqual(max || maximumSafeBinary - 1)
+            expect(x).toBeGreaterThanOrEqual(minOrDefaultMin)
+            expect(x).toBeLessThanOrEqual(maxOrDefaultMax)
+            expect(y).toBeGreaterThanOrEqual(minOrDefaultMin)
+            expect(y).toBeLessThanOrEqual(maxOrDefaultMax)
           })
         })
       })
