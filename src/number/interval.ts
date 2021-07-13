@@ -1,7 +1,7 @@
 import type { Cipher, CipherInput } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
-import { octet } from './integer'
+import octet from './integer/octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from '../utilities/octetToInterval'
