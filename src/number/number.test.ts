@@ -100,12 +100,9 @@ describe('number', () => {
   ])(
     'range: [$min, $max)',
     ({
+      expected,
       max,
       min,
-      expected: {
-        integer: [firstExpected, secondExpected],
-        interval: [firstExpectedInterval, secondExpectedInterval],
-      },
     }: {
       expected: {
         integer: number[][]
@@ -115,20 +112,17 @@ describe('number', () => {
       min?: number
     }) => {
       describe('deterministic', () => {
-        const seed: string = 'hello.',
-          expected: number[] = [...firstExpected, ...secondExpected],
-          expectedInterval: number[] = [
-            ...firstExpectedInterval,
-            ...secondExpectedInterval,
-          ],
-          firstExpectedLength: number = length(firstExpected),
-          expectedLength: number = length(expected)
+        const seed: string = 'hello.'
 
-        describe('integer', () => {
-          const discrete: boolean = true
+        describe.each([false, true])('discrete: %s', (discrete: boolean) => {
+          const [firstExpected, secondExpected] =
+              expected[discrete ? 'integer' : 'interval'],
+            compositeExpected: number[] = [...firstExpected, ...secondExpected],
+            firstExpectedLength: number = length(firstExpected),
+            compositeExpectedLength: number = length(compositeExpected)
 
           describe('first chained call', () => {
-            const { generated, next: nextInteger }: Cipher = number({
+            const { generated, next }: Cipher = number({
               discrete,
               max,
               min,
@@ -136,30 +130,30 @@ describe('number', () => {
               count: firstExpectedLength,
             })
 
-            it('should persistently return known integers', () => {
+            it('should persistently return known values', () => {
               expect(generated).toEqual(firstExpected)
             })
 
             describe('second chained call', () => {
-              it('should persistently return known integers', () => {
-                const { generated: generatedTwo }: Cipher =
-                  nextInteger(firstExpectedLength)
-                expect(generatedTwo).toEqual(secondExpected)
+              it('should persistently return known values', () => {
+                const { generated: secondGenerated }: Cipher =
+                  next(firstExpectedLength)
+                expect(secondGenerated).toEqual(secondExpected)
               })
             })
           })
 
           describe('composite call', () => {
-            it('should persistently return known integers', () => {
+            it('should persistently return known values', () => {
               const { generated }: Cipher = number({
                 discrete,
                 max,
                 min,
                 seed,
-                count: expectedLength,
+                count: compositeExpectedLength,
               })
 
-              expect(generated).toEqual(expected)
+              expect(generated).toEqual(compositeExpected)
             })
           })
 
@@ -180,70 +174,8 @@ describe('number', () => {
                 drop: 0,
               })
 
-            it('should return known integers from a loaded state', () => {
+            it('should return known values from a loaded state', () => {
               expect(generated).toEqual(secondExpected)
-            })
-          })
-        })
-
-        describe('interval', () => {
-          const discrete: boolean = false
-
-          describe('first chained call', () => {
-            const { generated, next: nextInteger }: Cipher = number({
-              discrete,
-              max,
-              min,
-              seed,
-              count: firstExpectedLength,
-            })
-
-            it('should persistently return known intervals', () => {
-              expect(generated).toEqual(firstExpectedInterval)
-            })
-
-            describe('second chained call', () => {
-              it('should persistently return known intervals', () => {
-                const { generated: generatedTwo }: Cipher =
-                  nextInteger(firstExpectedLength)
-                expect(generatedTwo).toEqual(secondExpectedInterval)
-              })
-            })
-          })
-
-          describe('composite call', () => {
-            it('should persistently return known intervals', () => {
-              const { generated }: Cipher = number({
-                discrete,
-                max,
-                min,
-                seed,
-                count: expectedLength,
-              })
-
-              expect(generated).toEqual(expectedInterval)
-            })
-          })
-
-          describe('state loading', () => {
-            const { state }: Cipher = number({
-                discrete,
-                max,
-                min,
-                seed,
-                count: firstExpectedLength,
-              }),
-              { generated }: Cipher = number({
-                discrete,
-                max,
-                min,
-                state,
-                count: firstExpectedLength,
-                drop: 0,
-              })
-
-            it('should return known intervals from a loaded state', () => {
-              expect(generated).toEqual(secondExpectedInterval)
             })
           })
         })
