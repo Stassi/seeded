@@ -208,31 +208,6 @@ describe('number', () => {
   )
 
   describe('range underflow errors', () => {
-    describe('integer', () => {
-      const discrete: boolean = true
-
-      describe.each([
-        { expected: integerRangeUnderflowErrorMessage, max: 0, min: 0 },
-        { expected: integerRangeUnderflowErrorMessage, max: -1, min: 0 },
-        { expected: integerRangeUnderflowErrorMessage, max: 1, min: 0.1 },
-      ])(
-        'range: [$min, $max)',
-        ({
-          expected,
-          max,
-          min,
-        }: {
-          expected: string
-          max: number
-          min: number
-        }) => {
-          it('should throw a range error', () => {
-            expect(() => number({ discrete, max, min })).toThrow(expected)
-          })
-        }
-      )
-    })
-
     describe('interval', () => {
       const discrete: boolean = false
 
@@ -275,6 +250,31 @@ describe('number', () => {
             expect(() =>
               number({ max, min, ...(discrete ? discrete : {}) })
             ).not.toThrow(expected)
+          })
+        }
+      )
+    })
+
+    describe('integer', () => {
+      const discrete: boolean = true
+
+      describe.each([
+        { expected: integerRangeUnderflowErrorMessage, max: 0, min: 0 },
+        { expected: integerRangeUnderflowErrorMessage, max: -1, min: 0 },
+        { expected: integerRangeUnderflowErrorMessage, max: 1, min: 0.1 },
+      ])(
+        'range: [$min, $max)',
+        ({
+          expected,
+          max,
+          min,
+        }: {
+          expected: string
+          max: number
+          min: number
+        }) => {
+          it('should throw a range error', () => {
+            expect(() => number({ discrete, max, min })).toThrow(expected)
           })
         }
       )
