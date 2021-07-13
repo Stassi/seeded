@@ -208,7 +208,7 @@ describe('number', () => {
   )
 
   describe('range underflow errors', () => {
-    describe('interval', () => {
+    describe('discrete: false', () => {
       const discrete: boolean = false
 
       describe.each([
@@ -255,7 +255,7 @@ describe('number', () => {
       )
     })
 
-    describe('integer', () => {
+    describe('discrete: true', () => {
       const discrete: boolean = true
 
       describe.each([
