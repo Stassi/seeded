@@ -1,6 +1,6 @@
-import type { Cipher, CipherInput } from '../cipher'
-import ceiling from '../utilities/ceiling'
-import floor from '../utilities/floor'
+import type { Cipher, CipherInput } from '../../cipher'
+import ceiling from '../../utilities/ceiling'
+import floor from '../../utilities/floor'
 import interval from '../interval'
 
 export default function largeInteger({

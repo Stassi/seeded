@@ -1,8 +1,8 @@
-import type { Cipher, CipherInput, CipherInputOptional } from './cipher'
+import type { Cipher, CipherInput, CipherInputOptional } from '../cipher'
 import integer from './integer'
 import interval from './interval'
-import timeSinceEpoch from './utilities/timeSinceEpoch'
-import { defaultDrop, maximumSafeBinary } from './data'
+import timeSinceEpoch from '../utilities/timeSinceEpoch'
+import { defaultDrop, maximumSafeBinary } from '../data'
 
 interface NumberInput extends CipherInputOptional {
   discrete?: boolean
