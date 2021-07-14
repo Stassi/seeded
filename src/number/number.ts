@@ -28,25 +28,24 @@ export default function number({
   },
 }: NumberInput = {}): Cipher {
   const props: CipherInput = {
-    count,
-    drop,
-    max,
-    min,
-    seed,
-    state,
-  }
+      count,
+      drop,
+      max,
+      min,
+      seed,
+      state,
+    },
+    rangeUnderflow: boolean = discrete
+      ? ceiling(min) >= ceiling(max)
+      : min >= max,
+    rangeUnderflowErrorMessage: string = discrete
+      ? integerRangeUnderflowErrorMessage
+      : intervalRangeUnderflowErrorMessage,
+    integerOrInterval: (props: CipherInput) => Cipher = discrete
+      ? integer
+      : interval
 
-  if (discrete) {
-    const rangeUnderflow: boolean = ceiling(min) >= ceiling(max)
+  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMessage)
 
-    if (rangeUnderflow) throw new RangeError(integerRangeUnderflowErrorMessage)
-
-    return integer(props)
-  } else {
-    const rangeUnderflow: boolean = min >= max
-
-    if (rangeUnderflow) throw new RangeError(intervalRangeUnderflowErrorMessage)
-
-    return interval(props)
-  }
+  return integerOrInterval(props)
 }
