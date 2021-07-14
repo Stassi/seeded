@@ -1,7 +1,7 @@
 import type { Cipher, CipherInput, CipherInputOptional } from '../cipher'
 import ceiling from '../utilities/ceiling'
-import integer from './integer'
-import interval from './interval'
+import integerModule from './integer'
+import intervalModule from './interval'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
 import {
   defaultDrop,
@@ -10,7 +10,35 @@ import {
   maximumSafeBinary,
 } from '../data'
 
-interface NumberInput extends CipherInputOptional {
+interface RangeUnderflowParams {
+  max: CipherInput['max']
+  min: CipherInput['min']
+}
+
+interface IntegerOrInterval {
+  cipherModule: (props: CipherInput) => Cipher
+  defaultMax: CipherInput['max']
+  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => void
+}
+
+const integer: IntegerOrInterval = {
+  cipherModule: integerModule,
+  defaultMax: maximumSafeBinary,
+  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => {
+    if (ceiling(min) >= ceiling(max))
+      throw new RangeError(integerRangeUnderflowErrorMessage)
+  },
+}
+
+const interval: IntegerOrInterval = {
+  cipherModule: intervalModule,
+  defaultMax: 1,
+  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => {
+    if (min >= max) throw new RangeError(intervalRangeUnderflowErrorMessage)
+  },
+}
+
+interface NumberParams extends CipherInputOptional {
   discrete?: boolean
 }
 
@@ -26,28 +54,22 @@ export default function number({
     pool: undefined,
     roundKey: 0,
   },
-}: NumberInput = {}): Cipher {
-  const defaultMax: number = discrete ? maximumSafeBinary : 1,
-    max: CipherInput['max'] = prevMax || defaultMax,
-    rangeUnderflow: boolean = discrete
-      ? ceiling(min) >= ceiling(max)
-      : min >= max,
-    rangeUnderflowErrorMessage: string = discrete
-      ? integerRangeUnderflowErrorMessage
-      : intervalRangeUnderflowErrorMessage,
-    integerOrInterval: (props: CipherInput) => Cipher = discrete
-      ? integer
-      : interval,
-    props: CipherInput = {
-      count,
-      drop,
-      max,
-      min,
-      seed,
-      state,
-    }
+}: NumberParams = {}): Cipher {
+  const {
+      cipherModule,
+      defaultMax,
+      throwIfRangeUnderflowError,
+    }: IntegerOrInterval = discrete ? integer : interval,
+    max: CipherInput['max'] = prevMax ?? defaultMax
 
-  if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMessage)
+  throwIfRangeUnderflowError({ max, min })
 
-  return integerOrInterval(props)
+  return cipherModule({
+    count,
+    drop,
+    max,
+    min,
+    seed,
+    state,
+  })
 }
