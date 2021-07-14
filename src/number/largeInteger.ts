@@ -1,6 +1,6 @@
 import type { Cipher, CipherInput } from '../cipher'
 import ceiling from '../utilities/ceiling'
-import floor from '../utilities/floor'
+import floorMap from '../utilities/floorMap'
 import interval from './interval'
 
 export default function largeInteger({
@@ -10,13 +10,14 @@ export default function largeInteger({
   state: prevState,
   ...props
 }: CipherInput): Cipher {
-  const { generated, state }: Cipher = interval({
-    ...props,
-    count,
-    max,
-    min: ceiling(min),
-    state: prevState,
-  })
+  const { state, generated: generatedInterval }: Cipher = interval({
+      ...props,
+      count,
+      max,
+      min: ceiling(min),
+      state: prevState,
+    }),
+    generated: Cipher['generated'] = floorMap(generatedInterval)
 
   function next(nextCount: number = 1): Cipher {
     return largeInteger({
@@ -30,8 +31,8 @@ export default function largeInteger({
   }
 
   return {
+    generated,
     next,
     state,
-    generated: generated.map(floor),
   }
 }
