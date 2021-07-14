@@ -1,6 +1,6 @@
 {
   "name": "arcseed",
-  "version": "0.0.25",
+  "version": "0.0.26",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",

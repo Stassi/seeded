@@ -1,11 +1,11 @@
 import type { Cipher, CipherInput } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
-import octet from './integer/octet'
+import octet from './octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from '../utilities/octetToInterval'
-import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
+import { poolWidth } from '../data'
 
 export default function interval({
   count,
@@ -15,10 +15,6 @@ export default function interval({
   seed,
   state: prevState,
 }: CipherInput): Cipher {
-  const rangeUnderflow: boolean = min >= max
-
-  if (rangeUnderflow) throw new RangeError(intervalRangeUnderflowErrorMessage)
-
   let generated: Cipher['generated'] = [],
     state: Cipher['state'] = prevState
 
