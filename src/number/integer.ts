@@ -5,8 +5,10 @@ import octet from './octet'
 import { poolWidth } from '../data'
 
 export default function integer({ max, min, ...props }: CipherInput): Cipher {
-  const options = { max, min, ...props },
-    octetRangeOverflow: boolean = max + negate(min) > poolWidth
+  const octetRangeOverflow: boolean = max + negate(min) > poolWidth,
+    cipherModule: (props: CipherInput) => Cipher = octetRangeOverflow
+      ? largeInteger
+      : octet
 
-  return octetRangeOverflow ? largeInteger(options) : octet(options)
+  return cipherModule({ max, min, ...props })
 }
