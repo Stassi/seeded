@@ -18,7 +18,7 @@ export default function number({
   count = 1,
   discrete = false,
   drop = defaultDrop,
-  max = discrete ? maximumSafeBinary : 1,
+  max: prevMax,
   min = 0,
   seed = `${timeSinceEpoch()}`,
   state = {
@@ -27,14 +27,8 @@ export default function number({
     roundKey: 0,
   },
 }: NumberInput = {}): Cipher {
-  const props: CipherInput = {
-      count,
-      drop,
-      max,
-      min,
-      seed,
-      state,
-    },
+  const defaultMax: number = discrete ? maximumSafeBinary : 1,
+    max: CipherInput['max'] = prevMax || defaultMax,
     rangeUnderflow: boolean = discrete
       ? ceiling(min) >= ceiling(max)
       : min >= max,
@@ -43,7 +37,15 @@ export default function number({
       : intervalRangeUnderflowErrorMessage,
     integerOrInterval: (props: CipherInput) => Cipher = discrete
       ? integer
-      : interval
+      : interval,
+    props: CipherInput = {
+      count,
+      drop,
+      max,
+      min,
+      seed,
+      state,
+    }
 
   if (rangeUnderflow) throw new RangeError(rangeUnderflowErrorMessage)
 
