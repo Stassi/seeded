@@ -7,11 +7,7 @@ import length from '../utilities/length'
 import negate from '../utilities/negate'
 import remainder from '../utilities/remainder'
 import sliceAt from '../utilities/sliceAt'
-import {
-  keySchedule,
-  pool as cipherPool,
-  roundKey as cipherRoundKey,
-} from '../cipher'
+import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
 import { poolWidth } from '../data'
 
 export default function octet({
@@ -28,18 +24,13 @@ export default function octet({
     subtractMin: NumberTransform = (n: number) => n + negate(min),
     toGenerate: number = count + drop,
     discardNonrandom: SliceAtCallback = sliceAt(drop),
-    prevPool: Pool = prevPoolState
-      ? cipherPool({ state: prevPoolState, width: poolWidth })
-      : keySchedule({ seed, width: poolWidth }),
+    prevPool: Pool = poolModule(prevPoolState),
     rangeDiff: number = subtractMin(max),
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
   let i: number = prevI,
-    roundKey: RoundKey = cipherRoundKey({
-      state: prevRoundKeyState,
-      width: poolWidth,
-    }),
+    roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
     pool: Pool = prevPool.create(prevPool.state),
     generated: number[] = []
 

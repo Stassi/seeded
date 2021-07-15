@@ -2,6 +2,7 @@ import type { Cipher, CipherInput, CipherInputOptional } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import integerModule from './integer'
 import intervalModule from './interval'
+import { keySchedule } from '../cipher'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
 import {
   defaultDrop,
@@ -51,7 +52,7 @@ export default function number({
   seed = `${timeSinceEpoch()}`,
   state = {
     i: 0,
-    pool: undefined,
+    pool: keySchedule(seed).state,
     roundKey: 0,
   },
 }: NumberParams = {}): Cipher {

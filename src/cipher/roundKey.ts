@@ -1,11 +1,9 @@
 import type { RemainderCallback } from '../utilities/remainder'
 import remainder from '../utilities/remainder'
 import sum from '../utilities/sum'
+import { poolWidth } from '../data'
 
-export interface RoundKeyInput {
-  state?: number
-  width: number
-}
+export type RoundKeyInput = number
 
 export interface RoundKey {
   addTo: (...summands: number[]) => number
@@ -13,18 +11,15 @@ export interface RoundKey {
   state: number
 }
 
-export default function roundKey({
-  width,
-  state = 0,
-}: RoundKeyInput): RoundKey {
-  const remainderWidth: RemainderCallback = remainder(width)
+export default function roundKey(state: RoundKeyInput): RoundKey {
+  const remainderWidth: RemainderCallback = remainder(poolWidth)
 
   function addTo(...summands: number[]): number {
     return sum(state, ...summands)
   }
 
   function create(n: RoundKey['state']): RoundKey {
-    return roundKey({ width, state: remainderWidth(n) })
+    return roundKey(remainderWidth(n))
   }
 
   return { addTo, create, state }

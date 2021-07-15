@@ -1,19 +1,16 @@
 import type { Key } from './key'
-import type { Pool } from './pool'
 import type { RoundKey } from './roundKey'
+import type { Pool } from './pool'
+import identityPermutation from '../utilities/identityPermutation'
 import keyModule from './key'
 import poolModule from './pool'
 import roundKeyModule from './roundKey'
+import { poolWidth } from '../data'
 
-interface KeyScheduleInput {
-  seed: string
-  width: number
-}
-
-export default function keySchedule({ seed, width }: KeyScheduleInput): Pool {
+export default function keySchedule(seed: string): Pool {
   const { atIndex: atKeyIndex }: Key = keyModule(seed)
-  let pool: Pool = poolModule({ width }),
-    roundKey: RoundKey = roundKeyModule({ width })
+  let pool: Pool = poolModule(identityPermutation(poolWidth)),
+    roundKey: RoundKey = roundKeyModule(0)
 
   pool.forEach((i: number): void => {
     roundKey = roundKey.create(roundKey.addTo(atKeyIndex(i), pool.atIndex(i)))
