@@ -1,4 +1,4 @@
-export interface CipherInput {
+export interface CipherParams {
   count: number
   drop: number
   max: number
@@ -11,17 +11,17 @@ export interface CipherInput {
   }
 }
 
-export interface CipherInputOptional {
-  count?: CipherInput['count']
-  drop?: CipherInput['drop']
-  max?: CipherInput['max']
-  min?: CipherInput['min']
-  seed?: CipherInput['seed']
-  state?: CipherInput['state']
+export interface CipherParamsOptional {
+  count?: CipherParams['count']
+  drop?: CipherParams['drop']
+  max?: CipherParams['max']
+  min?: CipherParams['min']
+  seed?: CipherParams['seed']
+  state?: CipherParams['state']
 }
 
 export default interface Cipher {
   generated: number[]
-  next: (count?: CipherInput['count']) => Cipher
-  state: CipherInput['state']
+  next: (count?: CipherParams['count']) => Cipher
+  state: CipherParams['state']
 }

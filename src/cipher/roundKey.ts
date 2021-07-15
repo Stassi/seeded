@@ -1,10 +1,10 @@
-import type { CipherInput } from './Cipher'
+import type { CipherParams } from './Cipher'
 import type { RemainderCallback } from '../utilities/remainder'
 import remainder from '../utilities/remainder'
 import sum from '../utilities/sum'
 import { poolWidth } from '../data'
 
-type RoundKeyState = CipherInput['state']['roundKey']
+type RoundKeyState = CipherParams['state']['roundKey']
 
 export interface RoundKey {
   addTo: (...summands: number[]) => number

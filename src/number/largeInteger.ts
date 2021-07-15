@@ -1,4 +1,4 @@
-import type { Cipher, CipherInput } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import floorMap from '../utilities/floorMap'
 import interval from './interval'
@@ -9,7 +9,7 @@ export default function largeInteger({
   min,
   state: prevState,
   ...props
-}: CipherInput): Cipher {
+}: CipherParams): Cipher {
   const { state, generated: generatedInterval }: Cipher = interval({
       ...props,
       count,
