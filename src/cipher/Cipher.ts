@@ -27,6 +27,6 @@ export interface CipherInputOptional {
 
 export default interface Cipher {
   generated: number[]
-  next: (count?: number) => Cipher
+  next: (count?: CipherInput['count']) => Cipher
   state: CipherInput['state']
 }
