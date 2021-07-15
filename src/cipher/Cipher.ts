@@ -1,19 +1,14 @@
-import type { PoolInput } from './pool'
-import type { RoundKeyInput } from './roundKey'
-
-interface CipherState {
-  i: number
-  pool: PoolInput
-  roundKey: RoundKeyInput
-}
-
 export interface CipherInput {
   count: number
   drop: number
   max: number
   min: number
   seed: string
-  state: CipherState
+  state: {
+    i: number
+    pool: number[]
+    roundKey: number
+  }
 }
 
 export interface CipherInputOptional {
