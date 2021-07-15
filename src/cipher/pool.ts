@@ -1,34 +1,28 @@
 import type { AtIndexProperty } from '../utilities/atIndex'
+import type { CipherParams } from './Cipher'
 import type { ForEachProperty } from '../utilities/forEach'
 import type { SwapIndicesProperty } from '../utilities/swapIndices'
 import atIndexUtil from '../utilities/atIndex'
 import forEachUtil from '../utilities/forEach'
-import identityPermutation from '../utilities/identityPermutation'
 import swapIndicesUtil from '../utilities/swapIndices'
 
-export interface PoolInput {
-  state?: number[]
-  width: number
-}
+type PoolState = CipherParams['state']['pool']
 
 export interface Pool
   extends AtIndexProperty,
     ForEachProperty,
     SwapIndicesProperty {
-  create: (state: number[]) => Pool
-  state: number[]
+  create: (state: PoolState) => Pool
+  state: PoolState
 }
 
-export default function pool({
-  width,
-  state = identityPermutation(width),
-}: PoolInput): Pool {
+export default function pool(state: PoolState): Pool {
   const atIndex: Pool['atIndex'] = atIndexUtil(state),
     forEach: Pool['forEach'] = forEachUtil(state),
     swapIndices: Pool['swapIndices'] = swapIndicesUtil(state)
 
-  function create(state: Pool['state']): Pool {
-    return pool({ state, width })
+  function create(newState: PoolState): Pool {
+    return pool(newState)
   }
 
   return { atIndex, create, forEach, state, swapIndices }

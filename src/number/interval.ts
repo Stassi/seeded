@@ -1,4 +1,4 @@
-import type { Cipher, CipherInput } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import octet from './octet'
@@ -14,7 +14,7 @@ export default function interval({
   min,
   seed,
   state: prevState,
-}: CipherInput): Cipher {
+}: CipherParams): Cipher {
   let generated: Cipher['generated'] = [],
     state: Cipher['state'] = prevState
 

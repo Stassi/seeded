@@ -1,17 +1,13 @@
 import type NumberTransform from '../utilities/NumberTransform'
 import type { RemainderCallback } from '../utilities/remainder'
 import type { SliceAtCallback } from '../utilities/sliceAt'
-import type { Cipher, CipherInput, Pool, RoundKey } from '../cipher'
+import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
 import negate from '../utilities/negate'
 import remainder from '../utilities/remainder'
 import sliceAt from '../utilities/sliceAt'
-import {
-  keySchedule,
-  pool as cipherPool,
-  roundKey as cipherRoundKey,
-} from '../cipher'
+import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
 import { poolWidth } from '../data'
 
 export default function octet({
@@ -21,25 +17,20 @@ export default function octet({
   max: prevMax,
   min: prevMin,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
-}: CipherInput): Cipher {
+}: CipherParams): Cipher {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
     subtractMin: NumberTransform = (n: number) => n + negate(min),
     toGenerate: number = count + drop,
     discardNonrandom: SliceAtCallback = sliceAt(drop),
-    prevPool: Pool = prevPoolState
-      ? cipherPool({ state: prevPoolState, width: poolWidth })
-      : keySchedule({ seed, width: poolWidth }),
+    prevPool: Pool = poolModule(prevPoolState),
     rangeDiff: number = subtractMin(max),
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
     remainderWidth: RemainderCallback = remainder(poolWidth)
 
   let i: number = prevI,
-    roundKey: RoundKey = cipherRoundKey({
-      state: prevRoundKeyState,
-      width: poolWidth,
-    }),
+    roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
     pool: Pool = prevPool.create(prevPool.state),
     generated: number[] = []
 
