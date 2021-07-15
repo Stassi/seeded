@@ -3,8 +3,8 @@ import type { RoundKeyInput } from './roundKey'
 
 interface CipherState {
   i: number
-  pool: PoolInput['state']
-  roundKey: RoundKeyInput['state']
+  pool: PoolInput
+  roundKey: RoundKeyInput
 }
 
 export interface CipherInput {
