@@ -23,7 +23,7 @@ export default function octet({
     addMin: NumberTransform = (n: number) => n + min,
     subtractMin: NumberTransform = (n: number) => n + negate(min),
     toGenerate: number = count + drop,
-    discardNonrandom: SliceAtCallback = sliceAt(drop),
+    dropInitial: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = poolModule(prevPoolState),
     rangeDiff: number = subtractMin(max),
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
@@ -32,14 +32,14 @@ export default function octet({
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
     pool: Pool = prevPool.create(prevPool.state),
-    generated: number[] = []
+    innerGenerated: Cipher['generated'] = []
 
-  while (length(generated) < toGenerate) {
+  while (length(innerGenerated) < toGenerate) {
     i = remainderWidth(i + 1)
     roundKey = roundKey.create(roundKey.addTo(pool.atIndex(i)))
     pool = pool.create(pool.swapIndices(i, roundKey.state))
-    generated = [
-      ...generated,
+    innerGenerated = [
+      ...innerGenerated,
       addMin(
         remainderRangeDiff(
           pool.atIndex(
@@ -50,11 +50,12 @@ export default function octet({
     ]
   }
 
-  const state: Cipher['state'] = {
-    i,
-    pool: pool.state,
-    roundKey: roundKey.state,
-  }
+  const generated: Cipher['generated'] = dropInitial(innerGenerated),
+    state: Cipher['state'] = {
+      i,
+      pool: pool.state,
+      roundKey: roundKey.state,
+    }
 
   function next(nextCount = 1): Cipher {
     return octet({
@@ -68,8 +69,8 @@ export default function octet({
   }
 
   return {
+    generated,
     next,
     state,
-    generated: discardNonrandom(generated),
   }
 }
