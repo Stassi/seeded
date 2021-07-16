@@ -1,7 +1,7 @@
 import type NumberTransform from '../utilities/NumberTransform'
 import type { RemainderCallback } from '../utilities/remainder'
 import type { SliceAtCallback } from '../utilities/sliceAt'
-import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
+import type { CipherComponent, CipherParams, Pool, RoundKey } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
 import negate from '../utilities/negate'
@@ -13,17 +13,16 @@ import { poolWidth } from '../data'
 export default function octet({
   count,
   drop,
-  seed,
   max: prevMax,
   min: prevMin,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
-}: CipherParams): Cipher {
+}: CipherParams): CipherComponent {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
     subtractMin: NumberTransform = (n: number) => n + negate(min),
     toGenerate: number = count + drop,
-    discardNonrandom: SliceAtCallback = sliceAt(drop),
+    dropInitial: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = poolModule(prevPoolState),
     rangeDiff: number = subtractMin(max),
     remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
@@ -32,14 +31,14 @@ export default function octet({
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
     pool: Pool = prevPool.create(prevPool.state),
-    generated: number[] = []
+    innerGenerated: CipherComponent['generated'] = []
 
-  while (length(generated) < toGenerate) {
+  while (length(innerGenerated) < toGenerate) {
     i = remainderWidth(i + 1)
     roundKey = roundKey.create(roundKey.addTo(pool.atIndex(i)))
     pool = pool.create(pool.swapIndices(i, roundKey.state))
-    generated = [
-      ...generated,
+    innerGenerated = [
+      ...innerGenerated,
       addMin(
         remainderRangeDiff(
           pool.atIndex(
@@ -50,26 +49,15 @@ export default function octet({
     ]
   }
 
-  const state: Cipher['state'] = {
-    i,
-    pool: pool.state,
-    roundKey: roundKey.state,
-  }
-
-  function next(nextCount = 1): Cipher {
-    return octet({
-      max,
-      min,
-      seed,
-      state,
-      count: nextCount,
-      drop: 0,
-    })
-  }
+  const generated: CipherComponent['generated'] = dropInitial(innerGenerated),
+    state: CipherComponent['state'] = {
+      i,
+      pool: pool.state,
+      roundKey: roundKey.state,
+    }
 
   return {
-    next,
+    generated,
     state,
-    generated: discardNonrandom(generated),
   }
 }

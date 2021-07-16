@@ -20,8 +20,11 @@ export interface CipherParamsOptional {
   state?: CipherParams['state']
 }
 
-export default interface Cipher {
+export interface CipherComponent {
   generated: number[]
-  next: (count?: CipherParams['count']) => Cipher
   state: CipherParams['state']
+}
+
+export default interface Cipher extends CipherComponent {
+  next: (count?: CipherParams['count']) => Cipher
 }

@@ -1,4 +1,9 @@
-import type { Cipher, CipherParams, CipherParamsOptional } from '../cipher'
+import type {
+  Cipher,
+  CipherComponent,
+  CipherParams,
+  CipherParamsOptional,
+} from '../cipher'
 import ceiling from '../utilities/ceiling'
 import integerModule from './integer'
 import intervalModule from './interval'
@@ -17,7 +22,7 @@ interface RangeUnderflowParams {
 }
 
 interface IntegerOrInterval {
-  cipherModule: (props: CipherParams) => Cipher
+  cipherModule: (props: CipherParams) => CipherComponent
   defaultMax: CipherParams['max']
   throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => void
 }
@@ -50,7 +55,7 @@ export default function number({
   max: prevMax,
   min = 0,
   seed = `${timeSinceEpoch()}`,
-  state = {
+  state: prevState = {
     i: 0,
     pool: keySchedule(seed).state,
     roundKey: 0,
@@ -65,12 +70,30 @@ export default function number({
 
   throwIfRangeUnderflowError({ max, min })
 
-  return cipherModule({
+  const { generated, state } = cipherModule({
     count,
     drop,
     max,
     min,
     seed,
-    state,
+    state: prevState,
   })
+
+  function next(newCount: CipherParams['count'] = 1): Cipher {
+    return number({
+      discrete,
+      max,
+      min,
+      seed,
+      state,
+      count: newCount,
+      drop: 0,
+    })
+  }
+
+  return {
+    generated,
+    next,
+    state,
+  }
 }
