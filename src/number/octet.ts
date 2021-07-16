@@ -1,7 +1,7 @@
 import type NumberTransform from '../utilities/NumberTransform'
 import type { RemainderCallback } from '../utilities/remainder'
 import type { SliceAtCallback } from '../utilities/sliceAt'
-import type { CipherComponent, CipherParams, Pool, RoundKey } from '../cipher'
+import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
 import negate from '../utilities/negate'
@@ -16,7 +16,7 @@ export default function octet({
   max: prevMax,
   min: prevMin,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
-}: CipherParams): CipherComponent {
+}: CipherParams): Cipher {
   const max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
     addMin: NumberTransform = (n: number) => n + min,
@@ -31,7 +31,7 @@ export default function octet({
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
     pool: Pool = prevPool.create(prevPool.state),
-    innerGenerated: CipherComponent['generated'] = []
+    innerGenerated: Cipher['generated'] = []
 
   while (length(innerGenerated) < toGenerate) {
     i = remainderWidth(i + 1)
@@ -49,8 +49,8 @@ export default function octet({
     ]
   }
 
-  const generated: CipherComponent['generated'] = dropInitial(innerGenerated),
-    state: CipherComponent['state'] = {
+  const generated: Cipher['generated'] = dropInitial(innerGenerated),
+    state: Cipher['state'] = {
       i,
       pool: pool.state,
       roundKey: roundKey.state,

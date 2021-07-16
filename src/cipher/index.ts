@@ -1,8 +1,10 @@
 import type Cipher from './Cipher'
 import type {
-  CipherComponent,
-  CipherParams,
   CipherParamsOptional,
+  CipherIntegerOrInterval,
+  CipherParams,
+  CipherPersistent,
+  CipherRangeUnderflowParams,
 } from './Cipher'
 import type { Pool } from './pool'
 import type { RoundKey } from './roundKey'
@@ -12,9 +14,11 @@ import roundKey from './roundKey'
 
 export type {
   Cipher,
-  CipherComponent,
-  CipherParams,
   CipherParamsOptional,
+  CipherIntegerOrInterval,
+  CipherParams,
+  CipherPersistent,
+  CipherRangeUnderflowParams,
   Pool,
   RoundKey,
 }

@@ -1,4 +1,4 @@
-import type { Cipher } from '../src/cipher'
+import type { CipherPersistent } from '../src/cipher'
 import delayTen from '../src/utilities/delayTen'
 import length from '../src/utilities/length'
 import negate from '../src/utilities/negate'
@@ -122,7 +122,7 @@ describe('number', () => {
             compositeExpectedLength: number = length(compositeExpected)
 
           describe('first chained call', () => {
-            const { generated, next }: Cipher = number({
+            const { generated, next }: CipherPersistent = number({
               discrete,
               max,
               min,
@@ -136,7 +136,7 @@ describe('number', () => {
 
             describe('second chained call', () => {
               it('should persistently return known values', () => {
-                const { generated: secondGenerated }: Cipher =
+                const { generated: secondGenerated }: CipherPersistent =
                   next(firstExpectedLength)
                 expect(secondGenerated).toEqual(secondExpected)
               })
@@ -145,7 +145,7 @@ describe('number', () => {
 
           describe('composite call', () => {
             it('should persistently return known values', () => {
-              const { generated }: Cipher = number({
+              const { generated }: CipherPersistent = number({
                 discrete,
                 max,
                 min,
@@ -158,14 +158,14 @@ describe('number', () => {
           })
 
           describe('state loading', () => {
-            const { state }: Cipher = number({
+            const { state }: CipherPersistent = number({
                 discrete,
                 max,
                 min,
                 seed,
                 count: firstExpectedLength,
               }),
-              { generated }: Cipher = number({
+              { generated }: CipherPersistent = number({
                 discrete,
                 max,
                 min,
