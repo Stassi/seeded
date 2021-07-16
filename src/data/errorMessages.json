@@ -1,5 +1,5 @@
 {
-  "range": {
+  "numberRange": {
     "underflow": {
       "integer": "max ceiling must exceed min ceiling",
       "interval": "max must exceed min"

@@ -25,18 +25,18 @@ export function intervalCipher({
 
   while (length(generated) < count) {
     const { generated: generatedOctet, state: octetState }: Cipher = octet({
-      seed,
-      state,
-      count: octetsNeededForMaxSafeBinary,
-      drop: isStrictZero(length(generated)) ? drop : 0,
-      min: 0,
-      max: poolWidth,
-    })
+        seed,
+        state,
+        count: octetsNeededForMaxSafeBinary,
+        drop: isStrictZero(length(generated)) ? drop : 0,
+        min: 0,
+        max: poolWidth,
+      }),
+      prevGenerated: number =
+        octetToInterval(generatedOctet) * (max - min) + min,
+      overflow: boolean = prevGenerated >= max
 
-    generated = [
-      ...generated,
-      octetToInterval(generatedOctet) * (max - min) + min,
-    ]
+    generated = overflow ? generated : [...generated, prevGenerated]
     state = octetState
   }
 
