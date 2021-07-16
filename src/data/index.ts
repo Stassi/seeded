@@ -1,6 +1,6 @@
 import maximumSafeBinary from './maximumSafeBinary'
 import { numberRange as numberRangeErrorMessages } from './errorMessages.json'
-import testCases from './testCases.json'
+import numberRangeTestCases from './numberRangeTestCases'
 import {
   bitsInOctet,
   defaultDrop,
@@ -9,12 +9,11 @@ import {
 } from './metrics.json'
 
 const {
-    underflow: {
-      integer: integerRangeUnderflowErrorMessage,
-      interval: intervalRangeUnderflowErrorMessage,
-    },
-  } = numberRangeErrorMessages,
-  { numberRange: numberRangeTestCases } = testCases
+  underflow: {
+    integer: integerRangeUnderflowErrorMessage,
+    interval: intervalRangeUnderflowErrorMessage,
+  },
+} = numberRangeErrorMessages
 
 export {
   bitsInOctet,
