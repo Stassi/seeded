@@ -1,33 +1,37 @@
-import type { CipherComponent, CipherParams } from '../cipher'
+import type {
+  Cipher,
+  CipherIntegerOrInterval,
+  CipherParams,
+  CipherRangeUnderflowParams,
+} from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import octet from './octet'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from '../utilities/octetToInterval'
-import { poolWidth } from '../data'
+import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
 
-export default function interval({
+export function intervalCipher({
   count,
   drop,
   max,
   min,
   seed,
   state: prevState,
-}: CipherParams): CipherComponent {
-  let generated: CipherComponent['generated'] = [],
-    state: CipherComponent['state'] = prevState
+}: CipherParams): Cipher {
+  let generated: Cipher['generated'] = [],
+    state: Cipher['state'] = prevState
 
   while (length(generated) < count) {
-    const { generated: generatedOctet, state: octetState }: CipherComponent =
-      octet({
-        seed,
-        state,
-        count: octetsNeededForMaxSafeBinary,
-        drop: isStrictZero(length(generated)) ? drop : 0,
-        min: 0,
-        max: poolWidth,
-      })
+    const { generated: generatedOctet, state: octetState }: Cipher = octet({
+      seed,
+      state,
+      count: octetsNeededForMaxSafeBinary,
+      drop: isStrictZero(length(generated)) ? drop : 0,
+      min: 0,
+      max: poolWidth,
+    })
 
     generated = [
       ...generated,
@@ -38,3 +42,13 @@ export default function interval({
 
   return { generated, state }
 }
+
+const interval: CipherIntegerOrInterval = {
+  cipherModule: intervalCipher,
+  defaultMax: 1,
+  throwIfRangeUnderflowError({ max, min }: CipherRangeUnderflowParams) {
+    if (min >= max) throw new RangeError(intervalRangeUnderflowErrorMessage)
+  },
+}
+
+export default interval

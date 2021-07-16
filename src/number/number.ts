@@ -1,52 +1,14 @@
 import type {
-  Cipher,
-  CipherComponent,
+  CipherIntegerOrInterval,
   CipherParams,
   CipherParamsOptional,
+  CipherPersistent,
 } from '../cipher'
-import ceiling from '../utilities/ceiling'
-import integerModule from './integer'
-import intervalModule from './interval'
+import integer from './integer'
+import interval from './interval'
 import { keySchedule } from '../cipher'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import {
-  defaultDrop,
-  integerRangeUnderflowErrorMessage,
-  intervalRangeUnderflowErrorMessage,
-  maximumSafeBinary,
-} from '../data'
-
-interface RangeUnderflowParams {
-  max: CipherParams['max']
-  min: CipherParams['min']
-}
-
-interface IntegerOrInterval {
-  cipherModule: (props: CipherParams) => CipherComponent
-  defaultMax: CipherParams['max']
-  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => void
-}
-
-const integer: IntegerOrInterval = {
-  cipherModule: integerModule,
-  defaultMax: maximumSafeBinary,
-  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => {
-    if (ceiling(min) >= ceiling(max))
-      throw new RangeError(integerRangeUnderflowErrorMessage)
-  },
-}
-
-const interval: IntegerOrInterval = {
-  cipherModule: intervalModule,
-  defaultMax: 1,
-  throwIfRangeUnderflowError: ({ max, min }: RangeUnderflowParams) => {
-    if (min >= max) throw new RangeError(intervalRangeUnderflowErrorMessage)
-  },
-}
-
-interface NumberParams extends CipherParamsOptional {
-  discrete?: boolean
-}
+import { defaultDrop } from '../data'
 
 export default function number({
   count = 1,
@@ -60,12 +22,12 @@ export default function number({
     pool: keySchedule(seed).state,
     roundKey: 0,
   },
-}: NumberParams = {}): Cipher {
+}: CipherParamsOptional = {}): CipherPersistent {
   const {
       cipherModule,
       defaultMax,
       throwIfRangeUnderflowError,
-    }: IntegerOrInterval = discrete ? integer : interval,
+    }: CipherIntegerOrInterval = discrete ? integer : interval,
     max: CipherParams['max'] = prevMax ?? defaultMax
 
   throwIfRangeUnderflowError({ max, min })
@@ -79,7 +41,7 @@ export default function number({
     state: prevState,
   })
 
-  function next(newCount: CipherParams['count'] = 1): Cipher {
+  function next(newCount: CipherParams['count'] = 1): CipherPersistent {
     return number({
       discrete,
       max,
