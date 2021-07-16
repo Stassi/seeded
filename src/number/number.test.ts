@@ -1,13 +1,13 @@
-import type { CipherPersistent } from '../src/cipher'
-import delayTen from '../src/utilities/delayTen'
-import length from '../src/utilities/length'
-import negate from '../src/utilities/negate'
-import { number } from '../src'
+import type { CipherPersistent } from '../cipher'
+import delayTen from '../utilities/delayTen'
+import length from '../utilities/length'
+import negate from '../utilities/negate'
+import { number } from '../index'
 import {
   integerRangeUnderflowErrorMessage,
   intervalRangeUnderflowErrorMessage,
   maximumSafeBinary,
-} from '../src/data'
+} from '../data'
 
 describe('number', () => {
   describe.each([
