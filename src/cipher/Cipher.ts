@@ -23,6 +23,17 @@ export interface CipherParamsOptional {
   state?: CipherParams['state']
 }
 
+export interface CipherRangeUnderflowParams {
+  max: CipherParams['max']
+  min: CipherParams['min']
+}
+
+export interface CipherIntegerOrInterval {
+  cipherModule: (props: CipherParams) => CipherComponent
+  defaultMax: CipherParams['max']
+  throwIfRangeUnderflowError: ({ max, min }: CipherRangeUnderflowParams) => void
+}
+
 export interface CipherComponent {
   generated: number[]
   state: CipherParams['state']
