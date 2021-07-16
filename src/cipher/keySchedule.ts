@@ -13,7 +13,7 @@ export default function keySchedule(seed: string): Pool {
     roundKey: RoundKey = roundKeyModule(0)
 
   pool.forEach((i: number): void => {
-    roundKey = roundKey.create(roundKey.addTo(atKeyIndex(i), pool.atIndex(i)))
+    roundKey = roundKey.create(roundKey.addTo(atKeyIndex(i) + pool.atIndex(i)))
     pool = pool.create(pool.swapIndices(i, roundKey.state))
   })
 
