@@ -1,4 +1,4 @@
-import type { Cipher, CipherParams } from '../cipher'
+import type { CipherComponent, CipherParams } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import octet from './octet'
@@ -14,19 +14,20 @@ export default function interval({
   min,
   seed,
   state: prevState,
-}: CipherParams): Cipher {
-  let generated: Cipher['generated'] = [],
-    state: Cipher['state'] = prevState
+}: CipherParams): CipherComponent {
+  let generated: CipherComponent['generated'] = [],
+    state: CipherComponent['state'] = prevState
 
   while (length(generated) < count) {
-    const { generated: generatedOctet, state: octetState }: Cipher = octet({
-      seed,
-      state,
-      count: octetsNeededForMaxSafeBinary,
-      drop: isStrictZero(length(generated)) ? drop : 0,
-      min: 0,
-      max: poolWidth,
-    })
+    const { generated: generatedOctet, state: octetState }: CipherComponent =
+      octet({
+        seed,
+        state,
+        count: octetsNeededForMaxSafeBinary,
+        drop: isStrictZero(length(generated)) ? drop : 0,
+        min: 0,
+        max: poolWidth,
+      })
 
     generated = [
       ...generated,
@@ -35,16 +36,5 @@ export default function interval({
     state = octetState
   }
 
-  function next(nextCount = 1): Cipher {
-    return interval({
-      max,
-      min,
-      seed,
-      state,
-      count: nextCount,
-      drop: 0,
-    })
-  }
-
-  return { generated, next, state }
+  return { generated, state }
 }
