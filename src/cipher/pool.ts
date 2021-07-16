@@ -1,12 +1,11 @@
 import type { AtIndexProperty } from '../utilities/atIndex'
-import type { CipherParams } from './Cipher'
 import type { ForEachProperty } from '../utilities/forEach'
 import type { SwapIndicesProperty } from '../utilities/swapIndices'
 import atIndexUtil from '../utilities/atIndex'
 import forEachUtil from '../utilities/forEach'
 import swapIndicesUtil from '../utilities/swapIndices'
 
-type PoolState = CipherParams['state']['pool']
+export type PoolState = number[]
 
 export interface Pool
   extends AtIndexProperty,
