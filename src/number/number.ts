@@ -37,7 +37,6 @@ export default function number({
     drop,
     max,
     min,
-    seed,
     state: prevState,
   })
 

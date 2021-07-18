@@ -17,7 +17,6 @@ export function intervalCipher({
   drop,
   max,
   min,
-  seed,
   state: prevState,
 }: CipherParams): Cipher {
   let generated: Cipher['generated'] = [],
@@ -25,7 +24,6 @@ export function intervalCipher({
 
   while (length(generated) < count) {
     const { generated: generatedOctet, state: octetState }: Cipher = octet({
-        seed,
         state,
         count: octetsNeededForMaxSafeBinary,
         drop: isStrictZero(length(generated)) ? drop : 0,
