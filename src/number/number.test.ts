@@ -227,7 +227,7 @@ describe('number', () => {
                 )
               })
             : it('should NOT throw an error', () => {
-                expect(() => number({ discrete, max, min })).not.toThrow()
+                expect(() => number({ max, min })).not.toThrow()
               })
         })
       }
