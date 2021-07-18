@@ -226,7 +226,7 @@ describe('number', () => {
                   thrownError
                 )
               })
-            : it('should NOT throw a range underflow error', () => {
+            : it('should NOT throw an error', () => {
                 expect(() => number({ discrete, max, min })).not.toThrow()
               })
         })
