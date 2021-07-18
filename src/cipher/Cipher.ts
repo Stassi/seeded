@@ -1,5 +1,5 @@
-import { PoolState } from './pool'
-import { RoundKeyState } from './roundKey'
+import type { PoolState } from './pool'
+import type { RoundKeyState } from './roundKey'
 
 export interface CipherParams {
   count: number
