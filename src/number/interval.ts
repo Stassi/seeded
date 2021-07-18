@@ -29,8 +29,8 @@ export function intervalCipher({
         state,
         count: octetsNeededForMaxSafeBinary,
         drop: isStrictZero(length(generated)) ? drop : 0,
-        min: 0,
         max: poolWidth,
+        min: 0,
       }),
       prevGenerated: number =
         octetToInterval(generatedOctet) * (max - min) + min,
