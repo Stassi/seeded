@@ -4,11 +4,11 @@ import type {
   CipherParamsOptional,
   CipherPersistent,
 } from '../cipher'
+import { defaultDrop } from '../data'
 import integer from './integer'
 import interval from './interval'
 import { keySchedule } from '../cipher'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import { defaultDrop } from '../data'
 
 export default function number({
   count = 1,
