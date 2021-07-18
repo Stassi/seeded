@@ -41,7 +41,7 @@ export default function number({
     state: prevState,
   })
 
-  function next(newCount: CipherParams['count'] = 1): CipherPersistent {
+  function next(newCount: CipherParamsOptional['count'] = 1): CipherPersistent {
     return number({
       discrete,
       max,
