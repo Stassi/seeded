@@ -84,7 +84,7 @@ describe('number', () => {
         const seed: string = 'hello.'
 
         describe.each([false, true])('discrete: %s', (discrete: boolean) => {
-          const [firstExpected, secondExpected] =
+          const [firstExpected, secondExpected]: number[][] =
               expected[discrete ? 'integer' : 'interval'],
             compositeExpected: number[] = [...firstExpected, ...secondExpected],
             firstExpectedLength: number = length(firstExpected),
