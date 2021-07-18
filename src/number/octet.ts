@@ -56,8 +56,5 @@ export default function octet({
       roundKey: roundKey.state,
     }
 
-  return {
-    generated,
-    state,
-  }
+  return { generated, state }
 }
