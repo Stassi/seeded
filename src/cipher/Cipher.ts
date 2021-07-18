@@ -6,7 +6,6 @@ export interface CipherParams {
   drop: number
   max: number
   min: number
-  seed: string
   state: {
     i: number
     pool: PoolState
@@ -20,7 +19,7 @@ export interface CipherParamsOptional {
   drop?: CipherParams['drop']
   max?: CipherParams['max']
   min?: CipherParams['min']
-  seed?: CipherParams['seed']
+  seed?: string
   state?: CipherParams['state']
 }
 
