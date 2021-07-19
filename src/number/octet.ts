@@ -1,14 +1,12 @@
-import type NumberTransform from '../utilities/NumberTransform'
-import type { RemainderCallback } from '../utilities/remainder'
 import type { SliceAtCallback } from '../utilities/sliceAt'
+import type { AddToCallBack, RemainderCallback } from '../arithmetic'
 import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
-import negate from '../utilities/negate'
-import remainder from '../utilities/remainder'
-import sliceAt from '../utilities/sliceAt'
-import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
 import { poolWidth } from '../data'
+import sliceAt from '../utilities/sliceAt'
+import { add, addTo, increment, negate, remainder } from '../arithmetic'
+import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
 
 export default function octet({
   count,
@@ -17,16 +15,14 @@ export default function octet({
   min: prevMin,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
 }: CipherParams): Cipher {
-  const max: number = ceiling(prevMax),
+  const toGenerate: number = add(count, drop),
+    max: number = ceiling(prevMax),
     min: number = ceiling(prevMin),
-    addMin: NumberTransform = (n: number) => n + min,
-    subtractMin: NumberTransform = (n: number) => n + negate(min),
-    toGenerate: number = count + drop,
     dropInitial: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = poolModule(prevPoolState),
-    rangeDiff: number = subtractMin(max),
-    remainderRangeDiff: RemainderCallback = remainder(rangeDiff),
-    remainderWidth: RemainderCallback = remainder(poolWidth)
+    addToMin: AddToCallBack = addTo(min),
+    remainderRangeDiff: RemainderCallback = remainder(add(max, negate(min))),
+    remainderPoolWidth: RemainderCallback = remainder(poolWidth)
 
   let i: number = prevI,
     roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
@@ -34,15 +30,17 @@ export default function octet({
     innerGenerated: Cipher['generated'] = []
 
   while (length(innerGenerated) < toGenerate) {
-    i = remainderWidth(i + 1)
+    i = remainderPoolWidth(increment(i))
     roundKey = roundKey.create(roundKey.addTo(pool.atIndex(i)))
     pool = pool.create(pool.swapIndices(i, roundKey.state))
     innerGenerated = [
       ...innerGenerated,
-      addMin(
+      addToMin(
         remainderRangeDiff(
           pool.atIndex(
-            remainderWidth(pool.atIndex(i) + pool.atIndex(roundKey.state))
+            remainderPoolWidth(
+              add(pool.atIndex(i), pool.atIndex(roundKey.state))
+            )
           )
         )
       ),
@@ -56,8 +54,5 @@ export default function octet({
       roundKey: roundKey.state,
     }
 
-  return {
-    generated,
-    state,
-  }
+  return { generated, state }
 }

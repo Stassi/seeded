@@ -4,11 +4,11 @@ import type {
   CipherParamsOptional,
   CipherPersistent,
 } from '../cipher'
+import { defaultDrop } from '../data'
 import integer from './integer'
 import interval from './interval'
 import { keySchedule } from '../cipher'
 import timeSinceEpoch from '../utilities/timeSinceEpoch'
-import { defaultDrop } from '../data'
 
 export default function number({
   count = 1,
@@ -37,11 +37,10 @@ export default function number({
     drop,
     max,
     min,
-    seed,
     state: prevState,
   })
 
-  function next(newCount: CipherParams['count'] = 1): CipherPersistent {
+  function next(newCount: CipherParamsOptional['count'] = 1): CipherPersistent {
     return number({
       discrete,
       max,

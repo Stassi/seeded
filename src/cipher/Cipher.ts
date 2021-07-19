@@ -1,12 +1,11 @@
-import { PoolState } from './pool'
-import { RoundKeyState } from './roundKey'
+import type { PoolState } from './pool'
+import type { RoundKeyState } from './roundKey'
 
 export interface CipherParams {
   count: number
   drop: number
   max: number
   min: number
-  seed: string
   state: {
     i: number
     pool: PoolState
@@ -20,7 +19,7 @@ export interface CipherParamsOptional {
   drop?: CipherParams['drop']
   max?: CipherParams['max']
   min?: CipherParams['min']
-  seed?: CipherParams['seed']
+  seed?: string
   state?: CipherParams['state']
 }
 

@@ -1,24 +1,22 @@
-import type { RemainderCallback } from '../utilities/remainder'
-import remainder from '../utilities/remainder'
+import type { AddToCallBack, RemainderCallback } from '../arithmetic'
 import { poolWidth } from '../data'
+import { remainder, addTo as addToModule } from '../arithmetic'
+
+const remainderPoolWidth: RemainderCallback = remainder(poolWidth)
 
 export type RoundKeyState = number
 
 export interface RoundKey {
-  addTo: (n: number) => number
+  addTo: AddToCallBack
   create: (state: RoundKeyState) => RoundKey
   state: RoundKeyState
 }
 
 export default function roundKey(state: RoundKeyState): RoundKey {
-  const remainderWidth: RemainderCallback = remainder(poolWidth)
-
-  function addTo(n: number): number {
-    return n + state
-  }
+  const addTo: AddToCallBack = addToModule(state)
 
   function create(newState: RoundKeyState): RoundKey {
-    return roundKey(remainderWidth(newState))
+    return roundKey(remainderPoolWidth(newState))
   }
 
   return { addTo, create, state }

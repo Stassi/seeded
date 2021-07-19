@@ -1,22 +1,35 @@
-import type { BinaryNumberToIntervalCallback } from './binaryNumberToInterval'
-import binaryNumberToInterval from './binaryNumberToInterval'
+import type { DivideByCallback, MultiplyByCallback } from '../arithmetic'
+import type { SliceAtCallback } from './sliceAt'
 import binaryToNumber from './binaryToNumber'
+import ceiling from './ceiling'
 import concatenate from './concatenate'
-import negate from './negate'
-import octetsNeededForLength from './octetsNeededForLength'
-import sliceAt, { SliceAtCallback } from './sliceAt'
+import sliceAt from './sliceAt'
 import toFixedBinaryOctets from './toFixedBinaryOctets'
+import {
+  add,
+  divideBy,
+  multiply,
+  multiplyBy,
+  negate,
+  raiseTwoToPowerOf,
+} from '../arithmetic'
 import { bitsInOctet, maximumSafeBinaryLength } from '../data'
 
-const maxSafeBinaryToInterval: BinaryNumberToIntervalCallback =
-  binaryNumberToInterval(maximumSafeBinaryLength)
+const maxSafeBinaryToInterval: MultiplyByCallback = multiplyBy(
+  raiseTwoToPowerOf(negate(maximumSafeBinaryLength))
+)
 
-export const octetsNeededForMaxSafeBinary: number = octetsNeededForLength(
-  maximumSafeBinaryLength
+const divideByBitsInOctet: DivideByCallback = divideBy(bitsInOctet)
+
+export const octetsNeededForMaxSafeBinary: number = ceiling(
+  divideByBitsInOctet(maximumSafeBinaryLength)
 )
 
 const sliceToMaxSafeBinary: SliceAtCallback = sliceAt(
-  octetsNeededForMaxSafeBinary * bitsInOctet + negate(maximumSafeBinaryLength)
+  add(
+    negate(maximumSafeBinaryLength),
+    multiply(octetsNeededForMaxSafeBinary, bitsInOctet)
+  )
 )
 
 export default function octetToInterval(octet: number[]): number {
