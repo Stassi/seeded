@@ -7,10 +7,11 @@ import type {
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import octet from './octet'
+import { add, multiply, negate } from '../arithmetic'
+import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
 import octetToInterval, {
   octetsNeededForMaxSafeBinary,
 } from '../utilities/octetToInterval'
-import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
 
 export function intervalCipher({
   count,
@@ -30,8 +31,10 @@ export function intervalCipher({
         max: poolWidth,
         min: 0,
       }),
-      prevGenerated: number =
-        octetToInterval(generatedOctet) * (max - min) + min,
+      prevGenerated: number = add(
+        min,
+        multiply(octetToInterval(generatedOctet), add(max, negate(min)))
+      ),
       overflow: boolean = prevGenerated >= max
 
     generated = overflow ? generated : [...generated, prevGenerated]

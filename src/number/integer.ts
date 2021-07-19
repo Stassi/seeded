@@ -6,8 +6,8 @@ import type {
 } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import largeInteger from './largeInteger'
-import negate from '../utilities/negate'
 import octet from './octet'
+import { add, negate } from '../arithmetic'
 import {
   integerRangeUnderflowErrorMessage,
   maximumSafeBinary,
@@ -16,7 +16,7 @@ import {
 
 const integer: CipherIntegerOrInterval = {
   cipherModule({ max, min, ...props }: CipherParams): Cipher {
-    const octetRangeOverflow: boolean = max + negate(min) > poolWidth,
+    const octetRangeOverflow: boolean = add(max, negate(min)) > poolWidth,
       cipherModule: (props: CipherParams) => Cipher = octetRangeOverflow
         ? largeInteger
         : octet
