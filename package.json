@@ -1,5 +1,5 @@
 {
-  "name": "arcseed",
+  "name": "seeded",
   "version": "0.0.33",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
@@ -23,16 +23,16 @@
     "uniform distribution",
     "weighted distribution"
   ],
-  "homepage": "https://github.com/Stassi/arcseed#readme",
+  "homepage": "https://github.com/Stassi/seeded#readme",
   "license": "MIT",
   "author": "Andreas Stassivik <andreas@stassi.net> (https://github.com/Stassi)",
   "files": [
     "lib/**/*"
   ],
   "type": "module",
-  "types": "./lib/arcSeed.d.ts",
-  "exports": "./lib/arcSeed.mjs",
-  "repository": "github:Stassi/arcseed",
+  "types": "./lib/seeded.d.ts",
+  "exports": "./lib/seeded.mjs",
+  "repository": "github:Stassi/seeded",
   "scripts": {
     "build": "rollup -c",
     "coverage": "jest --coverage",
