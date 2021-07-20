@@ -11,6 +11,7 @@ import negate from './negate'
 import raiseTwoToPowerOf from './raiseToPowerOf'
 import remainder from './remainder'
 import multiplyBy from './multiplyBy'
+import sum from './sum'
 
 export type {
   AddToCallBack,
@@ -28,4 +29,5 @@ export {
   negate,
   raiseTwoToPowerOf,
   remainder,
+  sum,
 }
