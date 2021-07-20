@@ -36,14 +36,11 @@ export default function sample({
     }
   )
 
-  const {
-    next,
-    state,
-    generated: generatedIntervals,
-  }: CipherPersistent = numberModule({
-    ...props,
-    discrete: false,
-  })
+  const { state, generated: generatedIntervals }: CipherPersistent =
+    numberModule({
+      ...props,
+      discrete: false,
+    })
 
   const generated: Sample['generated'] = generatedIntervals.map(
     (generatedInterval: number): number => {
@@ -71,6 +68,15 @@ export default function sample({
       return selected
     }
   )
+
+  function next(newCount: SampleParams['count'] = 1): Sample {
+    return sample({
+      ...props,
+      distribution,
+      state,
+      count: newCount,
+    })
+  }
 
   return {
     generated,
