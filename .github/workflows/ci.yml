@@ -35,9 +35,9 @@ jobs:
         run: npm run build
 
       - name: Coverage report generation
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.4.x'
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.5.x'
         run: npm run coverage
 
       - name: Submit coverage report to provider
-        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.4.x'
+        if: matrix.os == 'ubuntu-latest' && matrix.node-version == '16.5.x'
         uses: codecov/codecov-action@v1
