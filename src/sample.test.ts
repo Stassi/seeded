@@ -15,7 +15,7 @@ describe('sample', () => {
         },
       ],
       expected: Sample['generated'] = [1, 0, 1, 1, 1],
-      secondExpected: Sample['generated'] = [0, 1, 2, 3, 4],
+      secondExpected: Sample['generated'] = [1, 1, 1, 1, 1],
       seed: SampleParams['seed'] = 'hello world'
 
     const { generated, next } = sample({ count, distribution, seed })
