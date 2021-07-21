@@ -68,12 +68,12 @@ export default function sample<T>({
       }
     )
 
-  function next(newCount: SampleParams<T>['count'] = 1): Sample<T> {
+  function next(count: SampleParams<T>['count'] = 1): Sample<T> {
     return sample({
       ...props,
+      count,
       distribution,
       state,
-      count: newCount,
     })
   }
 
