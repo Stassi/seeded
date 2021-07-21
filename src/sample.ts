@@ -20,7 +20,7 @@ export interface SampleParams<T> {
 }
 
 export interface Sample<T> {
-  generated: T[]
+  generated: WeightedValue<T>['value'][]
   next: (count?: SampleParams<T>['count']) => Sample<T>
   state: CipherParams['state']
 }
