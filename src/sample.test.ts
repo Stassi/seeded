@@ -21,7 +21,11 @@ describe('sample', () => {
       secondExpected: SampleNumber['generated'] = [1, 1, 1, 1, 1],
       seed: SampleNumberParams['seed'] = 'hello world'
 
-    const { generated, next } = sample({ count, distribution, seed })
+    const { generated, next }: SampleNumber = sample({
+      count,
+      distribution,
+      seed,
+    })
 
     describe('first call', () => {
       it('should return a known sample', () => {
@@ -31,7 +35,7 @@ describe('sample', () => {
 
     describe('second call', () => {
       it('should return the next known sample', () => {
-        const { generated: secondGenerated } = next(count)
+        const { generated: secondGenerated }: SampleNumber = next(count)
         expect(secondGenerated).toEqual(secondExpected)
       })
     })
