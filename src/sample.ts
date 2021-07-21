@@ -59,9 +59,7 @@ export default function sample({
         if (generatedInterval < divideByTotalWeight(cumulativeWeight)) {
           selected = value
           isValueSelected = true
-        } else {
-          i = increment(i)
-        }
+        } else i = increment(i)
       }
 
       return selected
