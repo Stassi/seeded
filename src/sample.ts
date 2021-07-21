@@ -1,6 +1,6 @@
 import type { DivideByCallback } from './arithmetic'
 import type { CipherParamsOptional, CipherPersistent } from './cipher'
-import numberModule from './number'
+import number from './number'
 import { add, divideBy, increment, negate, sum } from './arithmetic'
 
 interface SampleDistributionElement {
@@ -8,10 +8,11 @@ interface SampleDistributionElement {
   weight: number
 }
 
-type SampleDistribution = SampleDistributionElement[]
-
-export interface SampleParams extends CipherParamsOptional {
-  distribution: SampleDistribution
+export interface SampleParams {
+  count?: CipherParamsOptional['count']
+  distribution: SampleDistributionElement[]
+  seed?: CipherParamsOptional['seed']
+  state?: CipherParamsOptional['state']
 }
 
 export interface Sample extends CipherPersistent {
@@ -27,20 +28,18 @@ export default function sample({
   )
   const divideByTotalWeight: DivideByCallback = divideBy(totalWeight)
 
-  const descendingProbabilities: SampleDistribution = distribution.sort(
-    (
-      { weight: prevWeight }: SampleDistributionElement,
-      { weight }: SampleDistributionElement
-    ): SampleDistributionElement['weight'] => {
-      return add(weight, negate(prevWeight))
-    }
-  )
+  const descendingProbabilities: SampleParams['distribution'] =
+    distribution.sort(
+      (
+        { weight: prevWeight }: SampleDistributionElement,
+        { weight }: SampleDistributionElement
+      ): SampleDistributionElement['weight'] => add(weight, negate(prevWeight))
+    )
 
-  const { state, generated: generatedIntervals }: CipherPersistent =
-    numberModule({
-      ...props,
-      discrete: false,
-    })
+  const { state, generated: generatedIntervals }: CipherPersistent = number({
+    ...props,
+    discrete: false,
+  })
 
   const generated: Sample['generated'] = generatedIntervals.map(
     (generatedInterval: number): number => {
