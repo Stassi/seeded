@@ -30,7 +30,11 @@ export default function sample<T>({
   ...props
 }: SampleParams<T>): Sample<T> {
   const divideByTotalWeight: DivideByCallback = divideBy(
-      sum(...distribution.map(({ weight }) => weight))
+      sum(
+        ...distribution.map(
+          ({ weight }: WeightedValue<T>): WeightedValue<T>['weight'] => weight
+        )
+      )
     ),
     descendingProbabilities: SampleParams<T>['distribution'] =
       distribution.sort(
