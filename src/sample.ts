@@ -36,13 +36,12 @@ export default function sample<T>({
         )
       )
     ),
-    descendingProbabilities: SampleParams<T>['distribution'] =
-      distribution.sort(
-        (
-          { weight: prevWeight }: WeightedValue<T>,
-          { weight }: WeightedValue<T>
-        ): WeightedValue<T>['weight'] => add(weight, negate(prevWeight))
-      ),
+    weightedValues: SampleParams<T>['distribution'] = distribution.sort(
+      (
+        { weight: prevWeight }: WeightedValue<T>,
+        { weight }: WeightedValue<T>
+      ): WeightedValue<T>['weight'] => add(weight, negate(prevWeight))
+    ),
     { state, generated: generatedIntervals }: CipherPersistent = number({
       ...props,
       discrete: false,
@@ -55,9 +54,7 @@ export default function sample<T>({
           i: number = 0
 
         while (!isValueSelected) {
-          const descendingProbabilityElement: WeightedValue<T> =
-              descendingProbabilities[i],
-            { value, weight }: WeightedValue<T> = descendingProbabilityElement
+          const { value, weight }: WeightedValue<T> = weightedValues[i]
 
           cumulativeWeight = add(cumulativeWeight, weight)
 
