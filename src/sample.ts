@@ -1,39 +1,46 @@
 import type { DivideByCallback } from './arithmetic'
-import type { CipherParamsOptional, CipherPersistent } from './cipher'
+import type {
+  CipherParams,
+  CipherParamsOptional,
+  CipherPersistent,
+} from './cipher'
 import number from './number'
 import { add, divideBy, increment, negate, sum } from './arithmetic'
 
-interface SampleDistributionElement {
-  value: any
+interface SampleDistributionElement<T> {
+  value: T
   weight: number
 }
 
-export interface SampleParams {
+export interface SampleParams<T> {
   count?: CipherParamsOptional['count']
-  distribution: SampleDistributionElement[]
+  distribution: SampleDistributionElement<T>[]
   seed?: CipherParamsOptional['seed']
   state?: CipherParamsOptional['state']
 }
 
-export interface Sample extends CipherPersistent {
-  generated: any[]
+export interface Sample<T> {
+  generated: T[]
+  next: (count?: SampleParams<T>['count']) => Sample<T>
+  state: CipherParams['state']
 }
 
-export default function sample({
+export default function sample<T>({
   distribution,
   ...props
-}: SampleParams): Sample {
-  const totalWeight: SampleDistributionElement['weight'] = sum(
+}: SampleParams<T>): Sample<T> {
+  const totalWeight: SampleDistributionElement<T>['weight'] = sum(
     ...distribution.map(({ weight }) => weight)
   )
   const divideByTotalWeight: DivideByCallback = divideBy(totalWeight)
 
-  const descendingProbabilities: SampleParams['distribution'] =
+  const descendingProbabilities: SampleParams<T>['distribution'] =
     distribution.sort(
       (
-        { weight: prevWeight }: SampleDistributionElement,
-        { weight }: SampleDistributionElement
-      ): SampleDistributionElement['weight'] => add(weight, negate(prevWeight))
+        { weight: prevWeight }: SampleDistributionElement<T>,
+        { weight }: SampleDistributionElement<T>
+      ): SampleDistributionElement<T>['weight'] =>
+        add(weight, negate(prevWeight))
     )
 
   const { state, generated: generatedIntervals }: CipherPersistent = number({
@@ -41,17 +48,17 @@ export default function sample({
     discrete: false,
   })
 
-  const generated: Sample['generated'] = generatedIntervals.map(
-    (generatedInterval: number): number => {
-      let selected: any | undefined,
+  const generated: Sample<T>['generated'] = generatedIntervals.map(
+    (generatedInterval: number): T => {
+      let selected: T | undefined,
         isValueSelected: boolean = false,
-        cumulativeWeight: SampleDistributionElement['weight'] = 0,
+        cumulativeWeight: SampleDistributionElement<T>['weight'] = 0,
         i: number = 0
 
       while (!isValueSelected) {
-        const descendingProbabilityElement: SampleDistributionElement =
+        const descendingProbabilityElement: SampleDistributionElement<T> =
             descendingProbabilities[i],
-          { value, weight }: SampleDistributionElement =
+          { value, weight }: SampleDistributionElement<T> =
             descendingProbabilityElement
 
         cumulativeWeight = add(cumulativeWeight, weight)
@@ -62,11 +69,11 @@ export default function sample({
         } else i = increment(i)
       }
 
-      return selected
+      return <T>selected
     }
   )
 
-  function next(newCount: SampleParams['count'] = 1): Sample {
+  function next(newCount: SampleParams<T>['count'] = 1): Sample<T> {
     return sample({
       ...props,
       distribution,
