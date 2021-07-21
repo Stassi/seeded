@@ -7,14 +7,14 @@ import type {
 import number from './number'
 import { add, divideBy, increment, negate, sum } from './arithmetic'
 
-interface SampleDistributionElement<T> {
+interface WeightedValue<T> {
   value: T
   weight: number
 }
 
 export interface SampleParams<T> {
   count?: CipherParamsOptional['count']
-  distribution: SampleDistributionElement<T>[]
+  distribution: WeightedValue<T>[]
   seed?: CipherParamsOptional['seed']
   state?: CipherParamsOptional['state']
 }
@@ -29,49 +29,43 @@ export default function sample<T>({
   distribution,
   ...props
 }: SampleParams<T>): Sample<T> {
-  const totalWeight: SampleDistributionElement<T>['weight'] = sum(
-    ...distribution.map(({ weight }) => weight)
-  )
-  const divideByTotalWeight: DivideByCallback = divideBy(totalWeight)
+  const divideByTotalWeight: DivideByCallback = divideBy(
+      sum(...distribution.map(({ weight }) => weight))
+    ),
+    descendingProbabilities: SampleParams<T>['distribution'] =
+      distribution.sort(
+        (
+          { weight: prevWeight }: WeightedValue<T>,
+          { weight }: WeightedValue<T>
+        ): WeightedValue<T>['weight'] => add(weight, negate(prevWeight))
+      ),
+    { state, generated: generatedIntervals }: CipherPersistent = number({
+      ...props,
+      discrete: false,
+    }),
+    generated: Sample<T>['generated'] = generatedIntervals.map(
+      (generatedInterval: number): WeightedValue<T>['value'] => {
+        let selected: WeightedValue<T>['value'] | undefined,
+          isValueSelected: boolean = false,
+          cumulativeWeight: WeightedValue<T>['weight'] = 0,
+          i: number = 0
 
-  const descendingProbabilities: SampleParams<T>['distribution'] =
-    distribution.sort(
-      (
-        { weight: prevWeight }: SampleDistributionElement<T>,
-        { weight }: SampleDistributionElement<T>
-      ): SampleDistributionElement<T>['weight'] =>
-        add(weight, negate(prevWeight))
-    )
+        while (!isValueSelected) {
+          const descendingProbabilityElement: WeightedValue<T> =
+              descendingProbabilities[i],
+            { value, weight }: WeightedValue<T> = descendingProbabilityElement
 
-  const { state, generated: generatedIntervals }: CipherPersistent = number({
-    ...props,
-    discrete: false,
-  })
+          cumulativeWeight = add(cumulativeWeight, weight)
 
-  const generated: Sample<T>['generated'] = generatedIntervals.map(
-    (generatedInterval: number): T => {
-      let selected: T | undefined,
-        isValueSelected: boolean = false,
-        cumulativeWeight: SampleDistributionElement<T>['weight'] = 0,
-        i: number = 0
+          if (generatedInterval < divideByTotalWeight(cumulativeWeight)) {
+            selected = value
+            isValueSelected = true
+          } else i = increment(i)
+        }
 
-      while (!isValueSelected) {
-        const descendingProbabilityElement: SampleDistributionElement<T> =
-            descendingProbabilities[i],
-          { value, weight }: SampleDistributionElement<T> =
-            descendingProbabilityElement
-
-        cumulativeWeight = add(cumulativeWeight, weight)
-
-        if (generatedInterval < divideByTotalWeight(cumulativeWeight)) {
-          selected = value
-          isValueSelected = true
-        } else i = increment(i)
+        return <WeightedValue<T>['value']>selected
       }
-
-      return <T>selected
-    }
-  )
+    )
 
   function next(newCount: SampleParams<T>['count'] = 1): Sample<T> {
     return sample({
