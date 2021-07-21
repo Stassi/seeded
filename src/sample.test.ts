@@ -1,13 +1,27 @@
 import type { Sample, SampleParams } from './sample'
 import { sample } from './index'
 
-type SampleNumber = Sample<number>
-type SampleNumberParams = SampleParams<number>
-
 describe('sample', () => {
-  describe('deterministic', () => {
-    const count: SampleNumberParams['count'] = 5,
-      distribution: SampleNumberParams['distribution'] = [
+  describe.each([
+    {
+      distribution: [
+        {
+          value: 0,
+          weight: 1,
+        },
+        {
+          value: 1,
+          weight: 1,
+        },
+      ],
+      expected: [
+        [0, 1, 0, 0, 1],
+        [0, 1, 1, 0, 0],
+      ],
+      name: 'binary uniform distribution',
+    },
+    {
+      distribution: [
         {
           value: 0,
           weight: 1,
@@ -17,27 +31,46 @@ describe('sample', () => {
           weight: 2,
         },
       ],
-      expected: SampleNumber['generated'] = [1, 0, 1, 1, 1],
-      secondExpected: SampleNumber['generated'] = [1, 1, 1, 1, 1],
-      seed: SampleNumberParams['seed'] = 'hello world'
-
-    const { generated, next }: SampleNumber = sample({
-      count,
+      expected: [
+        [1, 0, 1, 1, 1],
+        [1, 1, 1, 1, 1],
+      ],
+      name: 'binary weighted distribution',
+    },
+  ])(
+    'distribution: $name',
+    ({
       distribution,
-      seed,
-    })
+      expected: [expected, secondExpected],
+    }: {
+      distribution: SampleParams<unknown>['distribution']
+      expected: Sample<unknown>['generated'][]
+      name: string
+    }) => {
+      describe('deterministic', () => {
+        type Expected = typeof distribution[0]['value']
 
-    describe('first call', () => {
-      it('should return a known sample', () => {
-        expect(generated).toEqual(expected)
-      })
-    })
+        const count: SampleParams<Expected>['count'] = 5,
+          seed: SampleParams<Expected>['seed'] = 'hello world',
+          { generated, next }: Sample<Expected> = sample({
+            count,
+            distribution,
+            seed,
+          })
 
-    describe('second call', () => {
-      it('should return the next known sample', () => {
-        const { generated: secondGenerated }: SampleNumber = next(count)
-        expect(secondGenerated).toEqual(secondExpected)
+        describe('first chained call', () => {
+          it('should persistently return known values', () => {
+            expect(generated).toEqual(expected)
+          })
+        })
+
+        describe('second chained call', () => {
+          it('should persistently return known values', () => {
+            const { generated: secondGenerated }: Sample<Expected> = next(count)
+            expect(secondGenerated).toEqual(secondExpected)
+          })
+        })
       })
-    })
-  })
+    }
+  )
 })
