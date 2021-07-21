@@ -1,10 +1,13 @@
 import type { Sample, SampleParams } from './sample'
 import { sample } from './index'
 
+type SampleNumber = Sample<number>
+type SampleNumberParams = SampleParams<number>
+
 describe('sample', () => {
   describe('deterministic', () => {
-    const count: SampleParams['count'] = 5,
-      distribution: SampleParams['distribution'] = [
+    const count: SampleNumberParams['count'] = 5,
+      distribution: SampleNumberParams['distribution'] = [
         {
           value: 0,
           weight: 1,
@@ -14,9 +17,9 @@ describe('sample', () => {
           weight: 2,
         },
       ],
-      expected: Sample['generated'] = [1, 0, 1, 1, 1],
-      secondExpected: Sample['generated'] = [1, 1, 1, 1, 1],
-      seed: SampleParams['seed'] = 'hello world'
+      expected: SampleNumber['generated'] = [1, 0, 1, 1, 1],
+      secondExpected: SampleNumber['generated'] = [1, 1, 1, 1, 1],
+      seed: SampleNumberParams['seed'] = 'hello world'
 
     const { generated, next } = sample({ count, distribution, seed })
 
