@@ -24,7 +24,7 @@ const integer: CipherIntegerOrInterval = {
     return cipherModule({ max, min, ...props })
   },
   defaultMax: maximumSafeBinary,
-  throwIfRangeUnderflowError({ max, min }: CipherRangeUnderflowParams) {
+  throwIfRangeUnderflowError({ max, min }: CipherRangeUnderflowParams): void {
     if (ceiling(min) >= ceiling(max))
       throw new RangeError(integerRangeUnderflowErrorMessage)
   },
