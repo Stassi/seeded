@@ -93,6 +93,25 @@ describe('sample', () => {
             expect(generated).toEqual(compositeExpected)
           })
         })
+
+        describe('state loading', () => {
+          const { state }: ExpectedSample = sample({
+              count,
+              distribution,
+              seed,
+            }),
+            { generated }: ExpectedSample = sample({
+              count,
+              distribution,
+              seed,
+              state,
+              drop: 0,
+            })
+
+          it('should return known values from a loaded state', () => {
+            expect(generated).toEqual(secondExpected)
+          })
+        })
       })
     }
   )
