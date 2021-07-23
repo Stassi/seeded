@@ -15,6 +15,7 @@ interface WeightedValue<T> {
 export interface SampleParams<T> {
   count?: CipherParamsOptional['count']
   distribution: WeightedValue<T>[]
+  drop?: CipherParamsOptional['drop']
   seed?: CipherParamsOptional['seed']
   state?: CipherParamsOptional['state']
 }
@@ -74,6 +75,7 @@ export default function sample<T>({
       count,
       distribution,
       state,
+      drop: 0,
     })
   }
 
