@@ -47,24 +47,24 @@ describe('sample', () => {
     },
   ])(
     'distribution: $name',
-    ({
+    <Value extends unknown>({
       distribution,
       expected: [expected, secondExpected],
     }: {
-      distribution: SampleParams<unknown>['distribution']
-      expected: Sample<unknown>['generated'][]
+      distribution: SampleParams<Value>['distribution']
+      expected: Sample<Value>['generated'][]
       name: string
     }) => {
       describe('deterministic', () => {
-        const possibleValues: unknown[] = distribution.map(
-          <V extends unknown>({ value }: { value: V }): V => value
+        const possibleValues: Value[] = distribution.map(
+          ({ value }: { value: Value }): Value => value
         )
 
-        type ExpectedValues = typeof possibleValues[number]
+        type Expected = typeof possibleValues[number]
 
-        const count: SampleParams<ExpectedValues>['count'] = 5,
-          seed: SampleParams<ExpectedValues>['seed'] = 'hello world',
-          { generated, next }: Sample<ExpectedValues> = sample({
+        const count: SampleParams<Expected>['count'] = 5,
+          seed: SampleParams<Expected>['seed'] = 'hello world',
+          { generated, next }: Sample<Expected> = sample({
             count,
             distribution,
             seed,
@@ -78,8 +78,7 @@ describe('sample', () => {
 
         describe('second chained call', () => {
           it('should persistently return known values', () => {
-            const { generated: secondGenerated }: Sample<ExpectedValues> =
-              next(count)
+            const { generated: secondGenerated }: Sample<Expected> = next(count)
             expect(secondGenerated).toEqual(secondExpected)
           })
         })
