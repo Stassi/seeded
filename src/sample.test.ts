@@ -20,7 +20,7 @@ describe('sample', () => {
       ],
       expected: [
         [0, true, 0, 'a', 'a'],
-        ['a', 'a', 'a', 0, 0],
+        ['a', 'a', 'a', 'a', 0],
       ],
       name: 'uniform',
     },
@@ -41,7 +41,7 @@ describe('sample', () => {
       ],
       expected: [
         [true, 'a', true, true, 0],
-        [true, 0, 0, true, true],
+        [0, 0, true, true, true],
       ],
       name: 'weighted',
     },
@@ -78,6 +78,19 @@ describe('sample', () => {
           it('should persistently return known values', () => {
             const { generated: secondGenerated }: ExpectedSample = next(count)
             expect(secondGenerated).toEqual(secondExpected)
+          })
+        })
+
+        describe('composite call', () => {
+          const { generated }: ExpectedSample = sample({
+              distribution,
+              seed,
+              count: count * 2,
+            }),
+            compositeExpected: Expected[] = [...expected, ...secondExpected]
+
+          it('should persistently return known values', () => {
+            expect(generated).toEqual(compositeExpected)
           })
         })
       })
