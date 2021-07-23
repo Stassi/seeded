@@ -1,4 +1,5 @@
 import type { Sample, SampleParams } from './sample'
+import delayTen from './utilities/delayTen'
 import { sample } from './index'
 
 describe('sample', () => {
@@ -111,6 +112,24 @@ describe('sample', () => {
           it('should return known values from a loaded state', () => {
             expect(generated).toEqual(secondExpected)
           })
+        })
+      })
+
+      describe('stochastic', () => {
+        const values: Value[] = distribution.map(
+            ({ value }: { value: Value }): Value => value
+          ),
+          stochasticPair = async (): Promise<[Value, Value]> => {
+            const generateOne = (): Value =>
+                sample({ distribution }).generated[0],
+              x: Value = generateOne()
+            await delayTen()
+            const y: Value = generateOne()
+            return [x, y]
+          }
+
+        it('should return values within a specified sample distribution', async () => {
+          expect(values).toEqual(expect.arrayContaining(await stochasticPair()))
         })
       })
     }
