@@ -10,15 +10,19 @@ describe('sample', () => {
           weight: 1,
         },
         {
-          value: 1,
+          value: 'a',
+          weight: 1,
+        },
+        {
+          value: true,
           weight: 1,
         },
       ],
       expected: [
-        [0, 1, 0, 0, 1],
-        [0, 1, 1, 0, 0],
+        [0, true, 0, 'a', 'a'],
+        ['a', 'a', 'a', 0, 0],
       ],
-      name: 'binary uniform distribution',
+      name: 'uniform distribution',
     },
     {
       distribution: [
@@ -27,15 +31,19 @@ describe('sample', () => {
           weight: 1,
         },
         {
-          value: 1,
+          value: 'a',
+          weight: 1,
+        },
+        {
+          value: true,
           weight: 2,
         },
       ],
       expected: [
-        [1, 0, 1, 1, 1],
-        [1, 1, 1, 1, 1],
+        [true, 'a', true, true, 0],
+        [true, 0, 0, true, true],
       ],
-      name: 'binary weighted distribution',
+      name: 'weighted distribution',
     },
   ])(
     'distribution: $name',
