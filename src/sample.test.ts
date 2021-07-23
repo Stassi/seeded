@@ -56,15 +56,13 @@ describe('sample', () => {
       name: string
     }) => {
       describe('deterministic', () => {
-        const possibleValues: Value[] = distribution.map(
-          ({ value }: { value: Value }): Value => value
-        )
+        type Expected = Value[][number]
+        type ExpectedSample = Sample<Expected>
+        type ExpectedSampleParams = SampleParams<Expected>
 
-        type Expected = typeof possibleValues[number]
-
-        const count: SampleParams<Expected>['count'] = 5,
-          seed: SampleParams<Expected>['seed'] = 'hello world',
-          { generated, next }: Sample<Expected> = sample({
+        const count: ExpectedSampleParams['count'] = 5,
+          seed: ExpectedSampleParams['seed'] = 'hello world',
+          { generated, next }: ExpectedSample = sample({
             count,
             distribution,
             seed,
@@ -78,7 +76,7 @@ describe('sample', () => {
 
         describe('second chained call', () => {
           it('should persistently return known values', () => {
-            const { generated: secondGenerated }: Sample<Expected> = next(count)
+            const { generated: secondGenerated }: ExpectedSample = next(count)
             expect(secondGenerated).toEqual(secondExpected)
           })
         })
