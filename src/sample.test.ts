@@ -22,7 +22,7 @@ describe('sample', () => {
         [0, true, 0, 'a', 'a'],
         ['a', 'a', 'a', 0, 0],
       ],
-      name: 'uniform distribution',
+      name: 'uniform',
     },
     {
       distribution: [
@@ -43,7 +43,7 @@ describe('sample', () => {
         [true, 'a', true, true, 0],
         [true, 0, 0, true, true],
       ],
-      name: 'weighted distribution',
+      name: 'weighted',
     },
   ])(
     'distribution: $name',
