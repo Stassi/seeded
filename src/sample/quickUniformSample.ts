@@ -19,10 +19,10 @@ export default function quickUniformSample<T>({
   ...props
 }: QuickUniformSampleParams<T>): QuickUniformSample<T> {
   const totalWeight: number = length(distribution),
-    rangeOverflow: boolean = totalWeight > poolWidth,
+    weightOverflow: boolean = totalWeight > poolWidth,
     weightOverflowErrorMessage: string = `total weight must not exceed ${poolWidth}`
 
-  if (rangeOverflow) throw new RangeError(weightOverflowErrorMessage)
+  if (weightOverflow) throw new RangeError(weightOverflowErrorMessage)
 
   const { state, generated: generatedNumber }: CipherPersistent = number({
       ...props,
