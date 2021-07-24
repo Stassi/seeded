@@ -13,8 +13,8 @@ describe('sample (quick uniform)', () => {
 
   const distribution: Value[] = [0, 'a', true],
     [expected, secondExpected]: [Value[], Value[]] = [
-      [0, true, 0, 'a', 'a'],
-      ['a', 'a', 'a', 'a', 0],
+      [true, 0, true, true, 'a'],
+      [true, 0, 'a', 'a', 'a'],
     ]
 
   describe('deterministic', () => {
