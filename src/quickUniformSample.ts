@@ -3,8 +3,6 @@ import length from './utilities/length'
 import { poolWidth } from './data'
 import sample from './sample'
 
-export type QuickUniformSample<T> = Sample<T>
-
 export interface QuickUniformSampleParams<T> {
   count?: SampleParams<T>['count']
   distribution: T[]
@@ -12,6 +10,8 @@ export interface QuickUniformSampleParams<T> {
   seed?: SampleParams<T>['seed']
   state?: SampleParams<T>['state']
 }
+
+export type QuickUniformSample<T> = Sample<T>
 
 export default function quickUniformSample<T>({
   distribution: prevDistribution,
