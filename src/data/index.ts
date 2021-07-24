@@ -1,5 +1,8 @@
 import maximumSafeBinary from './maximumSafeBinary'
-import { numberRange as numberRangeErrorMessages } from './errorMessages.json'
+import {
+  numberRange as numberRangeErrorMessages,
+  sampleWeight as sampleWeightErrorMessages,
+} from './errorMessages.json'
 import {
   bitsInOctet,
   defaultDrop,
@@ -14,6 +17,9 @@ const {
   },
 } = numberRangeErrorMessages
 
+const { underflow: sampleWeightUnderflowErrorMessage } =
+  sampleWeightErrorMessages
+
 export {
   bitsInOctet,
   defaultDrop,
@@ -22,4 +28,5 @@ export {
   maximumSafeBinary,
   maximumSafeBinaryLength,
   poolWidth,
+  sampleWeightUnderflowErrorMessage,
 }

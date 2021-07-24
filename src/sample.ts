@@ -4,7 +4,9 @@ import type {
   CipherParamsOptional,
   CipherPersistent,
 } from './cipher'
+import isStrictZero from './utilities/isStrictZero'
 import number from './number'
+import { sampleWeightUnderflowErrorMessage } from './data'
 import { add, divideBy, increment, negate, sum } from './arithmetic'
 
 interface WeightedValue<T> {
@@ -15,6 +17,7 @@ interface WeightedValue<T> {
 export interface SampleParams<T> {
   count?: CipherParamsOptional['count']
   distribution: WeightedValue<T>[]
+  drop?: CipherParamsOptional['drop']
   seed?: CipherParamsOptional['seed']
   state?: CipherParamsOptional['state']
 }
@@ -25,10 +28,19 @@ export interface Sample<T> {
   state: CipherParams['state']
 }
 
+function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
+  distribution.forEach(({ weight }: WeightedValue<T>): void => {
+    if (isStrictZero(weight) || weight < 0)
+      throw new RangeError(sampleWeightUnderflowErrorMessage)
+  })
+}
+
 export default function sample<T>({
   distribution,
   ...props
 }: SampleParams<T>): Sample<T> {
+  throwIfRangeUnderflowError(distribution)
+
   const divideByTotalWeight: DivideByCallback = divideBy(
       sum(
         ...distribution.map(
@@ -74,6 +86,7 @@ export default function sample<T>({
       count,
       distribution,
       state,
+      drop: 0,
     })
   }
 

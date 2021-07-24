@@ -1,6 +1,6 @@
 {
   "name": "seeded",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",
@@ -49,7 +49,7 @@
     "prettier": "2.3.2",
     "rollup": "^2.53.3",
     "rollup-plugin-ts": "^1.4.0",
-    "ts-jest": "^27.0.3",
+    "ts-jest": "^27.0.4",
     "typescript": "^4.3.4"
   },
   "engines": {
