@@ -1,6 +1,8 @@
 import type { Sample, SampleParams } from './sample'
 import delayTen from './utilities/delayTen'
+import { negate } from './arithmetic'
 import { sample } from './index'
+import { sampleWeightUnderflowErrorMessage } from './data'
 
 describe('sample', () => {
   describe.each([
@@ -134,4 +136,44 @@ describe('sample', () => {
       })
     }
   )
+
+  describe('weight underflow errors', () => {
+    describe('distribution containing a zero weight', () => {
+      it('should throw a weight underflow error', () => {
+        expect(() =>
+          sample({
+            distribution: [
+              {
+                value: 0,
+                weight: 0,
+              },
+              {
+                value: 1,
+                weight: 1,
+              },
+            ],
+          })
+        ).toThrow(sampleWeightUnderflowErrorMessage)
+      })
+    })
+
+    describe('distribution containing a negative weight', () => {
+      it('should throw a weight underflow error', () => {
+        expect(() =>
+          sample({
+            distribution: [
+              {
+                value: negate(1),
+                weight: negate(1),
+              },
+              {
+                value: 1,
+                weight: 1,
+              },
+            ],
+          })
+        ).toThrow(sampleWeightUnderflowErrorMessage)
+      })
+    })
+  })
 })
