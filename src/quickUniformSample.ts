@@ -1,7 +1,8 @@
+import type { CipherPersistent } from './cipher'
 import type { Sample, SampleParams } from './sample'
 import length from './utilities/length'
+import number from './number'
 import { poolWidth } from './data'
-import sample from './sample'
 
 export interface QuickUniformSampleParams<T> {
   count?: SampleParams<T>['count']
@@ -14,23 +15,41 @@ export interface QuickUniformSampleParams<T> {
 export type QuickUniformSample<T> = Sample<T>
 
 export default function quickUniformSample<T>({
-  distribution: prevDistribution,
+  distribution,
   ...props
 }: QuickUniformSampleParams<T>): QuickUniformSample<T> {
-  if (length(prevDistribution) > poolWidth)
-    throw new RangeError(`total weight must not exceed ${poolWidth}`)
+  const totalWeight: number = length(distribution),
+    rangeOverflow: boolean = totalWeight > poolWidth,
+    weightOverflowErrorMessage: string = `total weight must not exceed ${poolWidth}`
 
-  const distribution: SampleParams<T>['distribution'] = prevDistribution.map(
-    (
-      value: QuickUniformSampleParams<T>['distribution'][number]
-    ): {
-      weight: SampleParams<T>['distribution'][number]['weight']
-      value: SampleParams<T>['distribution'][number]['value']
-    } => ({
-      value,
-      weight: 1,
+  if (rangeOverflow) throw new RangeError(weightOverflowErrorMessage)
+
+  const { state, generated: generatedNumber }: CipherPersistent = number({
+      ...props,
+      discrete: true,
+      max: totalWeight,
+    }),
+    generated: QuickUniformSample<T>['generated'] = generatedNumber.map(
+      (
+        i: CipherPersistent['generated'][number]
+      ): QuickUniformSample<T>['generated'][number] => distribution[i]
+    )
+
+  function next(
+    count: QuickUniformSampleParams<T>['count']
+  ): QuickUniformSample<T> {
+    return quickUniformSample({
+      ...props,
+      count,
+      distribution,
+      state,
+      drop: 0,
     })
-  )
+  }
 
-  return sample({ ...props, distribution })
+  return {
+    generated,
+    next,
+    state,
+  }
 }
