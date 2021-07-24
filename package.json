@@ -1,6 +1,6 @@
 {
   "name": "seeded",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",
