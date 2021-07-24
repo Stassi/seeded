@@ -1,8 +1,8 @@
-import type { CipherPersistent } from './cipher'
+import type { CipherPersistent } from '../cipher'
 import type { Sample, SampleParams } from './sample'
-import length from './utilities/length'
-import number from './number'
-import { poolWidth } from './data'
+import length from '../utilities/length'
+import number from '../number'
+import { poolWidth } from '../data'
 
 export interface QuickUniformSampleParams<T> {
   count?: SampleParams<T>['count']

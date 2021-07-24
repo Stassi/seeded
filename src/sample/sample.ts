@@ -1,13 +1,13 @@
-import type { DivideByCallback } from './arithmetic'
+import type { DivideByCallback } from '../arithmetic'
 import type {
   CipherParams,
   CipherParamsOptional,
   CipherPersistent,
-} from './cipher'
-import isStrictZero from './utilities/isStrictZero'
-import number from './number'
-import { sampleWeightUnderflowErrorMessage } from './data'
-import { add, divideBy, increment, negate, sum } from './arithmetic'
+} from '../cipher'
+import isStrictZero from '../utilities/isStrictZero'
+import number from '../number'
+import { sampleWeightUnderflowErrorMessage } from '../data'
+import { add, divideBy, increment, negate, sum } from '../arithmetic'
 
 interface WeightedValue<T> {
   value: T

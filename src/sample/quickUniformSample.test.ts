@@ -2,10 +2,10 @@ import type {
   QuickUniformSample,
   QuickUniformSampleParams,
 } from './quickUniformSample'
-import delayTen from './utilities/delayTen'
-import identityPermutation from './utilities/identityPermutation'
-import { increment } from './arithmetic'
-import { poolWidth } from './data'
+import delayTen from '../utilities/delayTen'
+import identityPermutation from '../utilities/identityPermutation'
+import { increment } from '../arithmetic'
+import { poolWidth } from '../data'
 import quickUniformSample from './quickUniformSample'
 
 describe('sample (quick uniform)', () => {
