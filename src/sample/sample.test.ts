@@ -1,8 +1,8 @@
 import type { Sample, SampleParams } from './sample'
-import delayTen from './utilities/delayTen'
-import { negate } from './arithmetic'
-import { sample } from './index'
-import { sampleWeightUnderflowErrorMessage } from './data'
+import delayTen from '../utilities/delayTen'
+import { negate } from '../arithmetic'
+import { sample } from '../index'
+import { sampleWeightUnderflowErrorMessage } from '../data'
 
 describe('sample', () => {
   describe.each([
