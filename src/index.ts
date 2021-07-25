@@ -1,6 +1,6 @@
 import number from './number'
-import { quickUniformSample } from './sample'
+import { sampleUniform } from './sample'
 import sample from './sample'
 
-export { number, quickUniformSample, sample }
+export { number, sampleUniform, sample }
 export default number
