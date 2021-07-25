@@ -27,6 +27,15 @@ export interface CipherParamsOptional {
   state?: CipherState
 }
 
+export default interface Cipher {
+  generated: number[]
+  state: CipherState
+}
+
+export interface CipherPersistent extends Cipher {
+  next: (count?: CipherParams['count']) => CipherPersistent
+}
+
 export interface CipherRangeUnderflowParams {
   max: CipherParams['max']
   min: CipherParams['min']
@@ -36,15 +45,6 @@ export interface CipherIntegerOrInterval {
   cipherModule: (props: CipherParams) => Cipher
   defaultMax: CipherParams['max']
   throwIfRangeUnderflowError: ({ max, min }: CipherRangeUnderflowParams) => void
-}
-
-export interface CipherPersistent extends Cipher {
-  next: (count?: CipherParams['count']) => CipherPersistent
-}
-
-export default interface Cipher {
-  generated: number[]
-  state: CipherState
 }
 
 export interface Pool
