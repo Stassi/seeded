@@ -14,7 +14,7 @@ function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
   })
 }
 
-export default function sample<T>({
+export default function sampleWeighted<T>({
   distribution,
   ...props
 }: SampleParams<T>): Sample<T> {
@@ -60,7 +60,7 @@ export default function sample<T>({
     )
 
   function next(count: SampleParams<T>['count'] = 1): Sample<T> {
-    return sample({
+    return sampleWeighted({
       ...props,
       count,
       distribution,
