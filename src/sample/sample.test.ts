@@ -1,4 +1,4 @@
-import type { Sample, SampleParams } from './sample'
+import type { Sample, SampleParams } from '../cipher'
 import delayTen from '../utilities/delayTen'
 import { negate } from '../arithmetic'
 import { sample } from '../index'

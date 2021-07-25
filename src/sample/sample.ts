@@ -1,32 +1,14 @@
 import type { DivideByCallback } from '../arithmetic'
 import type {
-  CipherParams,
-  CipherParamsOptional,
   CipherPersistent,
+  Sample,
+  SampleParams,
+  WeightedValue,
 } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
-
-interface WeightedValue<T> {
-  value: T
-  weight: number
-}
-
-export interface SampleParams<T> {
-  count?: CipherParamsOptional['count']
-  distribution: WeightedValue<T>[]
-  drop?: CipherParamsOptional['drop']
-  seed?: CipherParamsOptional['seed']
-  state?: CipherParamsOptional['state']
-}
-
-export interface Sample<T> {
-  generated: WeightedValue<T>['value'][]
-  next: (count?: SampleParams<T>['count']) => Sample<T>
-  state: CipherParams['state']
-}
 
 function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
   distribution.forEach(({ weight }: WeightedValue<T>): void => {

@@ -1,5 +1,4 @@
-import type { CipherPersistent } from '../cipher'
-import type { Sample, SampleParams } from './sample'
+import type { CipherPersistent, Sample, SampleParams } from '../cipher'
 import length from '../utilities/length'
 import number from '../number'
 import { poolWidth } from '../data'
