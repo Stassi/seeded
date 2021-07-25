@@ -27,7 +27,7 @@ export interface CipherParamsOptional {
   state?: CipherState
 }
 
-export default interface Cipher {
+export interface Cipher {
   generated: number[]
   state: CipherState
 }
