@@ -1,20 +1,14 @@
-import type { CipherParams } from './Cipher'
-import type { AddToCallBack, RemainderCallback } from '../arithmetic'
+import type { RemainderCallback } from '../arithmetic'
+import type { RoundKey } from './Cipher'
 import { poolWidth } from '../data'
 import { remainder, addTo as addToModule } from '../arithmetic'
 
 const remainderPoolWidth: RemainderCallback = remainder(poolWidth)
 
-type RoundKeyState = CipherParams['state']['roundKey']
-
-export interface RoundKey {
-  addTo: AddToCallBack
-  create: (state: RoundKeyState) => RoundKey
-  state: RoundKeyState
-}
+type RoundKeyState = RoundKey['state']
 
 export default function roundKey(state: RoundKeyState): RoundKey {
-  const addTo: AddToCallBack = addToModule(state)
+  const addTo: RoundKey['addTo'] = addToModule(state)
 
   function create(newState: RoundKeyState): RoundKey {
     return roundKey(remainderPoolWidth(newState))
