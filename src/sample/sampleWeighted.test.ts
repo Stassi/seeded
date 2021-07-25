@@ -1,10 +1,10 @@
-import type { Sample, SampleParams } from './sample'
+import type { Sample, SampleParams } from '../cipher'
 import delayTen from '../utilities/delayTen'
 import { negate } from '../arithmetic'
-import { sample } from '../index'
+import { sampleWeighted } from '../index'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 
-describe('sample', () => {
+describe('sample (weighted)', () => {
   describe.each([
     {
       distribution: [
@@ -65,7 +65,7 @@ describe('sample', () => {
 
         const count: ExpectedSampleParams['count'] = 5,
           seed: ExpectedSampleParams['seed'] = 'hello world',
-          { generated, next }: ExpectedSample = sample({
+          { generated, next }: ExpectedSample = sampleWeighted({
             count,
             distribution,
             seed,
@@ -85,7 +85,7 @@ describe('sample', () => {
         })
 
         describe('composite call', () => {
-          const { generated }: ExpectedSample = sample({
+          const { generated }: ExpectedSample = sampleWeighted({
               distribution,
               seed,
               count: count * 2,
@@ -98,12 +98,12 @@ describe('sample', () => {
         })
 
         describe('state loading', () => {
-          const { state }: ExpectedSample = sample({
+          const { state }: ExpectedSample = sampleWeighted({
               count,
               distribution,
               seed,
             }),
-            { generated }: ExpectedSample = sample({
+            { generated }: ExpectedSample = sampleWeighted({
               count,
               distribution,
               seed,
@@ -123,7 +123,7 @@ describe('sample', () => {
           ),
           stochasticPair = async (): Promise<[Value, Value]> => {
             const generateOne = (): Value =>
-                sample({ distribution }).generated[0],
+                sampleWeighted({ distribution }).generated[0],
               x: Value = generateOne()
             await delayTen()
             const y: Value = generateOne()
@@ -155,7 +155,7 @@ describe('sample', () => {
         expected: string
       }) => {
         it('should throw a weight underflow error', () => {
-          expect(() => sample({ distribution })).toThrow(expected)
+          expect(() => sampleWeighted({ distribution })).toThrow(expected)
         })
       }
     )

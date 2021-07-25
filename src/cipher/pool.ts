@@ -1,19 +1,9 @@
-import type { AtIndexProperty } from '../utilities/atIndex'
-import type { ForEachProperty } from '../utilities/forEach'
-import type { SwapIndicesProperty } from '../utilities/swapIndices'
+import type { Pool } from './Cipher'
 import atIndexUtil from '../utilities/atIndex'
 import forEachUtil from '../utilities/forEach'
 import swapIndicesUtil from '../utilities/swapIndices'
 
-export type PoolState = number[]
-
-export interface Pool
-  extends AtIndexProperty,
-    ForEachProperty,
-    SwapIndicesProperty {
-  create: (state: PoolState) => Pool
-  state: PoolState
-}
+type PoolState = Pool['state']
 
 export default function pool(state: PoolState): Pool {
   const atIndex: Pool['atIndex'] = atIndexUtil(state),

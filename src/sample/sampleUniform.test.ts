@@ -1,14 +1,11 @@
-import type {
-  QuickUniformSample,
-  QuickUniformSampleParams,
-} from './quickUniformSample'
+import type { SampleUniform, SampleUniformParams } from '../cipher'
 import delayTen from '../utilities/delayTen'
 import identityPermutation from '../utilities/identityPermutation'
 import { increment } from '../arithmetic'
 import { poolWidth } from '../data'
-import quickUniformSample from './quickUniformSample'
+import sampleUniform from './sampleUniform'
 
-describe('sample (quick uniform)', () => {
+describe('sample (uniform)', () => {
   type Value = boolean | number | string
 
   const distribution: Value[] = [0, 'a', true],
@@ -19,12 +16,12 @@ describe('sample (quick uniform)', () => {
 
   describe('deterministic', () => {
     type Expected = Value[][number]
-    type ExpectedSample = QuickUniformSample<Expected>
-    type ExpectedSampleParams = QuickUniformSampleParams<Expected>
+    type ExpectedSample = SampleUniform<Expected>
+    type ExpectedSampleParams = SampleUniformParams<Expected>
 
     const count: ExpectedSampleParams['count'] = 5,
       seed: ExpectedSampleParams['seed'] = 'hello world',
-      { generated, next }: ExpectedSample = quickUniformSample({
+      { generated, next }: ExpectedSample = sampleUniform({
         count,
         distribution,
         seed,
@@ -44,7 +41,7 @@ describe('sample (quick uniform)', () => {
     })
 
     describe('composite call', () => {
-      const { generated }: ExpectedSample = quickUniformSample({
+      const { generated }: ExpectedSample = sampleUniform({
           distribution,
           seed,
           count: count * 2,
@@ -57,12 +54,12 @@ describe('sample (quick uniform)', () => {
     })
 
     describe('state loading', () => {
-      const { state }: ExpectedSample = quickUniformSample({
+      const { state }: ExpectedSample = sampleUniform({
           count,
           distribution,
           seed,
         }),
-        { generated }: ExpectedSample = quickUniformSample({
+        { generated }: ExpectedSample = sampleUniform({
           count,
           distribution,
           seed,
@@ -79,7 +76,7 @@ describe('sample (quick uniform)', () => {
   describe('stochastic', () => {
     const stochasticPair = async (): Promise<[Value, Value]> => {
       const generateOne = (): Value =>
-          quickUniformSample({ distribution }).generated[0],
+          sampleUniform({ distribution }).generated[0],
         x: Value = generateOne()
       await delayTen()
       const y: Value = generateOne()
@@ -97,7 +94,7 @@ describe('sample (quick uniform)', () => {
     describe(`${increment(poolWidth)}-length distribution`, () => {
       it('should throw a (temporary) weight overflow error', () => {
         expect(() =>
-          quickUniformSample({
+          sampleUniform({
             distribution: identityPermutation(increment(poolWidth)),
           })
         ).toThrow(`total weight must not exceed ${poolWidth}`)

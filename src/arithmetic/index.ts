@@ -1,4 +1,4 @@
-import type { AddToCallBack } from './addTo'
+import type { AddToCallback } from './addTo'
 import type { DivideByCallback } from './divideBy'
 import type { MultiplyByCallback } from './multiplyBy'
 import type { RemainderCallback } from './remainder'
@@ -14,7 +14,7 @@ import multiplyBy from './multiplyBy'
 import sum from './sum'
 
 export type {
-  AddToCallBack,
+  AddToCallback,
   DivideByCallback,
   MultiplyByCallback,
   RemainderCallback,

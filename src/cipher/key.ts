@@ -1,11 +1,9 @@
-import type { AtIndexProperty } from '../utilities/atIndex'
+import type { Key } from './Cipher'
 import type { RemainderCallback } from '../arithmetic'
 import atIndexUtil from '../utilities/atIndex'
 import length from '../utilities/length'
 import { remainder } from '../arithmetic'
 import toCharCodes from '../utilities/toCharCodes'
-
-export interface Key extends AtIndexProperty {}
 
 export default function key(seedParam: string): Key {
   const seed: number[] = toCharCodes(seedParam),

@@ -1,5 +1,4 @@
-import quickUniformSample from './quickUniformSample'
-import sample from './sample'
+import sampleWeighted from './sampleWeighted'
+import sampleUniform from './sampleUniform'
 
-export { quickUniformSample }
-export default sample
+export { sampleUniform, sampleWeighted }

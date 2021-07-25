@@ -1,6 +1,4 @@
-import type { Key } from './key'
-import type { Pool } from './pool'
-import type { RoundKey } from './roundKey'
+import type { Key, Pool, RoundKey } from './Cipher'
 import { add } from '../arithmetic'
 import identityPermutation from '../utilities/identityPermutation'
 import keyModule from './key'
