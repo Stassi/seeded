@@ -1,5 +1,5 @@
-import quickUniformSample from './quickUniformSample'
 import sample from './sample'
+import sampleUniform from './sampleUniform'
 
-export { quickUniformSample }
+export { sampleUniform }
 export default sample
