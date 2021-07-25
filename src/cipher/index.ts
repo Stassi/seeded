@@ -11,7 +11,6 @@ import type {
   SampleParams,
   SampleUniform,
   SampleUniformParams,
-  WeightedValue,
 } from './Cipher'
 import keySchedule from './keySchedule'
 import pool from './pool'
@@ -30,6 +29,5 @@ export type {
   SampleParams,
   SampleUniform,
   SampleUniformParams,
-  WeightedValue,
 }
 export { keySchedule, pool, roundKey }

@@ -61,14 +61,12 @@ export interface RoundKey {
   state: CipherState['roundKey']
 }
 
-export interface WeightedValue<T> {
-  value: T
-  weight: number
-}
-
 export interface SampleParams<T> {
   count?: CipherParamsOptional['count']
-  distribution: WeightedValue<T>[]
+  distribution: {
+    value: T
+    weight: number
+  }[]
   drop?: CipherParamsOptional['drop']
   seed?: CipherParamsOptional['seed']
   state?: CipherState
