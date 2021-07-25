@@ -1,4 +1,7 @@
 import { AddToCallBack } from '../arithmetic'
+import { AtIndexProperty } from '../utilities/atIndex'
+import { ForEachProperty } from '../utilities/forEach'
+import { SwapIndicesProperty } from '../utilities/swapIndices'
 
 export interface CipherParams {
   count: number
@@ -40,6 +43,14 @@ export interface CipherPersistent extends Cipher {
 export default interface Cipher {
   generated: number[]
   state: CipherParams['state']
+}
+
+export interface Pool
+  extends AtIndexProperty,
+    ForEachProperty,
+    SwapIndicesProperty {
+  create: (state: Pool['state']) => Pool
+  state: CipherParams['state']['pool']
 }
 
 export interface RoundKey {
