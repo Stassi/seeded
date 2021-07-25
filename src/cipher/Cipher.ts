@@ -1,4 +1,4 @@
-import { AddToCallBack } from '../arithmetic'
+import { AddToCallback } from '../arithmetic'
 import { AtIndexProperty } from '../utilities/atIndex'
 import { ForEachProperty } from '../utilities/forEach'
 import { SwapIndicesProperty } from '../utilities/swapIndices'
@@ -54,7 +54,7 @@ export interface Pool
 }
 
 export interface RoundKey {
-  addTo: AddToCallBack
+  addTo: AddToCallback
   create: (state: RoundKey['state']) => RoundKey
   state: CipherParams['state']['roundKey']
 }

@@ -1,5 +1,5 @@
 import type { SliceAtCallback } from '../utilities/sliceAt'
-import type { AddToCallBack, RemainderCallback } from '../arithmetic'
+import type { AddToCallback, RemainderCallback } from '../arithmetic'
 import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
@@ -20,7 +20,7 @@ export default function octet({
     min: number = ceiling(prevMin),
     dropInitial: SliceAtCallback = sliceAt(drop),
     prevPool: Pool = poolModule(prevPoolState),
-    addToMin: AddToCallBack = addTo(min),
+    addToMin: AddToCallback = addTo(min),
     remainderRangeDiff: RemainderCallback = remainder(add(max, negate(min))),
     remainderPoolWidth: RemainderCallback = remainder(poolWidth)
 
