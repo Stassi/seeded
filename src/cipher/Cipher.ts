@@ -1,3 +1,5 @@
+import { AddToCallBack } from '../arithmetic'
+
 export interface CipherParams {
   count: number
   drop: number
@@ -38,4 +40,10 @@ export interface CipherPersistent extends Cipher {
 export default interface Cipher {
   generated: number[]
   state: CipherParams['state']
+}
+
+export interface RoundKey {
+  addTo: AddToCallBack
+  create: (state: RoundKey['state']) => RoundKey
+  state: CipherParams['state']['roundKey']
 }
