@@ -5,7 +5,7 @@ import { increment } from '../arithmetic'
 import { poolWidth } from '../data'
 import sampleUniform from './sampleUniform'
 
-describe('sample (quick uniform)', () => {
+describe('sample (uniform)', () => {
   type Value = boolean | number | string
 
   const distribution: Value[] = [0, 'a', true],
