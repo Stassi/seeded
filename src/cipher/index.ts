@@ -1,5 +1,5 @@
-import type Cipher from './Cipher'
 import type {
+  Cipher,
   CipherIntegerOrInterval,
   CipherParams,
   CipherParamsOptional,
