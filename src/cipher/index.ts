@@ -9,6 +9,8 @@ import type {
   RoundKey,
   Sample,
   SampleParams,
+  SampleUniform,
+  SampleUniformParams,
   WeightedValue,
 } from './Cipher'
 import keySchedule from './keySchedule'
@@ -26,6 +28,8 @@ export type {
   RoundKey,
   Sample,
   SampleParams,
+  SampleUniform,
+  SampleUniformParams,
   WeightedValue,
 }
 export { keySchedule, pool, roundKey }

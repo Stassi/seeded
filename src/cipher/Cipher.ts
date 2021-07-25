@@ -74,8 +74,18 @@ export interface SampleParams<T> {
   state?: CipherState
 }
 
+export interface SampleUniformParams<T> {
+  count?: CipherParamsOptional['count']
+  distribution: T[]
+  drop?: CipherParamsOptional['drop']
+  seed?: CipherParamsOptional['seed']
+  state?: CipherState
+}
+
 export interface Sample<T> {
   generated: T[]
   next: (count?: CipherParams['count']) => Sample<T>
   state: CipherState
 }
+
+export interface SampleUniform<T> extends Sample<T> {}
