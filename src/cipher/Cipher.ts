@@ -47,6 +47,8 @@ export interface CipherIntegerOrInterval {
   throwIfRangeUnderflowError: ({ max, min }: CipherRangeUnderflowParams) => void
 }
 
+export interface Key extends AtIndexProperty {}
+
 export interface Pool
   extends AtIndexProperty,
     ForEachProperty,
