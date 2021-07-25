@@ -3,16 +3,18 @@ import { AtIndexProperty } from '../utilities/atIndex'
 import { ForEachProperty } from '../utilities/forEach'
 import { SwapIndicesProperty } from '../utilities/swapIndices'
 
+interface CipherState {
+  i: number
+  pool: number[]
+  roundKey: number
+}
+
 export interface CipherParams {
   count: number
   drop: number
   max: number
   min: number
-  state: {
-    i: number
-    pool: number[]
-    roundKey: number
-  }
+  state: CipherState
 }
 
 export interface CipherParamsOptional {
@@ -22,7 +24,7 @@ export interface CipherParamsOptional {
   max?: CipherParams['max']
   min?: CipherParams['min']
   seed?: string
-  state?: CipherParams['state']
+  state?: CipherState
 }
 
 export interface CipherRangeUnderflowParams {
@@ -42,7 +44,7 @@ export interface CipherPersistent extends Cipher {
 
 export default interface Cipher {
   generated: number[]
-  state: CipherParams['state']
+  state: CipherState
 }
 
 export interface Pool
@@ -50,11 +52,11 @@ export interface Pool
     ForEachProperty,
     SwapIndicesProperty {
   create: (state: Pool['state']) => Pool
-  state: CipherParams['state']['pool']
+  state: CipherState['pool']
 }
 
 export interface RoundKey {
   addTo: AddToCallback
   create: (state: RoundKey['state']) => RoundKey
-  state: CipherParams['state']['roundKey']
+  state: CipherState['roundKey']
 }
