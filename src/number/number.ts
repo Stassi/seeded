@@ -1,8 +1,8 @@
 import type {
   CipherIntegerOrInterval,
   CipherParams,
-  CipherParamsOptional,
   CipherPersistent,
+  CipherPersistentParams,
 } from '../cipher'
 import { defaultDrop } from '../data'
 import integer from './integer'
@@ -22,7 +22,7 @@ export default function number({
     pool: keySchedule(seed).state,
     roundKey: 0,
   },
-}: CipherParamsOptional = {}): CipherPersistent {
+}: CipherPersistentParams = {}): CipherPersistent {
   const {
       cipherModule,
       defaultMax,
@@ -40,7 +40,9 @@ export default function number({
     state: prevState,
   })
 
-  function next(newCount: CipherParamsOptional['count'] = 1): CipherPersistent {
+  function next(
+    newCount: CipherPersistentParams['count'] = 1
+  ): CipherPersistent {
     return number({
       discrete,
       max,

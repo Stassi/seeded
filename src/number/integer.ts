@@ -2,7 +2,7 @@ import type {
   Cipher,
   CipherIntegerOrInterval,
   CipherParams,
-  CipherRangeUnderflowParams,
+  Range,
 } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import largeInteger from './largeInteger'
@@ -24,7 +24,7 @@ const integer: CipherIntegerOrInterval = {
     return cipherModule({ max, min, ...props })
   },
   defaultMax: maximumSafeBinary,
-  throwIfRangeUnderflowError({ max, min }: CipherRangeUnderflowParams): void {
+  throwIfRangeUnderflowError({ max, min }: Range): void {
     if (ceiling(min) >= ceiling(max))
       throw new RangeError(integerRangeUnderflowErrorMessage)
   },

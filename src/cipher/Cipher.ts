@@ -3,48 +3,48 @@ import { AtIndexProperty } from '../utilities/atIndex'
 import { ForEachProperty } from '../utilities/forEach'
 import { SwapIndicesProperty } from '../utilities/swapIndices'
 
-interface CipherState {
-  i: number
-  pool: number[]
-  roundKey: number
+type Count = number
+type CountableCallback<T> = (count?: Count) => T
+type PoolState = number[]
+type RoundKeyState = number
+
+interface CipherStateProperty {
+  state: {
+    i: number
+    pool: PoolState
+    roundKey: RoundKeyState
+  }
 }
 
-export interface CipherParams {
-  count: number
-  drop: number
+export interface Range {
   max: number
   min: number
-  state: CipherState
 }
 
-export interface CipherParamsOptional {
-  count?: CipherParams['count']
-  discrete?: boolean
-  drop?: CipherParams['drop']
-  max?: CipherParams['max']
-  min?: CipherParams['min']
-  seed?: string
-  state?: CipherState
+export interface CipherParams extends CipherStateProperty, Range {
+  count: Count
+  drop: number
 }
 
-export interface Cipher {
+export interface CipherPersistentParams
+  extends Partial<CipherParams>,
+    Partial<{
+      discrete: boolean
+      seed: string
+    }> {}
+
+export interface Cipher extends CipherStateProperty {
   generated: number[]
-  state: CipherState
 }
 
 export interface CipherPersistent extends Cipher {
-  next: (count?: CipherParams['count']) => CipherPersistent
-}
-
-export interface CipherRangeUnderflowParams {
-  max: CipherParams['max']
-  min: CipherParams['min']
+  next: CountableCallback<CipherPersistent>
 }
 
 export interface CipherIntegerOrInterval {
   cipherModule: (props: CipherParams) => Cipher
-  defaultMax: CipherParams['max']
-  throwIfRangeUnderflowError: ({ max, min }: CipherRangeUnderflowParams) => void
+  defaultMax: Range[keyof Range]
+  throwIfRangeUnderflowError: ({ max, min }: Range) => void
 }
 
 export interface Key extends AtIndexProperty {}
@@ -53,39 +53,31 @@ export interface Pool
   extends AtIndexProperty,
     ForEachProperty,
     SwapIndicesProperty {
-  create: (state: Pool['state']) => Pool
-  state: CipherState['pool']
+  create: (state: PoolState) => Pool
+  state: PoolState
 }
 
 export interface RoundKey {
   addTo: AddToCallback
-  create: (state: RoundKey['state']) => RoundKey
-  state: CipherState['roundKey']
+  create: (state: RoundKeyState) => RoundKey
+  state: RoundKeyState
 }
 
-export interface SampleParams<T> {
-  count?: CipherParamsOptional['count']
+export interface SampleParams<T> extends Partial<CipherPersistentParams> {
   distribution: {
     value: T
     weight: number
   }[]
-  drop?: CipherParamsOptional['drop']
-  seed?: CipherParamsOptional['seed']
-  state?: CipherState
 }
 
-export interface SampleUniformParams<T> {
-  count?: CipherParamsOptional['count']
+export interface SampleUniformParams<T>
+  extends Partial<CipherPersistentParams> {
   distribution: T[]
-  drop?: CipherParamsOptional['drop']
-  seed?: CipherParamsOptional['seed']
-  state?: CipherState
 }
 
-export interface Sample<T> {
+export interface Sample<T> extends CipherStateProperty {
   generated: T[]
-  next: (count?: CipherParams['count']) => Sample<T>
-  state: CipherState
+  next: CountableCallback<Sample<T>>
 }
 
 export interface SampleUniform<T> extends Sample<T> {}
