@@ -1,35 +1,7 @@
-import type {
-  Cipher,
-  CipherIntegerOrInterval,
-  CipherParams,
-  CipherParamsOptional,
-  CipherPersistent,
-  CipherRangeUnderflowParams,
-  Key,
-  Pool,
-  RoundKey,
-  Sample,
-  SampleParams,
-  SampleUniform,
-  SampleUniformParams,
-} from './Cipher'
+import type { Cipher, CipherParams, Key, Pool, RoundKey } from './Ciphers'
 import keySchedule from './keySchedule'
 import pool from './pool'
 import roundKey from './roundKey'
 
-export type {
-  Cipher,
-  CipherIntegerOrInterval,
-  CipherParams,
-  CipherParamsOptional,
-  CipherPersistent,
-  CipherRangeUnderflowParams,
-  Key,
-  Pool,
-  RoundKey,
-  Sample,
-  SampleParams,
-  SampleUniform,
-  SampleUniformParams,
-}
+export type { Cipher, CipherParams, Key, Pool, RoundKey }
 export { keySchedule, pool, roundKey }

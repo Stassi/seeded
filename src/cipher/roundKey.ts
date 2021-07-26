@@ -1,5 +1,5 @@
 import type { RemainderCallback } from '../arithmetic'
-import type { RoundKey } from './Cipher'
+import type { RoundKey } from './Ciphers'
 import { poolWidth } from '../data'
 import { remainder, addTo as addToModule } from '../arithmetic'
 

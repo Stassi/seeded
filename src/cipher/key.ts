@@ -1,4 +1,4 @@
-import type { Key } from './Cipher'
+import type { Key } from './Ciphers'
 import type { RemainderCallback } from '../arithmetic'
 import atIndexUtil from '../utilities/atIndex'
 import length from '../utilities/length'

@@ -1,9 +1,5 @@
-import type {
-  CipherIntegerOrInterval,
-  CipherParams,
-  CipherParamsOptional,
-  CipherPersistent,
-} from '../cipher'
+import type { CipherParams } from '../cipher'
+import type { IntegerOrInterval, Number, NumberParams } from './Numbers'
 import { defaultDrop } from '../data'
 import integer from './integer'
 import interval from './interval'
@@ -22,12 +18,12 @@ export default function number({
     pool: keySchedule(seed).state,
     roundKey: 0,
   },
-}: CipherParamsOptional = {}): CipherPersistent {
+}: NumberParams = {}): Number {
   const {
       cipherModule,
       defaultMax,
       throwIfRangeUnderflowError,
-    }: CipherIntegerOrInterval = discrete ? integer : interval,
+    }: IntegerOrInterval = discrete ? integer : interval,
     max: CipherParams['max'] = prevMax ?? defaultMax
 
   throwIfRangeUnderflowError({ max, min })
@@ -40,7 +36,7 @@ export default function number({
     state: prevState,
   })
 
-  function next(newCount: CipherParamsOptional['count'] = 1): CipherPersistent {
+  function next(newCount: NumberParams['count'] = 1): Number {
     return number({
       discrete,
       max,
