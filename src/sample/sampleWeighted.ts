@@ -1,5 +1,5 @@
-import type { CipherPersistent } from '../cipher'
 import type { DivideByCallback } from '../arithmetic'
+import type { Number } from '../number'
 import type { SampleWeighted, SampleWeightedParams } from './Samples'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
@@ -34,7 +34,7 @@ export default function sampleWeighted<T>({
         { weight }: WeightedValue<T>
       ): WeightedValue<T>['weight'] => add(weight, negate(prevWeight))
     ),
-    { state, generated: generatedIntervals }: CipherPersistent = number({
+    { state, generated: generatedIntervals }: Number = number({
       ...props,
       discrete: false,
     }),

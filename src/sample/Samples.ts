@@ -1,22 +1,20 @@
-import { CipherPersistentParams } from '../cipher'
+import { NumberParams } from '../number'
 
-export interface SampleWeightedParams<T>
-  extends Partial<CipherPersistentParams> {
+export interface SampleWeightedParams<T> extends Partial<NumberParams> {
   distribution: {
     value: T
     weight: number
   }[]
 }
 
-export interface SampleUniformParams<T>
-  extends Partial<CipherPersistentParams> {
+export interface SampleUniformParams<T> extends Partial<NumberParams> {
   distribution: T[]
 }
 
 export interface SampleWeighted<T> {
   generated: T[]
-  next: (count?: CipherPersistentParams['count']) => SampleWeighted<T>
-  state: CipherPersistentParams['state']
+  next: (count?: NumberParams['count']) => SampleWeighted<T>
+  state: NumberParams['state']
 }
 
 export interface SampleUniform<T> extends SampleWeighted<T> {}

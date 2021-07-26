@@ -1,4 +1,4 @@
-import type { CipherPersistent } from '../cipher'
+import type { Number } from '../number'
 import type { SampleUniform, SampleUniformParams } from './Samples'
 import length from '../utilities/length'
 import number from '../number'
@@ -14,15 +14,14 @@ export default function sampleUniform<T>({
 
   if (weightOverflow) throw new RangeError(weightOverflowErrorMessage)
 
-  const { state, generated: generatedNumber }: CipherPersistent = number({
+  const { state, generated: generatedNumber }: Number = number({
       ...props,
       discrete: true,
       max: totalWeight,
     }),
     generated: SampleUniform<T>['generated'] = generatedNumber.map(
-      (
-        i: CipherPersistent['generated'][number]
-      ): SampleUniform<T>['generated'][number] => distribution[i]
+      (i: Number['generated'][number]): SampleUniform<T>['generated'][number] =>
+        distribution[i]
     )
 
   function next(count: SampleUniformParams<T>['count'] = 1): SampleUniform<T> {
