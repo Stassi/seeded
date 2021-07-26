@@ -1,4 +1,4 @@
-import { NumberParams } from '../number'
+import type { NumberParams } from '../number'
 
 export interface SampleWeightedParams<T> extends Partial<NumberParams> {
   distribution: {
