@@ -1,4 +1,4 @@
-import type { Pool } from './Cipher'
+import type { Pool } from './Ciphers'
 import atIndexUtil from '../utilities/atIndex'
 import forEachUtil from '../utilities/forEach'
 import swapIndicesUtil from '../utilities/swapIndices'

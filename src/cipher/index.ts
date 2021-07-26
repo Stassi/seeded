@@ -8,7 +8,7 @@ import type {
   Pool,
   Range,
   RoundKey,
-} from './Cipher'
+} from './Ciphers'
 import keySchedule from './keySchedule'
 import pool from './pool'
 import roundKey from './roundKey'
