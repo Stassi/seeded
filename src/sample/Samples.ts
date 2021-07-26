@@ -11,10 +11,8 @@ export interface SampleUniformParams<T> extends Partial<NumberParams> {
   distribution: T[]
 }
 
-export interface SampleWeighted<T> {
+export interface Sample<T> {
   generated: T[]
-  next: (count?: NumberParams['count']) => SampleWeighted<T>
+  next: (count?: NumberParams['count']) => Sample<T>
   state: NumberParams['state']
 }
-
-export interface SampleUniform<T> extends SampleWeighted<T> {}
