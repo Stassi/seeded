@@ -92,12 +92,12 @@ describe('sample (uniform)', () => {
 
   describe('weight overflow errors', () => {
     describe(`${increment(poolWidth)}-length distribution`, () => {
-      it('should throw a (temporary) weight overflow error', () => {
+      it('should NOT throw a (temporary) weight overflow error', () => {
         expect(() =>
           sampleUniform({
             distribution: identityPermutation(increment(poolWidth)),
           })
-        ).toThrow(`total weight must not exceed ${poolWidth}`)
+        ).not.toThrow()
       })
     })
   })
