@@ -25,25 +25,8 @@ export interface CipherParams extends CipherStateProperty, Range {
   drop: number
 }
 
-export interface CipherPersistentParams
-  extends Partial<CipherParams>,
-    Partial<{
-      discrete: boolean
-      seed: string
-    }> {}
-
 export interface Cipher extends CipherStateProperty {
   generated: number[]
-}
-
-export interface CipherPersistent extends Cipher {
-  next: (count?: Count) => CipherPersistent
-}
-
-export interface CipherIntegerOrInterval {
-  cipherModule: (props: CipherParams) => Cipher
-  defaultMax: Range[keyof Range]
-  throwIfRangeUnderflowError: ({ max, min }: Range) => void
 }
 
 export interface Key extends AtIndexProperty {}
