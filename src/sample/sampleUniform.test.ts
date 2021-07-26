@@ -1,4 +1,4 @@
-import type { SampleUniform, SampleUniformParams } from './Samples'
+import type { Sample, SampleUniformParams } from './Samples'
 import delayTen from '../utilities/delayTen'
 import sampleUniform from './sampleUniform'
 
@@ -13,7 +13,7 @@ describe('sample (uniform)', () => {
 
   describe('deterministic', () => {
     type Expected = Value[][number]
-    type ExpectedSample = SampleUniform<Expected>
+    type ExpectedSample = Sample<Expected>
     type ExpectedSampleParams = SampleUniformParams<Expected>
 
     const count: ExpectedSampleParams['count'] = 5,
