@@ -3,7 +3,6 @@ import { AtIndexProperty } from '../utilities/atIndex'
 import { ForEachProperty } from '../utilities/forEach'
 import { SwapIndicesProperty } from '../utilities/swapIndices'
 
-type Count = number
 type PoolState = number[]
 type RoundKeyState = number
 
@@ -15,14 +14,11 @@ interface CipherStateProperty {
   }
 }
 
-export interface Range {
+export interface CipherParams extends CipherStateProperty {
+  count: number
+  drop: number
   max: number
   min: number
-}
-
-export interface CipherParams extends CipherStateProperty, Range {
-  count: Count
-  drop: number
 }
 
 export interface Cipher extends CipherStateProperty {
