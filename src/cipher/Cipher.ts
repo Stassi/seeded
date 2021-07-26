@@ -4,7 +4,6 @@ import { ForEachProperty } from '../utilities/forEach'
 import { SwapIndicesProperty } from '../utilities/swapIndices'
 
 type Count = number
-type CountableCallback<T> = (count?: Count) => T
 type PoolState = number[]
 type RoundKeyState = number
 
@@ -38,7 +37,7 @@ export interface Cipher extends CipherStateProperty {
 }
 
 export interface CipherPersistent extends Cipher {
-  next: CountableCallback<CipherPersistent>
+  next: (count?: Count) => CipherPersistent
 }
 
 export interface CipherIntegerOrInterval {
@@ -62,23 +61,3 @@ export interface RoundKey {
   create: (state: RoundKeyState) => RoundKey
   state: RoundKeyState
 }
-
-export interface SampleWeightedParams<T>
-  extends Partial<CipherPersistentParams> {
-  distribution: {
-    value: T
-    weight: number
-  }[]
-}
-
-export interface SampleUniformParams<T>
-  extends Partial<CipherPersistentParams> {
-  distribution: T[]
-}
-
-export interface SampleWeighted<T> extends CipherStateProperty {
-  generated: T[]
-  next: CountableCallback<SampleWeighted<T>>
-}
-
-export interface SampleUniform<T> extends SampleWeighted<T> {}
