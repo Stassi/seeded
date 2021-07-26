@@ -1,9 +1,5 @@
-import type {
-  Cipher,
-  CipherIntegerOrInterval,
-  CipherParams,
-  Range,
-} from '../cipher'
+import type { IntegerOrInterval } from './Numbers'
+import type { Cipher, CipherParams, Range } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import largeInteger from './largeInteger'
 import octet from './octet'
@@ -14,7 +10,7 @@ import {
   poolWidth,
 } from '../data'
 
-const integer: CipherIntegerOrInterval = {
+const integer: IntegerOrInterval = {
   cipherModule({ max, min, ...props }: CipherParams): Cipher {
     const octetRangeOverflow: boolean = add(max, negate(min)) > poolWidth,
       cipherModule: (props: CipherParams) => Cipher = octetRangeOverflow

@@ -1,9 +1,5 @@
-import type {
-  Cipher,
-  CipherIntegerOrInterval,
-  CipherParams,
-  Range,
-} from '../cipher'
+import type { IntegerOrInterval } from './Numbers'
+import type { Cipher, CipherParams, Range } from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import octet from './octet'
@@ -44,7 +40,7 @@ export function intervalCipher({
   return { generated, state }
 }
 
-const interval: CipherIntegerOrInterval = {
+const interval: IntegerOrInterval = {
   cipherModule: intervalCipher,
   defaultMax: 1,
   throwIfRangeUnderflowError({ max, min }: Range): void {
