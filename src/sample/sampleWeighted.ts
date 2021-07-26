@@ -1,6 +1,6 @@
 import type { CipherPersistent } from '../cipher'
 import type { DivideByCallback } from '../arithmetic'
-import type { SampleWeighted, SampleWeightedParams } from './Sample'
+import type { SampleWeighted, SampleWeightedParams } from './Samples'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'

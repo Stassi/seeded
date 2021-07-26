@@ -1,4 +1,4 @@
-import type { SampleWeighted, SampleWeightedParams } from './Sample'
+import type { SampleWeighted, SampleWeightedParams } from './Samples'
 import delayTen from '../utilities/delayTen'
 import { negate } from '../arithmetic'
 import { sampleWeighted } from '../index'

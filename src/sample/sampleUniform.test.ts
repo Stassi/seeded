@@ -1,4 +1,4 @@
-import type { SampleUniform, SampleUniformParams } from './Sample'
+import type { SampleUniform, SampleUniformParams } from './Samples'
 import delayTen from '../utilities/delayTen'
 import identityPermutation from '../utilities/identityPermutation'
 import { increment } from '../arithmetic'
