@@ -1,11 +1,15 @@
 import type { DivideByCallback } from '../arithmetic'
-import type { CipherPersistent, Sample, SampleParams } from '../cipher'
+import type {
+  CipherPersistent,
+  SampleWeighted,
+  SampleWeightedParams,
+} from '../cipher'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
 
-type WeightedValue<T> = SampleParams<T>['distribution'][number]
+type WeightedValue<T> = SampleWeightedParams<T>['distribution'][number]
 
 function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
   distribution.forEach(({ weight }: WeightedValue<T>): void => {
@@ -17,7 +21,7 @@ function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
 export default function sampleWeighted<T>({
   distribution,
   ...props
-}: SampleParams<T>): Sample<T> {
+}: SampleWeightedParams<T>): SampleWeighted<T> {
   throwIfRangeUnderflowError(distribution)
 
   const divideByTotalWeight: DivideByCallback = divideBy(
@@ -27,7 +31,7 @@ export default function sampleWeighted<T>({
         )
       )
     ),
-    weightedValues: SampleParams<T>['distribution'] = distribution.sort(
+    weightedValues: SampleWeightedParams<T>['distribution'] = distribution.sort(
       (
         { weight: prevWeight }: WeightedValue<T>,
         { weight }: WeightedValue<T>
@@ -37,7 +41,7 @@ export default function sampleWeighted<T>({
       ...props,
       discrete: false,
     }),
-    generated: Sample<T>['generated'] = generatedIntervals.map(
+    generated: SampleWeighted<T>['generated'] = generatedIntervals.map(
       (generatedInterval: number): WeightedValue<T>['value'] => {
         let selected: WeightedValue<T>['value'] | undefined,
           isValueSelected: boolean = false,
@@ -59,7 +63,9 @@ export default function sampleWeighted<T>({
       }
     )
 
-  function next(count: SampleParams<T>['count'] = 1): Sample<T> {
+  function next(
+    count: SampleWeightedParams<T>['count'] = 1
+  ): SampleWeighted<T> {
     return sampleWeighted({
       ...props,
       count,

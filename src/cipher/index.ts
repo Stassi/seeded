@@ -8,8 +8,8 @@ import type {
   Pool,
   Range,
   RoundKey,
-  Sample,
-  SampleParams,
+  SampleWeighted,
+  SampleWeightedParams,
   SampleUniform,
   SampleUniformParams,
 } from './Cipher'
@@ -27,8 +27,8 @@ export type {
   Pool,
   Range,
   RoundKey,
-  Sample,
-  SampleParams,
+  SampleWeighted,
+  SampleWeightedParams,
   SampleUniform,
   SampleUniformParams,
 }

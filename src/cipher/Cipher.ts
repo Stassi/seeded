@@ -63,7 +63,8 @@ export interface RoundKey {
   state: RoundKeyState
 }
 
-export interface SampleParams<T> extends Partial<CipherPersistentParams> {
+export interface SampleWeightedParams<T>
+  extends Partial<CipherPersistentParams> {
   distribution: {
     value: T
     weight: number
@@ -75,9 +76,9 @@ export interface SampleUniformParams<T>
   distribution: T[]
 }
 
-export interface Sample<T> extends CipherStateProperty {
+export interface SampleWeighted<T> extends CipherStateProperty {
   generated: T[]
-  next: CountableCallback<Sample<T>>
+  next: CountableCallback<SampleWeighted<T>>
 }
 
-export interface SampleUniform<T> extends Sample<T> {}
+export interface SampleUniform<T> extends SampleWeighted<T> {}

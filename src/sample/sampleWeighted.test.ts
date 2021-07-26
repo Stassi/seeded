@@ -1,4 +1,4 @@
-import type { Sample, SampleParams } from '../cipher'
+import type { SampleWeighted, SampleWeightedParams } from '../cipher'
 import delayTen from '../utilities/delayTen'
 import { negate } from '../arithmetic'
 import { sampleWeighted } from '../index'
@@ -54,14 +54,14 @@ describe('sample (weighted)', () => {
       distribution,
       expected: [expected, secondExpected],
     }: {
-      distribution: SampleParams<Value>['distribution']
-      expected: Sample<Value>['generated'][]
+      distribution: SampleWeightedParams<Value>['distribution']
+      expected: SampleWeighted<Value>['generated'][]
       name: string
     }) => {
       describe('deterministic', () => {
         type Expected = Value[][number]
-        type ExpectedSample = Sample<Expected>
-        type ExpectedSampleParams = SampleParams<Expected>
+        type ExpectedSample = SampleWeighted<Expected>
+        type ExpectedSampleParams = SampleWeightedParams<Expected>
 
         const count: ExpectedSampleParams['count'] = 5,
           seed: ExpectedSampleParams['seed'] = 'hello world',
@@ -140,7 +140,9 @@ describe('sample (weighted)', () => {
   describe('weight underflow errors', () => {
     describe.each(
       [0, negate(1)].map(
-        (weight: SampleParams<any>['distribution'][number]['weight']) => ({
+        (
+          weight: SampleWeightedParams<any>['distribution'][number]['weight']
+        ) => ({
           distribution: [{ weight, value: undefined }],
           expected: sampleWeightUnderflowErrorMessage,
         })
@@ -151,7 +153,7 @@ describe('sample (weighted)', () => {
         distribution,
         expected,
       }: {
-        distribution: SampleParams<Value>['distribution']
+        distribution: SampleWeightedParams<Value>['distribution']
         expected: string
       }) => {
         it('should throw a weight underflow error', () => {
