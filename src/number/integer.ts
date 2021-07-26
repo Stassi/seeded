@@ -1,5 +1,5 @@
 import type { IntegerOrInterval } from './Numbers'
-import type { Cipher, CipherParams, Range } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
 import ceiling from '../utilities/ceiling'
 import largeInteger from './largeInteger'
 import octet from './octet'
@@ -20,7 +20,10 @@ const integer: IntegerOrInterval = {
     return cipherModule({ max, min, ...props })
   },
   defaultMax: maximumSafeBinary,
-  throwIfRangeUnderflowError({ max, min }: Range): void {
+  throwIfRangeUnderflowError({
+    max,
+    min,
+  }: Pick<CipherParams, 'max' | 'min'>): void {
     if (ceiling(min) >= ceiling(max))
       throw new RangeError(integerRangeUnderflowErrorMessage)
   },

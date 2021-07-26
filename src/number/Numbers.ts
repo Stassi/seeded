@@ -1,4 +1,4 @@
-import type { Cipher, CipherParams, Range } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
 
 export interface NumberParams
   extends Partial<CipherParams>,
@@ -11,8 +11,10 @@ export interface Number extends Cipher {
   next: (count?: CipherParams['count']) => Number
 }
 
+type RangeParams = Pick<CipherParams, 'max' | 'min'>
+
 export interface IntegerOrInterval {
   cipherModule: (props: CipherParams) => Cipher
-  defaultMax: Range[keyof Range]
-  throwIfRangeUnderflowError: ({ max, min }: Range) => void
+  defaultMax: RangeParams[keyof RangeParams]
+  throwIfRangeUnderflowError: ({ max, min }: RangeParams) => void
 }
