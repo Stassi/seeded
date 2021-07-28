@@ -1,11 +1,14 @@
-import type { Number, NumberParams } from '../number'
-import type { Sample, SampleParams, WeightedValue } from './Samples'
+import type { NumberParams } from '../number'
+import type {
+  Sample,
+  SampleParams,
+  SampleUniform,
+  WeightedValue,
+} from './Samples'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
-import number from '../number'
+import sampleUniform from './sampleUniform'
 import sampleWeighted from './sampleWeighted'
-
-type SampleUniform<T> = Pick<Sample<T>, 'generated' | 'state'>
 
 export function expandedDistribution<T>(
   distribution: SampleParams<T>['distribution']
@@ -19,22 +22,6 @@ export function expandedDistribution<T>(
     : distributionKeys.every(
         (key: string) => key === 'value' || key === 'weight'
       )
-}
-
-function sampleUniform<T>({
-  distribution,
-  ...props
-}: SampleParams<T>): SampleUniform<T> {
-  const { state, generated: generatedNumber }: Number = number({
-      ...props,
-      discrete: true,
-      max: length(distribution),
-    }),
-    generated: T[] = generatedNumber.map(
-      (i: Number['generated'][number]): T => <T>distribution[i]
-    )
-
-  return { generated, state }
 }
 
 export default function sample<T>({
@@ -65,7 +52,7 @@ export default function sample<T>({
     }
   } else {
     const { generated: prevGenerated, state: prevState }: SampleUniform<T> =
-      sampleUniform({ ...props, distribution })
+      sampleUniform({ ...props, distribution: <T[]>distribution })
 
     generated = prevGenerated
     state = prevState
