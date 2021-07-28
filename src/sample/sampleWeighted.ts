@@ -1,14 +1,17 @@
 import type { DivideByCallback } from '../arithmetic'
 import type { Number } from '../number'
-import type { Sample, SampleWeightedParams } from './Samples'
+import type {
+  Sample,
+  SampleWeightedParams,
+  WeightedValue,
+  WeightedValues,
+} from './Samples'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
 
-type WeightedValue<T> = SampleWeightedParams<T>['distribution'][number]
-
-function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
+function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
   distribution.forEach(({ weight }: WeightedValue<T>): void => {
     if (isStrictZero(weight) || weight < 0)
       throw new RangeError(sampleWeightUnderflowErrorMessage)
