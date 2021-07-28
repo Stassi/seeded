@@ -37,7 +37,7 @@ export default function sample<T>({
     }
   } else {
     const { generated: prevGenerated, state: prevState }: Sample<T> =
-      sampleUniform({ ...props, distribution: <T[]>distribution })
+      sampleUniform({ ...props, distribution })
 
     generated = prevGenerated
     state = prevState
