@@ -2,22 +2,30 @@ import type { NumberParams } from '../number'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 
+type Values<T> = T[]
+
 export interface WeightedValue<T> {
   value: T
   weight: number
 }
 
-export interface SampleWeightedParams<T> extends Partial<NumberParams> {
-  distribution: WeightedValue<T>[]
+export type WeightedValues<T> = WeightedValue<T>[]
+
+type SampleNumberParams = Pick<
+  NumberParams,
+  'count' | 'drop' | 'seed' | 'state'
+>
+
+export interface SampleWeightedParams<T> extends SampleNumberParams {
+  distribution: WeightedValues<T>
 }
 
-export interface SampleUniformParams<T> extends Partial<NumberParams> {
-  distribution: T[]
+export interface SampleUniformParams<T> extends SampleNumberParams {
+  distribution: Values<T>
 }
 
-export interface SampleParams<T>
-  extends Pick<NumberParams, 'count' | 'drop' | 'seed' | 'state'> {
-  distribution: (T | WeightedValue<T>)[]
+export interface SampleParams<T> extends SampleNumberParams {
+  distribution: Values<T> | WeightedValues<T>
 }
 
 export interface Sample<T> {
@@ -31,7 +39,7 @@ export interface SamplePersistent<T> extends Sample<T> {
 
 export function expandedDistribution<T>(
   distribution: SampleParams<T>['distribution']
-): distribution is WeightedValue<T>[] {
+): distribution is WeightedValues<T> {
   const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
     distribution[0]
   )
