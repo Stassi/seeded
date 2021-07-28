@@ -1,6 +1,6 @@
 import type { SampleParams, SamplePersistent } from './Samples'
 import delayTen from '../utilities/delayTen'
-import { expandedDistribution } from './Samples'
+import { isExpandedDistributionSyntax } from './Samples'
 import { negate } from '../arithmetic'
 import { sample } from '../index'
 import { sampleWeightUnderflowErrorMessage } from '../data'
@@ -137,7 +137,7 @@ describe('sample', () => {
 
         it('should return values within a specified sample distribution', async () => {
           expect(
-            expandedDistribution(distribution)
+            isExpandedDistributionSyntax(distribution)
               ? distribution.map(({ value }: { value: Value }): Value => value)
               : distribution
           ).toEqual(expect.arrayContaining(await stochasticPair()))

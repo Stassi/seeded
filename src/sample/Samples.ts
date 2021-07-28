@@ -40,7 +40,7 @@ export interface SamplePersistent<T> extends Sample<T> {
   next: (count?: NumberParams['count']) => SamplePersistent<T>
 }
 
-export function expandedDistribution<T>(
+export function isExpandedDistributionSyntax<T>(
   distribution: SampleParams<T>['distribution']
 ): distribution is WeightedValues<T> {
   const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
