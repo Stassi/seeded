@@ -51,7 +51,7 @@ export function isExpandedDistributionSyntax<T>(
   return isStrictZero(length(distributionKeys))
     ? false
     : distributionKeys.every(
-        (key: string) => key === 'value' || key === 'weight'
+        (key: string): boolean => key === 'value' || key === 'weight'
       )
 }
 
