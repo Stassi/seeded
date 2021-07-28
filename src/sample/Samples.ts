@@ -2,11 +2,14 @@ import type { NumberParams } from '../number'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 
-type Values<T> = T[]
+export type Value<T> = T
+type Values<T> = Value<T>[]
+
+export type Weight = number
 
 export interface WeightedValue<T> {
-  value: T
-  weight: number
+  value: Value<T>
+  weight: Weight
 }
 
 export type WeightedValues<T> = WeightedValue<T>[]
