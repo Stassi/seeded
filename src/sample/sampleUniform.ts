@@ -1,6 +1,7 @@
+import type { Number } from '../number'
 import type { Sample, SampleUniformParams } from './Samples'
 import length from '../utilities/length'
-import number, { Number } from '../number'
+import number from '../number'
 
 export default function sampleUniform<T>({
   distribution,
