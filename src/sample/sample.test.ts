@@ -1,6 +1,6 @@
 import type { Sample, SampleParams } from './Samples'
 import delayTen from '../utilities/delayTen'
-import { expandedDistribution } from './sample'
+import { expandedDistribution } from './Samples'
 import { negate } from '../arithmetic'
 import { sample } from '../index'
 import { sampleWeightUnderflowErrorMessage } from '../data'
