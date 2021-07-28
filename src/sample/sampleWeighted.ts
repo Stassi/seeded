@@ -8,16 +8,15 @@ import type {
   WeightedValue,
   WeightedValues,
 } from './Samples'
-import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
 
 function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
-  distribution.forEach(({ weight }: WeightedValue<T>): void => {
-    if (isStrictZero(weight) || weight < 0)
-      throw new RangeError(sampleWeightUnderflowErrorMessage)
-  })
+  if (
+    distribution.some(({ weight }: WeightedValue<T>): boolean => !(weight > 0))
+  )
+    throw new RangeError(sampleWeightUnderflowErrorMessage)
 }
 
 export default function sampleWeighted<T>({
