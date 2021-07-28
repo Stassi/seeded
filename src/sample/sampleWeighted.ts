@@ -60,19 +60,5 @@ export default function sampleWeighted<T>({
       }
     )
 
-  function next(count: SampleWeightedParams<T>['count'] = 1): Sample<T> {
-    return sampleWeighted({
-      ...props,
-      count,
-      distribution,
-      state,
-      drop: 0,
-    })
-  }
-
-  return {
-    generated,
-    next,
-    state,
-  }
+  return { generated, state }
 }

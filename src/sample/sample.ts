@@ -1,52 +1,24 @@
-import type { Number, NumberParams } from '../number'
-import type { Sample, SampleParams, WeightedValue } from './Samples'
-import isStrictZero from '../utilities/isStrictZero'
-import length from '../utilities/length'
-import number from '../number'
+import type { NumberParams } from '../number'
+import type {
+  Sample,
+  SampleParams,
+  SamplePersistent,
+  WeightedValue,
+} from './Samples'
+import { expandedDistribution } from './Samples'
+import sampleUniform from './sampleUniform'
 import sampleWeighted from './sampleWeighted'
-
-type SampleUniform<T> = Pick<Sample<T>, 'generated' | 'state'>
-
-export function expandedDistribution<T>(
-  distribution: SampleParams<T>['distribution']
-): distribution is WeightedValue<T>[] {
-  const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
-    distribution[0]
-  )
-
-  return isStrictZero(length(distributionKeys))
-    ? false
-    : distributionKeys.every(
-        (key: string) => key === 'value' || key === 'weight'
-      )
-}
-
-function sampleUniform<T>({
-  distribution,
-  ...props
-}: SampleParams<T>): SampleUniform<T> {
-  const { state, generated: generatedNumber }: Number = number({
-      ...props,
-      discrete: true,
-      max: length(distribution),
-    }),
-    generated: T[] = generatedNumber.map(
-      (i: Number['generated'][number]): T => <T>distribution[i]
-    )
-
-  return { generated, state }
-}
 
 export default function sample<T>({
   distribution,
   ...props
-}: SampleParams<T>): Sample<T> {
-  let generated: Sample<T>['generated']
-  let state: Sample<T>['state']
+}: SampleParams<T>): SamplePersistent<T> {
+  let generated: SamplePersistent<T>['generated']
+  let state: SamplePersistent<T>['state']
 
   if (expandedDistribution(distribution)) {
     if (distribution.every(({ weight }: WeightedValue<T>) => weight === 1)) {
-      const { generated: prevGenerated, state: prevState }: SampleUniform<T> =
+      const { generated: prevGenerated, state: prevState }: Sample<T> =
         sampleUniform({
           ...props,
           distribution: distribution.map(
@@ -64,14 +36,14 @@ export default function sample<T>({
       state = prevState
     }
   } else {
-    const { generated: prevGenerated, state: prevState }: SampleUniform<T> =
-      sampleUniform({ ...props, distribution })
+    const { generated: prevGenerated, state: prevState }: Sample<T> =
+      sampleUniform({ ...props, distribution: <T[]>distribution })
 
     generated = prevGenerated
     state = prevState
   }
 
-  function next(count?: NumberParams['count']): Sample<T> {
+  function next(count?: NumberParams['count']): SamplePersistent<T> {
     return sample({ ...props, count, distribution, state, drop: 0 })
   }
 

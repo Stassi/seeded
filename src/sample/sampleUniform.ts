@@ -1,7 +1,6 @@
-import type { Number } from '../number'
 import type { Sample, SampleUniformParams } from './Samples'
 import length from '../utilities/length'
-import number from '../number'
+import number, { Number } from '../number'
 
 export default function sampleUniform<T>({
   distribution,
@@ -12,24 +11,9 @@ export default function sampleUniform<T>({
       discrete: true,
       max: length(distribution),
     }),
-    generated: Sample<T>['generated'] = generatedNumber.map(
-      (i: Number['generated'][number]): Sample<T>['generated'][number] =>
-        distribution[i]
+    generated: T[] = generatedNumber.map(
+      (i: Number['generated'][number]): T => distribution[i]
     )
 
-  function next(count: SampleUniformParams<T>['count'] = 1): Sample<T> {
-    return sampleUniform({
-      ...props,
-      count,
-      distribution,
-      state,
-      drop: 0,
-    })
-  }
-
-  return {
-    generated,
-    next,
-    state,
-  }
+  return { generated, state }
 }

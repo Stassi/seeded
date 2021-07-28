@@ -1,6 +1,6 @@
 {
   "name": "seeded",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "Seedable pseudorandom number generator (PRNG).",
   "keywords": [
     "arc4",
@@ -39,7 +39,7 @@
     "format:check": "prettier --check .",
     "format:write": "prettier --write .",
     "prepublishOnly": "npm run build",
-    "test": "jest && package-check"
+    "test": "jest && package-check && npm run format:check"
   },
   "devDependencies": {
     "@rollup/plugin-json": "^4.1.0",
@@ -47,7 +47,7 @@
     "@types/jest": "^26.0.24",
     "jest": "^27.0.5",
     "prettier": "2.3.2",
-    "rollup": "^2.54.0",
+    "rollup": "^2.55.0",
     "rollup-plugin-ts": "^1.4.0",
     "ts-jest": "^27.0.4",
     "typescript": "^4.3.4"
