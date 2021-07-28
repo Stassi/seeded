@@ -1,4 +1,6 @@
 import type { NumberParams } from '../number'
+import isStrictZero from '../utilities/isStrictZero'
+import length from '../utilities/length'
 
 export interface WeightedValue<T> {
   value: T
@@ -25,3 +27,17 @@ export interface Sample<T> {
 }
 
 export type SampleUniform<T> = Pick<Sample<T>, 'generated' | 'state'>
+
+export function expandedDistribution<T>(
+  distribution: SampleParams<T>['distribution']
+): distribution is WeightedValue<T>[] {
+  const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
+    distribution[0]
+  )
+
+  return isStrictZero(length(distributionKeys))
+    ? false
+    : distributionKeys.every(
+        (key: string) => key === 'value' || key === 'weight'
+      )
+}
