@@ -1,4 +1,5 @@
 import type { NumberParams } from '../number'
+import head from '../utilities/head'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
 import { sampleWeightUnderflowErrorMessage } from '../data'
@@ -45,7 +46,7 @@ export function isExpandedDistributionSyntax<T>(
   distribution: SampleParams<T>['distribution']
 ): distribution is WeightedValues<T> {
   const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
-    distribution[0]
+    head(<Values<T>>distribution)
   )
 
   return isStrictZero(length(distributionKeys))
