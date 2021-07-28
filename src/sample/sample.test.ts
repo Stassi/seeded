@@ -1,11 +1,22 @@
-import type { Sample, SampleWeightedParams } from './Samples'
+import type { Sample, SampleParams } from './Samples'
 import delayTen from '../utilities/delayTen'
+import { expandedDistribution } from './sample'
 import { negate } from '../arithmetic'
-import { sampleWeighted } from '../index'
+import { sample } from '../index'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 
-describe('sample (weighted)', () => {
+describe('sample', () => {
+  const expectedUniform = [
+    [true, 0, true, true, 'a'],
+    [true, 0, 'a', 'a', 'a'],
+  ]
+
   describe.each([
+    {
+      distribution: [0, 'a', true],
+      expected: expectedUniform,
+      name: 'uniform',
+    },
     {
       distribution: [
         {
@@ -21,11 +32,8 @@ describe('sample (weighted)', () => {
           weight: 1,
         },
       ],
-      expected: [
-        [0, true, 0, 'a', 'a'],
-        ['a', 'a', 'a', 'a', 0],
-      ],
-      name: 'uniform',
+      expected: expectedUniform,
+      name: 'uniform (expanded syntax)',
     },
     {
       distribution: [
@@ -46,7 +54,7 @@ describe('sample (weighted)', () => {
         [true, 'a', true, true, 0],
         [0, 0, true, true, true],
       ],
-      name: 'weighted',
+      name: 'weighted (expanded syntax)',
     },
   ])(
     'distribution: $name',
@@ -54,18 +62,18 @@ describe('sample (weighted)', () => {
       distribution,
       expected: [expected, secondExpected],
     }: {
-      distribution: SampleWeightedParams<Value>['distribution']
+      distribution: SampleParams<Value>['distribution']
       expected: Sample<Value>['generated'][]
       name: string
     }) => {
       describe('deterministic', () => {
         type Expected = Value[][number]
         type ExpectedSample = Sample<Expected>
-        type ExpectedSampleParams = SampleWeightedParams<Expected>
+        type ExpectedSampleParams = SampleParams<Expected>
 
         const count: ExpectedSampleParams['count'] = 5,
           seed: ExpectedSampleParams['seed'] = 'hello world',
-          { generated, next }: ExpectedSample = sampleWeighted({
+          { generated, next }: ExpectedSample = sample({
             count,
             distribution,
             seed,
@@ -85,7 +93,7 @@ describe('sample (weighted)', () => {
         })
 
         describe('composite call', () => {
-          const { generated }: ExpectedSample = sampleWeighted({
+          const { generated }: ExpectedSample = sample({
               distribution,
               seed,
               count: count * 2,
@@ -98,12 +106,12 @@ describe('sample (weighted)', () => {
         })
 
         describe('state loading', () => {
-          const { state }: ExpectedSample = sampleWeighted({
+          const { state }: ExpectedSample = sample({
               count,
               distribution,
               seed,
             }),
-            { generated }: ExpectedSample = sampleWeighted({
+            { generated }: ExpectedSample = sample({
               count,
               distribution,
               seed,
@@ -118,20 +126,21 @@ describe('sample (weighted)', () => {
       })
 
       describe('stochastic', () => {
-        const values: Value[] = distribution.map(
-            ({ value }: { value: Value }): Value => value
-          ),
-          stochasticPair = async (): Promise<[Value, Value]> => {
-            const generateOne = (): Value =>
-                sampleWeighted({ distribution }).generated[0],
-              x: Value = generateOne()
-            await delayTen()
-            const y: Value = generateOne()
-            return [x, y]
-          }
+        const stochasticPair = async (): Promise<[Value, Value]> => {
+          const generateOne = (): Value =>
+              sample({ distribution }).generated[0],
+            x: Value = generateOne()
+          await delayTen()
+          const y: Value = generateOne()
+          return [x, y]
+        }
 
         it('should return values within a specified sample distribution', async () => {
-          expect(values).toEqual(expect.arrayContaining(await stochasticPair()))
+          expect(
+            expandedDistribution(distribution)
+              ? distribution.map(({ value }: { value: Value }): Value => value)
+              : distribution
+          ).toEqual(expect.arrayContaining(await stochasticPair()))
         })
       })
     }
@@ -140,9 +149,7 @@ describe('sample (weighted)', () => {
   describe('weight underflow errors', () => {
     describe.each(
       [0, negate(1)].map(
-        (
-          weight: SampleWeightedParams<any>['distribution'][number]['weight']
-        ) => ({
+        (weight: SampleParams<any>['distribution'][number]['weight']) => ({
           distribution: [{ weight, value: undefined }],
           expected: sampleWeightUnderflowErrorMessage,
         })
@@ -153,11 +160,11 @@ describe('sample (weighted)', () => {
         distribution,
         expected,
       }: {
-        distribution: SampleWeightedParams<Value>['distribution']
+        distribution: SampleParams<Value>['distribution']
         expected: string
       }) => {
         it('should throw a weight underflow error', () => {
-          expect(() => sampleWeighted({ distribution })).toThrow(expected)
+          expect(() => sample({ distribution })).toThrow(expected)
         })
       }
     )

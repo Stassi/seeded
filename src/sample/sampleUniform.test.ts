@@ -1,8 +1,5 @@
-import type { SampleUniform, SampleUniformParams } from './Samples'
+import type { Sample, SampleUniformParams } from './Samples'
 import delayTen from '../utilities/delayTen'
-import identityPermutation from '../utilities/identityPermutation'
-import { increment } from '../arithmetic'
-import { poolWidth } from '../data'
 import sampleUniform from './sampleUniform'
 
 describe('sample (uniform)', () => {
@@ -16,7 +13,7 @@ describe('sample (uniform)', () => {
 
   describe('deterministic', () => {
     type Expected = Value[][number]
-    type ExpectedSample = SampleUniform<Expected>
+    type ExpectedSample = Sample<Expected>
     type ExpectedSampleParams = SampleUniformParams<Expected>
 
     const count: ExpectedSampleParams['count'] = 5,
@@ -87,18 +84,6 @@ describe('sample (uniform)', () => {
       expect(distribution).toEqual(
         expect.arrayContaining(await stochasticPair())
       )
-    })
-  })
-
-  describe('weight overflow errors', () => {
-    describe(`${increment(poolWidth)}-length distribution`, () => {
-      it('should throw a (temporary) weight overflow error', () => {
-        expect(() =>
-          sampleUniform({
-            distribution: identityPermutation(increment(poolWidth)),
-          })
-        ).toThrow(`total weight must not exceed ${poolWidth}`)
-      })
     })
   })
 })

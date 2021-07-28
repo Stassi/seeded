@@ -1,30 +1,23 @@
 import type { Number } from '../number'
-import type { SampleUniform, SampleUniformParams } from './Samples'
+import type { Sample, SampleUniformParams } from './Samples'
 import length from '../utilities/length'
 import number from '../number'
-import { poolWidth } from '../data'
 
 export default function sampleUniform<T>({
   distribution,
   ...props
-}: SampleUniformParams<T>): SampleUniform<T> {
-  const totalWeight: number = length(distribution),
-    weightOverflow: boolean = totalWeight > poolWidth,
-    weightOverflowErrorMessage: string = `total weight must not exceed ${poolWidth}`
-
-  if (weightOverflow) throw new RangeError(weightOverflowErrorMessage)
-
+}: SampleUniformParams<T>): Sample<T> {
   const { state, generated: generatedNumber }: Number = number({
       ...props,
       discrete: true,
-      max: totalWeight,
+      max: length(distribution),
     }),
-    generated: SampleUniform<T>['generated'] = generatedNumber.map(
-      (i: Number['generated'][number]): SampleUniform<T>['generated'][number] =>
+    generated: Sample<T>['generated'] = generatedNumber.map(
+      (i: Number['generated'][number]): Sample<T>['generated'][number] =>
         distribution[i]
     )
 
-  function next(count: SampleUniformParams<T>['count'] = 1): SampleUniform<T> {
+  function next(count: SampleUniformParams<T>['count'] = 1): Sample<T> {
     return sampleUniform({
       ...props,
       count,

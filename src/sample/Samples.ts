@@ -1,20 +1,25 @@
-import { NumberParams } from '../number'
+import type { NumberParams } from '../number'
+
+export interface WeightedValue<T> {
+  value: T
+  weight: number
+}
 
 export interface SampleWeightedParams<T> extends Partial<NumberParams> {
-  distribution: {
-    value: T
-    weight: number
-  }[]
+  distribution: WeightedValue<T>[]
 }
 
 export interface SampleUniformParams<T> extends Partial<NumberParams> {
   distribution: T[]
 }
 
-export interface SampleWeighted<T> {
-  generated: T[]
-  next: (count?: NumberParams['count']) => SampleWeighted<T>
-  state: NumberParams['state']
+export interface SampleParams<T>
+  extends Pick<NumberParams, 'count' | 'drop' | 'seed' | 'state'> {
+  distribution: (T | WeightedValue<T>)[]
 }
 
-export interface SampleUniform<T> extends SampleWeighted<T> {}
+export interface Sample<T> {
+  generated: T[]
+  next: (count?: NumberParams['count']) => Sample<T>
+  state: NumberParams['state']
+}
