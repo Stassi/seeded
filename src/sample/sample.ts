@@ -29,10 +29,8 @@ export default function sample<T>({
       generated = prevGenerated
       state = prevState
     } else {
-      const {
-        generated: prevGenerated,
-        state: prevState,
-      }: SamplePersistent<T> = sampleWeighted({ ...props, distribution })
+      const { generated: prevGenerated, state: prevState }: Sample<T> =
+        sampleWeighted({ ...props, distribution })
 
       generated = prevGenerated
       state = prevState

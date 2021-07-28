@@ -1,6 +1,6 @@
 import type { DivideByCallback } from '../arithmetic'
 import type { Number } from '../number'
-import type { SamplePersistent, SampleWeightedParams } from './Samples'
+import type { Sample, SampleWeightedParams } from './Samples'
 import isStrictZero from '../utilities/isStrictZero'
 import number from '../number'
 import { sampleWeightUnderflowErrorMessage } from '../data'
@@ -18,7 +18,7 @@ function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
 export default function sampleWeighted<T>({
   distribution,
   ...props
-}: SampleWeightedParams<T>): SamplePersistent<T> {
+}: SampleWeightedParams<T>): Sample<T> {
   throwIfRangeUnderflowError(distribution)
 
   const divideByTotalWeight: DivideByCallback = divideBy(
@@ -38,7 +38,7 @@ export default function sampleWeighted<T>({
       ...props,
       discrete: false,
     }),
-    generated: SamplePersistent<T>['generated'] = generatedIntervals.map(
+    generated: Sample<T>['generated'] = generatedIntervals.map(
       (generatedInterval: number): WeightedValue<T>['value'] => {
         let selected: WeightedValue<T>['value'] | undefined,
           isValueSelected: boolean = false,
@@ -60,21 +60,5 @@ export default function sampleWeighted<T>({
       }
     )
 
-  function next(
-    count: SampleWeightedParams<T>['count'] = 1
-  ): SamplePersistent<T> {
-    return sampleWeighted({
-      ...props,
-      count,
-      distribution,
-      state,
-      drop: 0,
-    })
-  }
-
-  return {
-    generated,
-    next,
-    state,
-  }
+  return { generated, state }
 }
