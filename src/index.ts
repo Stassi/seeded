@@ -1,5 +1,5 @@
 import number from './number'
-import { sampleUniform, sampleWeighted } from './sample'
+import sample, { sampleUniform, sampleWeighted } from './sample'
 
-export { number, sampleUniform, sampleWeighted }
+export { number, sample, sampleUniform, sampleWeighted }
 export default number
