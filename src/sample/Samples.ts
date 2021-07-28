@@ -16,12 +16,12 @@ type SampleNumberParams = Pick<
   'count' | 'drop' | 'seed' | 'state'
 >
 
-export interface SampleWeightedParams<T> extends SampleNumberParams {
-  distribution: WeightedValues<T>
-}
-
 export interface SampleUniformParams<T> extends SampleNumberParams {
   distribution: Values<T>
+}
+
+export interface SampleWeightedParams<T> extends SampleNumberParams {
+  distribution: WeightedValues<T>
 }
 
 export interface SampleParams<T> extends SampleNumberParams {
