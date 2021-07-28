@@ -29,7 +29,7 @@ export default function sampleWeighted<T>({
   const divideByTotalWeight: DivideByCallback = divideBy(
       sum(...distribution.map(({ weight }: WeightedValue<T>): Weight => weight))
     ),
-    weightedValues: SampleWeightedParams<T>['distribution'] = distribution.sort(
+    weightedValues: WeightedValues<T> = distribution.sort(
       (
         { weight: prevWeight }: WeightedValue<T>,
         { weight }: WeightedValue<T>
