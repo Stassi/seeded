@@ -5,24 +5,9 @@ import type {
   SampleUniform,
   WeightedValue,
 } from './Samples'
-import isStrictZero from '../utilities/isStrictZero'
-import length from '../utilities/length'
+import { expandedDistribution } from './Samples'
 import sampleUniform from './sampleUniform'
 import sampleWeighted from './sampleWeighted'
-
-export function expandedDistribution<T>(
-  distribution: SampleParams<T>['distribution']
-): distribution is WeightedValue<T>[] {
-  const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
-    distribution[0]
-  )
-
-  return isStrictZero(length(distributionKeys))
-    ? false
-    : distributionKeys.every(
-        (key: string) => key === 'value' || key === 'weight'
-      )
-}
 
 export default function sample<T>({
   distribution,
