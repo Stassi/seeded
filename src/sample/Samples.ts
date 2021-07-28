@@ -23,3 +23,5 @@ export interface Sample<T> {
   next: (count?: NumberParams['count']) => Sample<T>
   state: NumberParams['state']
 }
+
+export type SampleUniform<T> = Pick<Sample<T>, 'generated' | 'state'>
