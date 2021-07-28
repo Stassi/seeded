@@ -1,11 +1,11 @@
-import type { SampleUniform, SampleUniformParams } from './Samples'
+import type { Sample, SampleUniformParams } from './Samples'
 import length from '../utilities/length'
 import number, { Number } from '../number'
 
 export default function sampleUniform<T>({
   distribution,
   ...props
-}: SampleUniformParams<T>): SampleUniform<T> {
+}: SampleUniformParams<T>): Sample<T> {
   const { state, generated: generatedNumber }: Number = number({
       ...props,
       discrete: true,

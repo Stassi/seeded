@@ -1,4 +1,4 @@
-import type { Sample, SampleParams } from './Samples'
+import type { SampleParams, SamplePersistent } from './Samples'
 import delayTen from '../utilities/delayTen'
 import { expandedDistribution } from './Samples'
 import { negate } from '../arithmetic'
@@ -63,12 +63,12 @@ describe('sample', () => {
       expected: [expected, secondExpected],
     }: {
       distribution: SampleParams<Value>['distribution']
-      expected: Sample<Value>['generated'][]
+      expected: SamplePersistent<Value>['generated'][]
       name: string
     }) => {
       describe('deterministic', () => {
         type Expected = Value[][number]
-        type ExpectedSample = Sample<Expected>
+        type ExpectedSample = SamplePersistent<Expected>
         type ExpectedSampleParams = SampleParams<Expected>
 
         const count: ExpectedSampleParams['count'] = 5,

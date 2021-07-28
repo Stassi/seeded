@@ -2,7 +2,7 @@ import type { NumberParams } from '../number'
 import type {
   Sample,
   SampleParams,
-  SampleUniform,
+  SamplePersistent,
   WeightedValue,
 } from './Samples'
 import { expandedDistribution } from './Samples'
@@ -12,13 +12,13 @@ import sampleWeighted from './sampleWeighted'
 export default function sample<T>({
   distribution,
   ...props
-}: SampleParams<T>): Sample<T> {
-  let generated: Sample<T>['generated']
-  let state: Sample<T>['state']
+}: SampleParams<T>): SamplePersistent<T> {
+  let generated: SamplePersistent<T>['generated']
+  let state: SamplePersistent<T>['state']
 
   if (expandedDistribution(distribution)) {
     if (distribution.every(({ weight }: WeightedValue<T>) => weight === 1)) {
-      const { generated: prevGenerated, state: prevState }: SampleUniform<T> =
+      const { generated: prevGenerated, state: prevState }: Sample<T> =
         sampleUniform({
           ...props,
           distribution: distribution.map(
@@ -29,21 +29,23 @@ export default function sample<T>({
       generated = prevGenerated
       state = prevState
     } else {
-      const { generated: prevGenerated, state: prevState }: Sample<T> =
-        sampleWeighted({ ...props, distribution })
+      const {
+        generated: prevGenerated,
+        state: prevState,
+      }: SamplePersistent<T> = sampleWeighted({ ...props, distribution })
 
       generated = prevGenerated
       state = prevState
     }
   } else {
-    const { generated: prevGenerated, state: prevState }: SampleUniform<T> =
+    const { generated: prevGenerated, state: prevState }: Sample<T> =
       sampleUniform({ ...props, distribution: <T[]>distribution })
 
     generated = prevGenerated
     state = prevState
   }
 
-  function next(count?: NumberParams['count']): Sample<T> {
+  function next(count?: NumberParams['count']): SamplePersistent<T> {
     return sample({ ...props, count, distribution, state, drop: 0 })
   }
 

@@ -22,11 +22,12 @@ export interface SampleParams<T>
 
 export interface Sample<T> {
   generated: T[]
-  next: (count?: NumberParams['count']) => Sample<T>
   state: NumberParams['state']
 }
 
-export type SampleUniform<T> = Pick<Sample<T>, 'generated' | 'state'>
+export interface SamplePersistent<T> extends Sample<T> {
+  next: (count?: NumberParams['count']) => SamplePersistent<T>
+}
 
 export function expandedDistribution<T>(
   distribution: SampleParams<T>['distribution']
