@@ -1,6 +1,7 @@
 import type { NumberParams } from '../number'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
+import { sampleWeightUnderflowErrorMessage } from '../data'
 
 export type Value<T> = T
 type Values<T> = Value<T>[]
@@ -52,4 +53,11 @@ export function isExpandedDistributionSyntax<T>(
     : distributionKeys.every(
         (key: string) => key === 'value' || key === 'weight'
       )
+}
+
+export function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
+  if (
+    distribution.some(({ weight }: WeightedValue<T>): boolean => !(weight > 0))
+  )
+    throw new RangeError(sampleWeightUnderflowErrorMessage)
 }
