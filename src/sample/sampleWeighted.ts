@@ -9,15 +9,8 @@ import type {
   WeightedValues,
 } from './Samples'
 import number from '../number'
-import { sampleWeightUnderflowErrorMessage } from '../data'
+import { throwIfRangeUnderflowError } from './Samples'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
-
-function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
-  if (
-    distribution.some(({ weight }: WeightedValue<T>): boolean => !(weight > 0))
-  )
-    throw new RangeError(sampleWeightUnderflowErrorMessage)
-}
 
 export default function sampleWeighted<T>({
   distribution,
