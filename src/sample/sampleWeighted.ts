@@ -1,19 +1,16 @@
 import type { DivideByCallback } from '../arithmetic'
 import type { Number } from '../number'
-import type { Sample, SampleWeightedParams } from './Samples'
-import isStrictZero from '../utilities/isStrictZero'
+import type {
+  Sample,
+  SampleWeightedParams,
+  Value,
+  Weight,
+  WeightedValue,
+  WeightedValues,
+} from './Samples'
 import number from '../number'
-import { sampleWeightUnderflowErrorMessage } from '../data'
+import { throwIfRangeUnderflowError } from './Samples'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
-
-type WeightedValue<T> = SampleWeightedParams<T>['distribution'][number]
-
-function throwIfRangeUnderflowError<T>(distribution: WeightedValue<T>[]) {
-  distribution.forEach(({ weight }: WeightedValue<T>): void => {
-    if (isStrictZero(weight) || weight < 0)
-      throw new RangeError(sampleWeightUnderflowErrorMessage)
-  })
-}
 
 export default function sampleWeighted<T>({
   distribution,
@@ -22,43 +19,39 @@ export default function sampleWeighted<T>({
   throwIfRangeUnderflowError(distribution)
 
   const divideByTotalWeight: DivideByCallback = divideBy(
-      sum(
-        ...distribution.map(
-          ({ weight }: WeightedValue<T>): WeightedValue<T>['weight'] => weight
-        )
-      )
+      sum(...distribution.map(({ weight }: WeightedValue<T>): Weight => weight))
     ),
-    weightedValues: SampleWeightedParams<T>['distribution'] = distribution.sort(
+    weightedValues: WeightedValues<T> = distribution.sort(
       (
         { weight: prevWeight }: WeightedValue<T>,
         { weight }: WeightedValue<T>
-      ): WeightedValue<T>['weight'] => add(weight, negate(prevWeight))
+      ): Weight => add(weight, negate(prevWeight))
     ),
-    { state, generated: generatedIntervals }: Number = number({
+    { generated, state }: Number = number({
       ...props,
       discrete: false,
-    }),
-    generated: Sample<T>['generated'] = generatedIntervals.map(
-      (generatedInterval: number): WeightedValue<T>['value'] => {
-        let selected: WeightedValue<T>['value'] | undefined,
-          isValueSelected: boolean = false,
-          cumulativeWeight: WeightedValue<T>['weight'] = 0,
-          i: number = 0
+    })
 
-        while (!isValueSelected) {
-          const { value, weight }: WeightedValue<T> = weightedValues[i]
+  return {
+    state,
+    generated: generated.map((generatedInterval: number): Value<T> => {
+      let selected: Value<T> | undefined,
+        isValueSelected: boolean = false,
+        cumulativeWeight: Weight = 0,
+        i: number = 0
 
-          cumulativeWeight = add(cumulativeWeight, weight)
+      while (!isValueSelected) {
+        const { value, weight }: WeightedValue<T> = weightedValues[i]
 
-          if (generatedInterval < divideByTotalWeight(cumulativeWeight)) {
-            selected = value
-            isValueSelected = true
-          } else i = increment(i)
-        }
+        cumulativeWeight = add(cumulativeWeight, weight)
 
-        return <WeightedValue<T>['value']>selected
+        if (generatedInterval < divideByTotalWeight(cumulativeWeight)) {
+          selected = value
+          isValueSelected = true
+        } else i = increment(i)
       }
-    )
 
-  return { generated, state }
+      return <Value<T>>selected
+    }),
+  }
 }

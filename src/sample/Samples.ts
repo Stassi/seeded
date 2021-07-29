@@ -1,23 +1,36 @@
 import type { NumberParams } from '../number'
+import head from '../utilities/head'
 import isStrictZero from '../utilities/isStrictZero'
 import length from '../utilities/length'
+import { sampleWeightUnderflowErrorMessage } from '../data'
+
+export type Value<T> = T
+type Values<T> = Value<T>[]
+
+export type Weight = number
 
 export interface WeightedValue<T> {
-  value: T
-  weight: number
+  value: Value<T>
+  weight: Weight
 }
 
-export interface SampleWeightedParams<T> extends Partial<NumberParams> {
-  distribution: WeightedValue<T>[]
+export type WeightedValues<T> = WeightedValue<T>[]
+
+type SampleNumberParams = Pick<
+  NumberParams,
+  'count' | 'drop' | 'seed' | 'state'
+>
+
+export interface SampleUniformParams<T> extends SampleNumberParams {
+  distribution: Values<T>
 }
 
-export interface SampleUniformParams<T> extends Partial<NumberParams> {
-  distribution: T[]
+export interface SampleWeightedParams<T> extends SampleNumberParams {
+  distribution: WeightedValues<T>
 }
 
-export interface SampleParams<T>
-  extends Pick<NumberParams, 'count' | 'drop' | 'seed' | 'state'> {
-  distribution: (T | WeightedValue<T>)[]
+export interface SampleParams<T> extends SampleNumberParams {
+  distribution: Values<T> | WeightedValues<T>
 }
 
 export interface Sample<T> {
@@ -29,16 +42,23 @@ export interface SamplePersistent<T> extends Sample<T> {
   next: (count?: NumberParams['count']) => SamplePersistent<T>
 }
 
-export function expandedDistribution<T>(
+export function isExpandedDistributionSyntax<T>(
   distribution: SampleParams<T>['distribution']
-): distribution is WeightedValue<T>[] {
+): distribution is WeightedValues<T> {
   const distributionKeys: ReturnType<typeof Object.keys> = Object.keys(
-    distribution[0]
+    head(<Values<T>>distribution)
   )
 
   return isStrictZero(length(distributionKeys))
     ? false
     : distributionKeys.every(
-        (key: string) => key === 'value' || key === 'weight'
+        (key: string): boolean => key === 'value' || key === 'weight'
       )
+}
+
+export function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
+  if (
+    distribution.some(({ weight }: WeightedValue<T>): boolean => !(weight > 0))
+  )
+    throw new RangeError(sampleWeightUnderflowErrorMessage)
 }
