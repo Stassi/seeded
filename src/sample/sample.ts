@@ -6,6 +6,7 @@ import type {
   WeightedValue,
 } from './Samples'
 import { isExpandedDistributionSyntax } from './Samples'
+import { isStrictOne } from '../utilities/isStrict'
 import sampleUniform from './sampleUniform'
 import sampleWeighted from './sampleWeighted'
 
@@ -17,7 +18,9 @@ export default function sample<T>({
   let state: SamplePersistent<T>['state']
 
   if (isExpandedDistributionSyntax(distribution)) {
-    if (distribution.every(({ weight }: WeightedValue<T>) => weight === 1)) {
+    if (
+      distribution.every(({ weight }: WeightedValue<T>) => isStrictOne(weight))
+    ) {
       const { generated: prevGenerated, state: prevState }: Sample<T> =
         sampleUniform({
           ...props,
