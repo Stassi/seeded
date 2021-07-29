@@ -1,5 +1,5 @@
 import type { Number } from '../number'
-import type { Sample, SampleUniformParams } from './Samples'
+import type { Sample, SampleUniformParams, Value } from './Samples'
 import length from '../utilities/length'
 import number from '../number'
 
@@ -7,14 +7,16 @@ export default function sampleUniform<T>({
   distribution,
   ...props
 }: SampleUniformParams<T>): Sample<T> {
-  const { state, generated: generatedNumber }: Number = number({
-      ...props,
-      discrete: true,
-      max: length(distribution),
-    }),
-    generated: T[] = generatedNumber.map(
-      (i: Number['generated'][number]): T => distribution[i]
-    )
+  const { generated, state }: Number = number({
+    ...props,
+    discrete: true,
+    max: length(distribution),
+  })
 
-  return { generated, state }
+  return {
+    state,
+    generated: generated.map(
+      (i: Number['generated'][number]): Value<T> => distribution[i]
+    ),
+  }
 }
