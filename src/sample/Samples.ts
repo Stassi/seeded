@@ -1,8 +1,8 @@
 import type { NumberParams } from '../number'
 import head from '../utilities/head'
-import { isStrictZero } from '../utilities/isStrict'
 import length from '../utilities/length'
 import { sampleWeightUnderflowErrorMessage } from '../data'
+import { strictlyEqualsZero } from '../utilities/strictlyEquals'
 
 export type Value<T> = T
 type Values<T> = Value<T>[]
@@ -49,7 +49,7 @@ export function isExpandedDistributionSyntax<T>(
     head(<Values<T>>distribution)
   )
 
-  return isStrictZero(length(distributionKeys))
+  return strictlyEqualsZero(length(distributionKeys))
     ? false
     : distributionKeys.every(
         (key: string): boolean => key === 'value' || key === 'weight'

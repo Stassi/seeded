@@ -1,8 +1,8 @@
 import type { IntegerOrInterval } from './Numbers'
 import type { Cipher, CipherParams } from '../cipher'
-import { isStrictZero } from '../utilities/isStrict'
 import length from '../utilities/length'
 import octet from './octet'
+import { strictlyEqualsZero } from '../utilities/strictlyEquals'
 import { add, multiply, negate } from '../arithmetic'
 import { intervalRangeUnderflowErrorMessage, poolWidth } from '../data'
 import octetToInterval, {
@@ -23,7 +23,7 @@ export function intervalCipher({
     const { generated: generatedOctet, state: octetState }: Cipher = octet({
         state,
         count: octetsNeededForMaxSafeBinary,
-        drop: isStrictZero(length(generated)) ? drop : 0,
+        drop: strictlyEqualsZero(length(generated)) ? drop : 0,
         max: poolWidth,
         min: 0,
       }),
