@@ -2,6 +2,7 @@ import type { Callback } from '../utilities/Callback'
 import type { NumberParams } from '../number'
 import head from '../utilities/head'
 import length from '../utilities/length'
+import not from '../utilities/not'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 import strictlyEquals, { strictlyEqualsZero } from '../utilities/strictlyEquals'
 
@@ -62,7 +63,9 @@ export function isExpandedDistributionSyntax<T>(
 
 export function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
   if (
-    distribution.some(({ weight }: WeightedValue<T>): boolean => !(weight > 0))
+    distribution.some(({ weight }: WeightedValue<T>): boolean =>
+      not(weight > 0)
+    )
   )
     throw new RangeError(sampleWeightUnderflowErrorMessage)
 }

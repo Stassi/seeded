@@ -8,6 +8,7 @@ import type {
   WeightedValue,
   WeightedValues,
 } from './Samples'
+import not from '../utilities/not'
 import number from '../number'
 import { throwIfRangeUnderflowError } from './Samples'
 import { add, divideBy, increment, negate, sum } from '../arithmetic'
@@ -40,7 +41,7 @@ export default function sampleWeighted<T>({
         cumulativeWeight: Weight = 0,
         i: number = 0
 
-      while (!isValueSelected) {
+      while (not(isValueSelected)) {
         const { value, weight }: WeightedValue<T> = weightedValues[i]
 
         cumulativeWeight = add(cumulativeWeight, weight)
