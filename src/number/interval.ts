@@ -1,6 +1,6 @@
 import type { IntegerOrInterval } from './Numbers'
 import type { Cipher, CipherParams } from '../cipher'
-import isStrictZero from '../utilities/isStrictZero'
+import { isStrictZero } from '../utilities/isStrict'
 import length from '../utilities/length'
 import octet from './octet'
 import { add, multiply, negate } from '../arithmetic'

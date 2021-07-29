@@ -1,6 +1,6 @@
 import type { NumberParams } from '../number'
 import head from '../utilities/head'
-import isStrictZero from '../utilities/isStrictZero'
+import { isStrictZero } from '../utilities/isStrict'
 import length from '../utilities/length'
 import { sampleWeightUnderflowErrorMessage } from '../data'
 
