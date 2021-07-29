@@ -1,8 +1,9 @@
+import type { Callback } from '../utilities/Callback'
 import type { NumberParams } from '../number'
 import head from '../utilities/head'
 import length from '../utilities/length'
 import { sampleWeightUnderflowErrorMessage } from '../data'
-import { strictlyEqualsZero } from '../utilities/strictlyEquals'
+import strictlyEquals, { strictlyEqualsZero } from '../utilities/strictlyEquals'
 
 export type Value<T> = T
 type Values<T> = Value<T>[]
@@ -51,9 +52,12 @@ export function isExpandedDistributionSyntax<T>(
 
   return strictlyEqualsZero(length(distributionKeys))
     ? false
-    : distributionKeys.every(
-        (key: string): boolean => key === 'value' || key === 'weight'
-      )
+    : distributionKeys.every((key: string): boolean => {
+        const strictlyEqualsKey: Callback<typeof key, boolean> =
+          strictlyEquals(key)
+
+        return strictlyEqualsKey('value') || strictlyEqualsKey('weight')
+      })
 }
 
 export function throwIfRangeUnderflowError<T>(distribution: WeightedValues<T>) {
