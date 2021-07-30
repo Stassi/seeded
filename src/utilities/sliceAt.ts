@@ -1,7 +1,6 @@
-type ArrayOrString = any[] | string
+type StringOrArray<T> = string | T[]
 
-export type SliceAtCallback = (x: ArrayOrString) => any
-
-export default function sliceAt(n: number): SliceAtCallback {
-  return (x: ArrayOrString) => x.slice(n)
+export default function sliceAt(n: number) {
+  return <T>(sliceable: StringOrArray<T>): StringOrArray<T> =>
+    sliceable.slice(n)
 }

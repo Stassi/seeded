@@ -8,6 +8,7 @@ import type {
 import { isExpandedDistributionSyntax } from './Samples'
 import sampleUniform from './sampleUniform'
 import sampleWeighted from './sampleWeighted'
+import { strictlyEqualsOne } from '../utilities/strictlyEquals'
 
 export default function sample<T>({
   distribution,
@@ -17,7 +18,11 @@ export default function sample<T>({
   let state: SamplePersistent<T>['state']
 
   if (isExpandedDistributionSyntax(distribution)) {
-    if (distribution.every(({ weight }: WeightedValue<T>) => weight === 1)) {
+    if (
+      distribution.every(({ weight }: WeightedValue<T>) =>
+        strictlyEqualsOne(weight)
+      )
+    ) {
       const { generated: prevGenerated, state: prevState }: Sample<T> =
         sampleUniform({
           ...props,

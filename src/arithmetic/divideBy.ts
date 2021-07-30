@@ -1,5 +1,5 @@
-export type DivideByCallback = (numerator: number) => number
+import type { N, NumberCallback } from '../utilities/numbers'
 
-export default function divideBy(denominator: number): DivideByCallback {
-  return (numerator: number) => numerator / denominator
+export default function divideBy(denominator: N): NumberCallback {
+  return (numerator: N): N => numerator / denominator
 }

@@ -1,12 +1,19 @@
-import type { SliceAtCallback } from '../utilities/sliceAt'
-import type { AddToCallback, RemainderCallback } from '../arithmetic'
-import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
+import type {
+  N,
+  Ns,
+  NumberCallback,
+  NumbersCallback,
+} from '../utilities/numbers'
 import ceiling from '../utilities/ceiling'
 import length from '../utilities/length'
 import { poolWidth } from '../data'
 import sliceAt from '../utilities/sliceAt'
 import { add, addTo, increment, negate, remainder } from '../arithmetic'
 import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
+
+type Pool = ReturnType<typeof poolModule>
+type RoundKey = ReturnType<typeof roundKeyModule>
 
 export default function octet({
   count,
@@ -15,19 +22,19 @@ export default function octet({
   min: prevMin,
   state: { i: prevI, roundKey: prevRoundKeyState, pool: prevPoolState },
 }: CipherParams): Cipher {
-  const toGenerate: number = add(count, drop),
-    max: number = ceiling(prevMax),
-    min: number = ceiling(prevMin),
-    dropInitial: SliceAtCallback = sliceAt(drop),
+  const max: N = ceiling(prevMax),
+    min: N = ceiling(prevMin),
+    toGenerate: N = add(count, drop),
     prevPool: Pool = poolModule(prevPoolState),
-    addToMin: AddToCallback = addTo(min),
-    remainderRangeDiff: RemainderCallback = remainder(add(max, negate(min))),
-    remainderPoolWidth: RemainderCallback = remainder(poolWidth)
+    dropInitial = <NumbersCallback>sliceAt(drop),
+    addToMin: NumberCallback = addTo(min),
+    remainderPoolWidth: NumberCallback = remainder(poolWidth),
+    remainderRangeDiff: NumberCallback = remainder(add(max, negate(min)))
 
-  let i: number = prevI,
+  let i: N = prevI,
+    innerGenerated: Ns = [],
     roundKey: RoundKey = roundKeyModule(prevRoundKeyState),
-    pool: Pool = prevPool.create(prevPool.state),
-    innerGenerated: Cipher['generated'] = []
+    pool: Pool = prevPool.create(prevPool.state)
 
   while (length(innerGenerated) < toGenerate) {
     i = remainderPoolWidth(increment(i))
@@ -47,12 +54,12 @@ export default function octet({
     ]
   }
 
-  const generated: Cipher['generated'] = dropInitial(innerGenerated),
-    state: Cipher['state'] = {
+  return {
+    generated: dropInitial(innerGenerated),
+    state: {
       i,
       pool: pool.state,
       roundKey: roundKey.state,
-    }
-
-  return { generated, state }
+    },
+  }
 }

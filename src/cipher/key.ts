@@ -1,18 +1,22 @@
-import type { Key } from './Ciphers'
-import type { RemainderCallback } from '../arithmetic'
+import type { AtIndexProperty } from '../utilities/atIndex'
+import type { N, NumberCallback } from '../utilities/numbers'
+import type { S as Seed } from '../utilities/strings'
 import atIndexUtil from '../utilities/atIndex'
 import length from '../utilities/length'
 import { remainder } from '../arithmetic'
 import toCharCodes from '../utilities/toCharCodes'
 
-export default function key(seedParam: string): Key {
-  const seed: number[] = toCharCodes(seedParam),
-    atOverflowableIndex: Key['atIndex'] = atIndexUtil(seed),
-    remainderLength: RemainderCallback = remainder(length(seed))
+type CharacterCodes = ReturnType<typeof toCharCodes>
+interface Key extends AtIndexProperty<N> {}
 
-  function atIndex(n: number): number {
-    return atOverflowableIndex(remainderLength(n))
+export default function key(seedParam: Seed): Key {
+  const seed: CharacterCodes = toCharCodes(seedParam),
+    atOverflowableIndex: NumberCallback = atIndexUtil(seed),
+    remainderLength: NumberCallback = remainder(length(seed))
+
+  return {
+    atIndex(n: N): N {
+      return atOverflowableIndex(remainderLength(n))
+    },
   }
-
-  return { atIndex }
 }

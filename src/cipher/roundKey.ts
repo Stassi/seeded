@@ -1,18 +1,22 @@
-import type { RemainderCallback } from '../arithmetic'
-import type { RoundKey } from './Ciphers'
+import type { RecursiveState } from '../utilities/state'
+import type { N, NumberCallback } from '../utilities/numbers'
 import { poolWidth } from '../data'
-import { remainder, addTo as addToModule } from '../arithmetic'
+import { addTo, remainder } from '../arithmetic'
 
-const remainderPoolWidth: RemainderCallback = remainder(poolWidth)
+interface RoundKey extends RecursiveState<RoundKey, N> {
+  addTo: NumberCallback
+}
 
 type RoundKeyState = RoundKey['state']
 
+const remainderPoolWidth: NumberCallback = remainder(poolWidth)
+
 export default function roundKey(state: RoundKeyState): RoundKey {
-  const addTo: RoundKey['addTo'] = addToModule(state)
-
-  function create(newState: RoundKeyState): RoundKey {
-    return roundKey(remainderPoolWidth(newState))
+  return {
+    state,
+    addTo: addTo(state),
+    create(newState: RoundKeyState): RoundKey {
+      return roundKey(remainderPoolWidth(newState))
+    },
   }
-
-  return { addTo, create, state }
 }

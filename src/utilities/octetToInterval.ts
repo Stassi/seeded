@@ -1,5 +1,5 @@
-import type { DivideByCallback, MultiplyByCallback } from '../arithmetic'
-import type { SliceAtCallback } from './sliceAt'
+import type { StringCallback } from './strings'
+import type { N, Ns, NumberCallback } from './numbers'
 import binaryToNumber from './binaryToNumber'
 import ceiling from './ceiling'
 import concatenate from './concatenate'
@@ -15,24 +15,26 @@ import {
 } from '../arithmetic'
 import { bitsInOctet, maximumSafeBinaryLength } from '../data'
 
-const maxSafeBinaryToInterval: MultiplyByCallback = multiplyBy(
+const maxSafeBinaryToInterval: NumberCallback = multiplyBy(
   raiseTwoToPowerOf(negate(maximumSafeBinaryLength))
 )
 
-const divideByBitsInOctet: DivideByCallback = divideBy(bitsInOctet)
+const divideByBitsInOctet: NumberCallback = divideBy(bitsInOctet)
 
-export const octetsNeededForMaxSafeBinary: number = ceiling(
+export const octetsNeededForMaxSafeBinary: N = ceiling(
   divideByBitsInOctet(maximumSafeBinaryLength)
 )
 
-const sliceToMaxSafeBinary: SliceAtCallback = sliceAt(
-  add(
-    negate(maximumSafeBinaryLength),
-    multiply(octetsNeededForMaxSafeBinary, bitsInOctet)
+const sliceToMaxSafeBinary = <StringCallback>(
+  sliceAt(
+    add(
+      negate(maximumSafeBinaryLength),
+      multiply(octetsNeededForMaxSafeBinary, bitsInOctet)
+    )
   )
 )
 
-export default function octetToInterval(octet: number[]): number {
+export default function octetToInterval(octet: Ns): N {
   return maxSafeBinaryToInterval(
     binaryToNumber(
       sliceToMaxSafeBinary(concatenate(toFixedBinaryOctets(octet)))

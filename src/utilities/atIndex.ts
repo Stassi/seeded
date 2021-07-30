@@ -1,9 +1,12 @@
-export interface AtIndexProperty {
-  atIndex: AtIndexCallback
+import type { Callback } from './Callback'
+import type { N } from './numbers'
+
+type AtIndexCallback<T> = Callback<N, T>
+
+export interface AtIndexProperty<T> {
+  atIndex: AtIndexCallback<T>
 }
 
-export type AtIndexCallback = (i: number) => any
-
-export default function atIndex(a: any[]): AtIndexCallback {
-  return (i: number): any => a[i]
+export default function atIndex<T>(a: T[]): AtIndexCallback<T> {
+  return (i: number): T => a[i]
 }

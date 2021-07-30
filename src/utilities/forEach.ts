@@ -1,9 +1,14 @@
+import type { Callback } from './Callback'
+
+type ForEach = typeof Array.prototype.forEach
+type ForEachParameter = Parameters<ForEach>[0]
+type ForEachReturns = ReturnType<ForEach>
+type ForEachCallback = Callback<ForEachParameter, ForEachReturns>
+
 export interface ForEachProperty {
-  forEach: (fn: ForEachCallback) => void
+  forEach: ForEachCallback
 }
 
-export type ForEachCallback = (value: any, index: number, array: any[]) => void
-
-export default function forEach(a: any[]) {
-  return (fn: ForEachCallback): void => a.forEach(fn)
+export default function forEach<T>(a: T[]): ForEachCallback {
+  return (fn: ForEachParameter) => a.forEach(fn)
 }
