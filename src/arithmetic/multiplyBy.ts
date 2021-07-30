@@ -1,7 +1,6 @@
+import type { N, NumberCallback } from '../utilities/numbers'
 import multiply from './multiply'
 
-export type MultiplyByCallback = (y: number) => number
-
-export default function multiplyBy(x: number): MultiplyByCallback {
-  return (y: number) => multiply(x, y)
+export default function multiplyBy(x: N): NumberCallback {
+  return (y: N): N => multiply(x, y)
 }

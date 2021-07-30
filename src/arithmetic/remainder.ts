@@ -1,5 +1,5 @@
-export type RemainderCallback = (dividend: number) => number
+import type { N, NumberCallback } from '../utilities/numbers'
 
-export default function remainder(divisor: number): RemainderCallback {
-  return (dividend: number): number => dividend % divisor
+export default function remainder(divisor: N): NumberCallback {
+  return (dividend: N): N => dividend % divisor
 }

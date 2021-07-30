@@ -1,7 +1,6 @@
+import type { N, NumberCallback } from '../utilities/numbers'
 import add from './add'
 
-export type AddToCallback = (n: number) => number
-
-export default function addTo(x: number): AddToCallback {
-  return (y) => add(x, y)
+export default function addTo(x: N): NumberCallback {
+  return (y: N): N => add(x, y)
 }
