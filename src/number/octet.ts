@@ -1,4 +1,4 @@
-import type { Cipher, CipherParams, Pool, RoundKey } from '../cipher'
+import type { Cipher, CipherParams } from '../cipher'
 import type {
   N,
   Ns,
@@ -11,6 +11,9 @@ import { poolWidth } from '../data'
 import sliceAt from '../utilities/sliceAt'
 import { add, addTo, increment, negate, remainder } from '../arithmetic'
 import { pool as poolModule, roundKey as roundKeyModule } from '../cipher'
+
+type Pool = ReturnType<typeof poolModule>
+type RoundKey = ReturnType<typeof roundKeyModule>
 
 export default function octet({
   count,
