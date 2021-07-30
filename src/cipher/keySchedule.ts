@@ -1,4 +1,3 @@
-import type { Key, Pool, RoundKey } from './Ciphers'
 import { add } from '../arithmetic'
 import identityPermutation from '../utilities/identityPermutation'
 import keyModule from './key'
@@ -6,7 +5,12 @@ import poolModule from './pool'
 import { poolWidth } from '../data'
 import roundKeyModule from './roundKey'
 
-export default function keySchedule(seed: string): Pool {
+type Key = ReturnType<typeof keyModule>
+type Pool = ReturnType<typeof poolModule>
+type RoundKey = ReturnType<typeof roundKeyModule>
+type Seed = Parameters<typeof keyModule>[0]
+
+export default function keySchedule(seed: Seed): Pool {
   const { atIndex: atKeyIndex }: Key = keyModule(seed)
 
   let pool: Pool = poolModule(identityPermutation(poolWidth)),

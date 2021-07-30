@@ -1,7 +1,11 @@
-import type { NumberCallback } from '../utilities/numbers'
-import type { RoundKey } from './Ciphers'
+import type { RecursiveState } from '../utilities/state'
+import type { N, NumberCallback } from '../utilities/numbers'
 import { poolWidth } from '../data'
 import { addTo, remainder } from '../arithmetic'
+
+interface RoundKey extends RecursiveState<RoundKey, N> {
+  addTo: NumberCallback
+}
 
 type RoundKeyState = RoundKey['state']
 
